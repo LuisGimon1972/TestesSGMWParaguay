@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Cadastro pessoas', async ({ page }) => {
+test('Cadastro de pessoas', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
  await loginCompleto(page);
@@ -71,9 +71,6 @@ await menuDoc2
   console.log('TIPO DE CADASTRO OK');
 
 
-//  await page.mouse.wheel(0, 500);
-
-
 await page.locator('.q-field')
   .filter({ hasText: /departamento/i })
   .first()
@@ -125,6 +122,7 @@ const campoNumero = page.locator('.q-field')
 await campoNumero.locator('input').fill(numero.toString());
 console.log('NUMERO OK:', numero);
 
+await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
 const telefone = Array.from({ length: 9 }, () =>
   Math.floor(Math.random() * 10)
