@@ -42,7 +42,7 @@ console.log('CLICOU EM ESPÉCIES');
 
 await page.waitForTimeout(1000);
 page.locator('a[href*="registros/cotizacion-monedas"]').click()
-console.log('CLICOU EM  COTAÇÃO');
+console.log('CLICOU EM COTAÇÃO');
 
 await page.waitForTimeout(1000);
 page.locator('a[href*="registros/grupos"]').click()
