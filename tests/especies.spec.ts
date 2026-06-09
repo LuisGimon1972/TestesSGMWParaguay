@@ -4,6 +4,11 @@ import { loginCompleto } from '../utils/loginCompleto';
 test('Cadastro de especies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);
+
+    await page.locator('.q-btn')
+      .filter({ hasText: /talvez depois/i })
+      .click({ force: true });
+      console.log('CLICOU EM TAL VEZ'); 
  
     await page.waitForTimeout(2000);
     await page.getByText(/Cadastros/i).click({ force: true });
