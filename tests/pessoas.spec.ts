@@ -8,7 +8,7 @@ test('Cadastro de pessoas', async ({ page }) => {
     await page.locator('.q-btn')
       .filter({ hasText: /talvez depois/i })
       .click({ force: true });
-      console.log('CLICOU EM TAL VEZ'); 
+      console.log('CLICOU EM TALVEZ'); 
 
     await Promise.all([
       page.waitForURL(/pessoa/, { timeout: 15000 }),

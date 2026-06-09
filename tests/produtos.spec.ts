@@ -6,7 +6,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await loginCompleto(page);
 
       await page.locator('.q-btn')
-      .filter({ hasText: /talvez depois/i })
+      .filter({ hasText: /talvezdepois/i })
       .click({ force: true });
       console.log('CLICOU EM TAL VEZ'); 
 
