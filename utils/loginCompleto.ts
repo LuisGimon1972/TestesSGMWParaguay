@@ -3,50 +3,34 @@ import { Page } from '@playwright/test';
 export async function loginCompleto(page: Page) {
 
   console.log('INICIO');
-
   await page.goto(process.env.BASE_URL!);
-
   console.log('ABRIU SITE');
-
   await page.getByText(/entrar/i).click();
-
   console.log('CLICOU ENTRAR');
   
   await page.waitForSelector('input[type="email"], input[type="text"]', {
     timeout: 15000
   });
 
-  console.log('FORM APARECEU');
-  
+  console.log('FORM APARECEU');  
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
-
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
-
-  console.log('PREENCHIDO');
-  
+  console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-
   console.log('CLICOU LOGIN');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
-
-  console.log('CHEGOU EMPRESAS');
-  
+  console.log('CHEGOU EMPRESAS');  
   const botao = page.locator('button:has-text("ENTRAR")').first();
-
   await botao.highlight();
-
   await botao.evaluate((el: any) => {
     el.style.border = '5px solid red';
     el.click();
   });
-
   console.log('CLIQUE FORÇADO EXECUTADO');
 
   await page.waitForTimeout(3000);
-
   console.log('URL:', await page.url());
-
   console.log('CLICOU EMPRESA');
 
   // 🔥 remover modais
@@ -57,5 +41,4 @@ export async function loginCompleto(page: Page) {
   });
 
   console.log('MODAL + OVERLAY REMOVIDOS');
-
 }
