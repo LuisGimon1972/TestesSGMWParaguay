@@ -6,9 +6,9 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await loginCompleto(page);
 
       await page.locator('.q-btn')
-      .filter({ hasText: /talvezdepois/i })
+      .filter({ hasText: /talvez depois/i })
       .click({ force: true });
-      console.log('CLICOU EM TAL VEZ'); 
+      console.log('CLICOU EM TALVEZ'); 
 
       await page.waitForTimeout(1000);
       await Promise.all([
@@ -101,5 +101,5 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
 
-      await page.waitForTimeout(7000);
+      await page.waitForTimeout(4000);
 });

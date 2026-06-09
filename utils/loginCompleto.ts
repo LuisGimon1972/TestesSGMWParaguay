@@ -11,10 +11,11 @@ export async function loginCompleto(page: Page) {
   await page.waitForSelector('input[type="email"], input[type="text"]', {
     timeout: 15000
   });
-
+  await page.waitForTimeout(1000);
   console.log('FORM APARECEU');  
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
+  await page.waitForTimeout(1000);
   console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
   console.log('CLICOU LOGIN');

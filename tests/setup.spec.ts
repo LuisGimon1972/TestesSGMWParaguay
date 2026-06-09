@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
 test('Setup login', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
   await loginCompleto(page);  
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(4000);
 });

@@ -64,5 +64,5 @@ test('Navegação de menus', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
       
-    await page.waitForTimeout(7000);
+    await page.waitForTimeout(4000);
 });
