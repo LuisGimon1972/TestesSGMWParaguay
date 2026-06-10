@@ -19,9 +19,8 @@ test('Cadastro de grupos', async ({ page }) => {
 
     const nomegrupo = `TEST GRUPO ${Date.now()}`;
     await page.getByLabel(/cadastrar novo grupo/i).fill(nomegrupo);
-    console.log('NOME DE GRUPO OK', nomegrupo);       
+    console.log('NOME DE GRUPO OK', nomegrupo);     
     
-
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });

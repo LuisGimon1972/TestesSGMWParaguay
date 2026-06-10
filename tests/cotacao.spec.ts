@@ -16,7 +16,6 @@ test('Cadastro de especies', async ({ page }) => {
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR COTAÇÃO');    
-
     
     const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
     await moedaField.scrollIntoViewIfNeeded();
