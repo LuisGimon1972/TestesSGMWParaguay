@@ -40,7 +40,7 @@ test('Cadastro de especies', async ({ page }) => {
     .filter({ hasText: /dinheiro/i })
     .first()
     .click({ force: true });
-    console.log('TIPO DA ESPÉCIE OK');
+    console.log('TIPO DA ESPÉCIE OK');    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
