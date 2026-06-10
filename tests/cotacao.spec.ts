@@ -70,7 +70,7 @@ test('Cadastro de especies', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');  
+    console.log('CLICOU EM SALVAR COTACAO');  
 
     await page.waitForTimeout(4000);
 });
