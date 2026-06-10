@@ -1,14 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
+
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);
-
-    await page.locator('.q-btn')
-      .filter({ hasText: /talvez depois/i })
-      .click({ force: true });
-      console.log('CLICOU EM TALVEZ'); 
+    await loginCompleto(page);    
     
     await page.getByText(/dashboard/i).click({ force: true });
     console.log('CLICOU EM DASKBOARD'); 

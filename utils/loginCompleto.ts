@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { talVez } from '../utils/talvez';
 
 export async function loginCompleto(page: Page) {
 
@@ -42,4 +43,6 @@ export async function loginCompleto(page: Page) {
   });
 
   console.log('MODAL + OVERLAY REMOVIDOS');
+
+ // await talVez(page);   
 }
