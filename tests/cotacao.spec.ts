@@ -17,23 +17,29 @@ test('Cadastro de especies', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR COTAÇÃO');    
 
-    await page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').click({ force: true });
-    const moeda = page.locator('.q-menu:visible');
-    await moeda.waitFor();
-    await moeda
-    .locator('.q-item')
-    .filter({ hasText: /usd/i })
-    .first()
-    .click({ force: true });
-    console.log('MOEDA DE COTAÇÃO OK');
+    
+    const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
+    await moedaField.scrollIntoViewIfNeeded();
+    await expect(moedaField).toBeVisible();    
+    await moedaField.evaluate(el => (el as HTMLElement).click());    
+    const menu = page.locator('.q-menu');
+    await expect(menu).toBeVisible();    
+    const moedas = ['usd', 'brl', 'pyg', 'cad', 'eur', 'gbp'];    
+    const moedaEscolhida = moedas[Math.floor(Math.random() * moedas.length)];
+    
+    const opcao = menu.locator('.q-item', {
+    hasText: new RegExp(moedaEscolhida, 'i')
+    }).first();
+    await opcao.click();
+    console.log('MOEDA DE COTAÇÃO OK:', moedaEscolhida);
 
-    const venta = 6070;
+    const venta = Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
     const inputVenta = page.getByLabel(/valor de venda/i);
     await expect(inputVenta).toBeVisible();
     await inputVenta.fill(String(venta));
     console.log('VALOR DE VENTA OK', venta);
 
-    const compra = 5975;
+    const compra = Math.floor(Math.random() * (5000 - 4500 + 1)) + 4500;
     const inputCompra = page.getByLabel(/valor de compra/i);
     await expect(inputCompra).toBeVisible();
     await inputCompra.fill(String(compra));
