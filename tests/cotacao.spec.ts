@@ -39,16 +39,33 @@ test('Cadastro de especies', async ({ page }) => {
     await inputCompra.fill(String(compra));
     console.log('VALOR DE COMPRA OK', compra);
 
-    await page.waitForTimeout(1000);
-    await page.locator('[aria-label="Tipo da espécie"]').click({ force: true });
-    const menu = page.locator('.q-menu:visible');
-    await menu.waitFor();
-    await menu
-    .locator('.q-item')
-    .filter({ hasText: /dinheiro/i })
+    const hoje = new Date();
+    const datahoje = hoje.toLocaleDateString('pt-BR');
+    const inputData = page
+    .locator('.q-field')
+    .filter({ hasText: /vig[eê]ncia/i })
     .first()
-    .click({ force: true });
-    console.log('TIPO DA ESPÉCIE OK');
+    .locator('input');
+    await expect(inputData).toBeVisible();
+    await inputData.fill(datahoje);
+    console.log('INICIO DE VIGÊNCIA OK', datahoje);
+    
+    const fin = new Date();
+    const fimMes = new Date(fin.getFullYear(), hoje.getMonth() + 1, 0);
+    const dia = String(fimMes.getDate()).padStart(2, '0');
+    const mes = String(fimMes.getMonth() + 1).padStart(2, '0');
+    const ano = fimMes.getFullYear();
+    const datafin = `${dia}/${mes}/${ano}`;
+    const inputDatafin = page
+    .locator('.q-field')
+    .filter({ hasText: /fim|vig[eê]ncia/i })
+    .last()
+    .locator('input');
+    await inputDatafin.scrollIntoViewIfNeeded();
+    await expect(inputDatafin).toBeVisible();
+    await inputDatafin.fill('');
+    await inputDatafin.type(datafin, { delay: 50 });
+    console.log('FIM DE VIGÊNCIA OK', datafin);
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
