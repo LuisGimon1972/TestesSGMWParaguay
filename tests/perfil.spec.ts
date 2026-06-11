@@ -20,7 +20,7 @@ test('Cadastro de perlfil de acesso', async ({ page }) => {
   await btnCadastrar.click();
   console.log('CLICOU CADASTRAR PERFIL DE ACESSO'); 
     
-  const nome = `TEST PERFIL  ${Date.now()}`;
+  const nome = `TEST PERFIL ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
   .filter({ hasText: /nome/i })

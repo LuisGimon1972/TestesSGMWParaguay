@@ -33,7 +33,7 @@ test('Cadastro de usuários', async ({ page }) => {
   await campoCI.type(ruc, { delay: 50 });
   console.log('RUC:', ruc);
   
-  const nome = `AUTO TEST NOME  ${Date.now()}`;
+  const nome = `TEST USUARIO ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
   .filter({ hasText: /nome/i })
@@ -43,7 +43,7 @@ test('Cadastro de usuários', async ({ page }) => {
   await campoNome.fill(nome);
   console.log('NOME OK', nome);
 
-  const sobrenome = `AUTO TEST SOBRENOME  ${Date.now()}`;
+  const sobrenome = `TEST USUARIO SOBRENOME  ${Date.now()}`;
   const camposobrenome = page
   .locator('.q-field')
   .filter({ hasText: /sobrenome/i })
@@ -107,14 +107,11 @@ test('Cadastro de usuários', async ({ page }) => {
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString();
   const pesos = [2, 3, 4, 5, 6, 7, 2];
-
   let soma = 0;
   for (let i = 0; i < base.length; i++) {
     soma += parseInt(base[i]) * pesos[i];
   }
-
   const resto = soma % 11;
   const dv = resto > 1 ? 11 - resto : 0;
-
   return `${base}-${dv}`;
 }

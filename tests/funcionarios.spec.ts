@@ -24,7 +24,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await camponomefuncionario.fill(nomefuncionario);
   console.log('NOME OK', nomefuncionario);
 
-  const cargofuncionario = `TEST CARGO  ${Date.now()}`;
+  const cargofuncionario = `TEST CARGO ${Date.now()}`;
   const campocargofuncionario = page
   .locator('.q-field')
   .filter({ hasText: /cargo/i })
@@ -57,14 +57,11 @@ test('Cadastro de funcionários', async ({ page }) => {
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString();
   const pesos = [2, 3, 4, 5, 6, 7, 2];
-
   let soma = 0;
   for (let i = 0; i < base.length; i++) {
     soma += parseInt(base[i]) * pesos[i];
   }
-
   const resto = soma % 11;
   const dv = resto > 1 ? 11 - resto : 0;
-
   return `${base}-${dv}`;
 }

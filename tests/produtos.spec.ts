@@ -17,7 +17,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
 
-      const nomeproduto = `AUTO TEST PRODUTO ${Date.now()}`;
+      const nomeproduto = `TEST PRODUTO ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
       console.log('NOME DE PRODUTO OK', nomeproduto);
 
@@ -26,11 +26,11 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnGerar.click({ force: true });
       console.log('CLICOU GERAR CÓDIGO DE BARRAS');
 
-      const localestoque = `AUTO TEST LOCAL ESTOQUE ${Date.now()}`;
+      const localestoque = `TEST LOCAL ESTOQUE ${Date.now()}`;
       await page.getByLabel(/localização/i).fill(localestoque);
       console.log('LOCALIZAÇÃO DE ESTOQUE OK', localestoque);
 
-      const refestoque = `AUTO TEST REFERÊNCIA ESTOQUE ${Date.now()}`;
+      const refestoque = `TEST REFERÊNCIA ESTOQUE ${Date.now()}`;
       await page.getByLabel(/referência/i).fill(refestoque);
       console.log('REFERÊNCIA ESTOQUE ESTOQUE OK', refestoque);
 

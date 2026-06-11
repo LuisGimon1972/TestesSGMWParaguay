@@ -50,7 +50,7 @@ test('Cadastro de pessoas', async ({ page }) => {
     .click({ force: true }); 
     console.log('TIPO DE OPERAÇÃO OK');
 
-    const nome = `AUTO TEST ${Date.now()}`;
+    const nome = `TEST NOME ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
     console.log('NOMBRE OK', nome);
 
@@ -100,7 +100,7 @@ test('Cadastro de pessoas', async ({ page }) => {
     .click({ force: true });
     console.log('CIUDAD OK');
 
-    const direccion = `AUTO TEST ${Date.now()}`;
+    const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
     console.log('DIRECCIÓN OK', nome);
 
