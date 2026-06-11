@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Cadastro de especies', async ({ page }) => {
+test('Cadastro de espécies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  

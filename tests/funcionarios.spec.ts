@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Cadastro de funcionarios', async ({ page }) => {
+test('Cadastro de funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
   await loginCompleto(page);

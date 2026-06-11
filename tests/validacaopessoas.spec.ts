@@ -1,0 +1,64 @@
+import { test, expect } from '@playwright/test';
+import { loginCompleto } from '../utils/loginCompleto';
+
+test('Validação cadastro de pessoas', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await loginCompleto(page);
+
+  // =============================
+  // ACESSAR CADASTRO
+  // =============================
+  await Promise.all([
+    page.waitForURL(/pessoa/, { timeout: 15000 }),
+    page.locator('a[href*="pessoa"]').first().click()
+  ]);
+
+  await Promise.all([
+    page.waitForURL(/cadastro/, { timeout: 15000 }),
+    page.locator('a[href*="pessoa/cadastro"]').click()
+  ]);
+
+  // =============================
+  // PREENCHER PARCIAL (COM ERRO)
+  // =============================
+
+  // natureza
+  await page.locator('[aria-label="Natureza"]').click({ force: true });
+  await page.locator('.q-menu:visible .q-item')
+    .filter({ hasText: /não contribuinte/i })
+    .click({ force: true });
+
+  // tipo doc
+  await page.locator('[aria-label="Tipo do documento de identificação"]').click({ force: true });
+  await page.locator('.q-menu').last()
+    .locator('.q-item')
+    .filter({ hasText: /carteira de identidade paraguaia/i })
+    .click({ force: true });
+    console.log('SEM PREENCHER NOME --ERRO ESPERADO');
+    console.log('SEM PREENCHER DOCUMENTO --ERRO ESPERADO');  
+    console.log('SEM PREENCHER DEPARTAMENTO --ERRO ESPERADO');  
+
+  await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
+  await page.waitForTimeout(700);
+    await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
+    const menuDoc1 = page.locator('.q-menu').last();
+    await menuDoc1.waitFor();
+    await menuDoc1
+    .locator('.q-item')
+    .filter({ hasText: /B2C/i })
+    .click({ force: true }); 
+    console.log('TIPO DE OPERAÇÃO OK');
+
+
+  await page.locator('.q-btn')
+    .filter({ hasText: /salvar|guardar/i })
+    .click({ force: true });
+
+  console.log('TENTOU SALVAR COM ERRO');
+
+  
+  await page.waitForTimeout(7000);
+  
+  console.log('VALIDAÇÃO OK');
+
+});
