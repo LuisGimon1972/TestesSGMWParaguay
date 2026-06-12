@@ -52,7 +52,7 @@ test('Validação cadastro de pessoas', async ({ page }) => {
   .click({ force: true });
   console.log('TENTOU SALVAR COM ERRO');
   
-  await page.waitForTimeout(7000);
+  await page.waitForTimeout(4000);
 
   console.log('VALIDAÇÃO OK');
 

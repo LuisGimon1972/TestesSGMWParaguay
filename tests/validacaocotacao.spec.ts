@@ -58,5 +58,5 @@ test('Validação de cotação', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR COTACAO');  
 
-    await page.waitForTimeout(7000);
+    await page.waitForTimeout(4000);
 });

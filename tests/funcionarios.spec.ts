@@ -51,7 +51,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   .click({ force: true });
   console.log('CLICOU EM SALVAR USUARIO');
 
-  await page.waitForTimeout(7000);
+  await page.waitForTimeout(4000);
 });
 
 function gerarRUC() {
