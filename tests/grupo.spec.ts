@@ -26,5 +26,5 @@ test('Cadastro de grupos', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR GRUPO');  
 
-    await page.waitForTimeout(4000);
+    await page.waitForTimeout(7000);
 });

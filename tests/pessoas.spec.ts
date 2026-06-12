@@ -130,7 +130,7 @@ test('Cadastro de pessoas', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');  
 
-    await page.waitForTimeout(4000);
+    await page.waitForTimeout(7000);
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos

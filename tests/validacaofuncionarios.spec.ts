@@ -29,5 +29,5 @@ test('Validação de cadastro de funcionários', async ({ page }) => {
   
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
 
-  await page.waitForTimeout(4000); 
+  await page.waitForTimeout(7000); 
 });

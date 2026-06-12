@@ -96,5 +96,5 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
 
-      await page.waitForTimeout(4000);
+      await page.waitForTimeout(7000);
 });
