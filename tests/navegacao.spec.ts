@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -72,6 +73,7 @@ test('Navegação de menus', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
-      
+
     await page.waitForTimeout(4000);
+    await capturarRequisicoesApi(page);         
 });

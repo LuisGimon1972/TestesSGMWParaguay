@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Validação de cadastro de funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -29,5 +30,6 @@ test('Validação de cadastro de funcionários', async ({ page }) => {
   
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
 
-  await page.waitForTimeout(4000); 
+  await capturarRequisicoesApi(page); 
+  await page.waitForTimeout(4000);  
 });

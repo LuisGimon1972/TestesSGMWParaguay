@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Cadastro de pessoas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -129,8 +130,10 @@ test('Cadastro de pessoas', async ({ page }) => {
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR');  
-
+      
+    await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);
+    
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Validação cadastro de produtos/serviços', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1085 });
@@ -31,8 +32,9 @@ test('Validação cadastro de produtos/serviços', async ({ page }) => {
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });    
   console.log('TENTOU SALVAR COM ERRO');  
-
-  await page.waitForTimeout(4000);
-
+  
   console.log('VALIDAÇÃO OK');
+
+  await capturarRequisicoesApi(page); 
+  await page.waitForTimeout(4000);  
 });

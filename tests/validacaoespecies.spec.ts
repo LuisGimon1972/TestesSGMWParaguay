@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Validação de dados espécies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -30,5 +31,6 @@ test('Validação de dados espécies', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');  
 
-    await page.waitForTimeout(4000);
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(4000);    
 });

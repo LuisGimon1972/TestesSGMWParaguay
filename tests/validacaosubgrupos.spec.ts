@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
-test('Cadastro de subgrupos', async ({ page }) => {
+test('Validação dados subgrupos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  
@@ -22,17 +22,9 @@ test('Cadastro de subgrupos', async ({ page }) => {
     await page.getByLabel(/cadastrar novo subgrupo/i).fill(nomesubgrupo);
     console.log('NOME DE SUBGRUPO OK', nomesubgrupo);   
 
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000);    
     
-    await page.locator('[aria-label="Grupo"]').click({ force: true });
-    const grupo = page.locator('.q-menu:visible');
-    await grupo.waitFor();
-    await grupo
-    .locator('.q-item')
-    .filter({ hasText: /test/i })
-    .first()
-    .click({ force: true });
-    console.log('GRUPO OK',grupo);    
+    console.log('GRUPO VAZIO OK');    
 
     await page.waitForTimeout(1000);
 
@@ -42,5 +34,5 @@ test('Cadastro de subgrupos', async ({ page }) => {
     console.log('CLICOU EM SALVAR SUBGRUPO');  
 
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);   
+    await page.waitForTimeout(4000);    
 });

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Cadastro de funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -51,7 +52,8 @@ test('Cadastro de funcionários', async ({ page }) => {
   .click({ force: true });
   console.log('CLICOU EM SALVAR USUARIO');
 
-  await page.waitForTimeout(4000);
+  await capturarRequisicoesApi(page); 
+  await page.waitForTimeout(4000);  
 });
 
 function gerarRUC() {

@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
-test('Cadastro de marcas', async ({ page }) => {
+test('Validação de dados marcas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  
@@ -17,10 +17,8 @@ test('Cadastro de marcas', async ({ page }) => {
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR MARCA');    
-
-    const marca = `TEST MARCA ${Date.now()}`;
-    await page.getByLabel(/cadastrar nova marca/i).fill(marca);
-    console.log('NOME DE MARCA OK', marca);           
+    
+    console.log('NOME DE MARCA VAZIO OK');           
 
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
@@ -28,5 +26,5 @@ test('Cadastro de marcas', async ({ page }) => {
     console.log('CLICOU EM SALVAR MARCA');  
 
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);      
+    await page.waitForTimeout(4000);        
 });

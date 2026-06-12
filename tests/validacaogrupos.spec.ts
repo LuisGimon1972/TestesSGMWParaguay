@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
-test('Cadastro de marcas', async ({ page }) => {
+test('Validação de datos grupos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  
@@ -10,23 +10,21 @@ test('Cadastro de marcas', async ({ page }) => {
     await page.getByText(/Cadastros/i).click({ force: true });
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/marcas"]').click()
-    console.log('CLICOU EM MARCAS'); 
+    page.locator('a[href*="registros/grupos"]').click()
+    console.log('CLICOU EM GRUPOS');
 
-    const btnCadastrar = page.getByText(/cadastrar marca/i).first();
+    const btnCadastrar = page.getByText(/cadastrar grupo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR MARCA');    
+    console.log('CLICOU CADASTRAR GRUPO');    
 
-    const marca = `TEST MARCA ${Date.now()}`;
-    await page.getByLabel(/cadastrar nova marca/i).fill(marca);
-    console.log('NOME DE MARCA OK', marca);           
-
+    console.log('NOME DE GRUPO VAZIO OK');     
+    
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR MARCA');  
+    console.log('CLICOU EM SALVAR GRUPO');  
 
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);      
+    await page.waitForTimeout(4000);    
 });
