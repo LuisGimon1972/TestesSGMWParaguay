@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
-import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Teste de busca crítico em Pessoas', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -29,6 +28,5 @@ await page.keyboard.press('Enter');
 await page.waitForTimeout(1500);
 console.log('BUSCA INEXISTENTE OK:', nomeInexistente);
 
-await capturarRequisicoesApi(page);
 await page.waitForTimeout(4000);  
 });

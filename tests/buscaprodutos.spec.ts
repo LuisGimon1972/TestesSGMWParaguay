@@ -1,6 +1,5 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
-import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Teste de busca crítico em Produtos', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -28,7 +27,6 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
     console.log('BUSCA INEXISTENTE OK:', prodInexistente);
-
-    await capturarRequisicoesApi(page);
+    
     await page.waitForTimeout(4000);  
 });
