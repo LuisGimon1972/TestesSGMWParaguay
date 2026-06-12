@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Cadastro de cotação de moedas', async ({ page }) => {
+test('Validação de cotação', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  
@@ -32,17 +32,13 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await opcao.click();
     console.log('MOEDA DE COTAÇÃO OK:', moedaEscolhida);
 
-    const venta = Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
+    const venta = '0';
     const inputVenta = page.getByLabel(/valor de venda/i);
     await expect(inputVenta).toBeVisible();
     await inputVenta.fill(String(venta));
-    console.log('VALOR DE VENTA OK', venta);
-
-    const compra = Math.floor(Math.random() * (5000 - 4500 + 1)) + 4500;
-    const inputCompra = page.getByLabel(/valor de compra/i);
-    await expect(inputCompra).toBeVisible();
-    await inputCompra.fill(String(compra));
-    console.log('VALOR DE COMPRA OK', compra);
+    console.log('VALOR DE VENTA ZERADO OK', venta);
+    
+    console.log('VALOR DE COMPRA VAZIO OK');
 
     const hoje = new Date();
     const datahoje = hoje.toLocaleDateString('pt-BR');
@@ -53,24 +49,9 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     .locator('input');
     await expect(inputData).toBeVisible();
     await inputData.fill(datahoje);
-    console.log('INICIO DE VIGÊNCIA OK', datahoje);
+    console.log('INICIO DE VIGÊNCIA OK', datahoje);    
     
-    const fin = new Date();
-    const fimMes = new Date(fin.getFullYear(), hoje.getMonth() + 1, 0);
-    const dia = String(fimMes.getDate()).padStart(2, '0');
-    const mes = String(fimMes.getMonth() + 1).padStart(2, '0');
-    const ano = fimMes.getFullYear();
-    const datafin = `${dia}/${mes}/${ano}`;
-    const inputDatafin = page
-    .locator('.q-field')
-    .filter({ hasText: /fim|vig[eê]ncia/i })
-    .last()
-    .locator('input');
-    await inputDatafin.scrollIntoViewIfNeeded();
-    await expect(inputDatafin).toBeVisible();
-    await inputDatafin.fill('');
-    await inputDatafin.type(datafin, { delay: 50 });
-    console.log('FIM DE VIGÊNCIA OK', datafin);
+    console.log('FIM DE VIGÊNCIA VAZIO OK');
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
