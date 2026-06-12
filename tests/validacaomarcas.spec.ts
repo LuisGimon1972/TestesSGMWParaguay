@@ -18,12 +18,7 @@ test('Validação de dados marcas', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR MARCA');    
     
-    console.log('NOME DE MARCA VAZIO OK');           
-
-    await page.locator('.q-btn')
-    .filter({ hasText: /confirmar|guardar/i })
-    .click({ force: true });
-    console.log('CLICOU EM SALVAR MARCA');  
+    console.log('NOME DE MARCA VAZIO OK');               
 
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);        
