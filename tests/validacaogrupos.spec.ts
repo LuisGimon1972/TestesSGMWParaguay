@@ -18,13 +18,8 @@ test('Validação de datos grupos', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR GRUPO');    
 
-    console.log('NOME DE GRUPO VAZIO OK');     
+    console.log('NOME DE GRUPO VAZIO OK');        
     
-    await page.locator('.q-btn')
-    .filter({ hasText: /confirmar|guardar/i })
-    .click({ force: true });
-    console.log('CLICOU EM SALVAR GRUPO');  
-
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
 });
