@@ -19,7 +19,7 @@ test('Teste de busca crítico em Usuários', async ({ page }) => {
 
      const primeiroNome = `TEST USUARIO`;
      await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
-     await page.waitForTimeout(600);  
+     await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');
      await page.waitForTimeout(1500);
      console.log('BUSCA EXISTENTE OK:', primeiroNome);
@@ -28,7 +28,7 @@ test('Teste de busca crítico em Usuários', async ({ page }) => {
 
     const prodInexistente = `USUÁRIO INEXISTENTE`;
     await page.getByLabel(/pesquisar registro/i).fill(prodInexistente);
-    await page.waitForTimeout(600);  
+    await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
     console.log('BUSCA INEXISTENTE OK:', prodInexistente);

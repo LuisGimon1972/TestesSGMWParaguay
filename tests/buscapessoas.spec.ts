@@ -15,7 +15,7 @@ test('Teste de busca crítico em Pessoas', async ({ page }) => {
 
 const primeiroNome = `TEST NOME`;
 await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
-await page.waitForTimeout(600);  
+await page.waitForTimeout(1000);  
 await page.keyboard.press('Enter');
 await page.waitForTimeout(1500);
 console.log('BUSCA EXISTENTE OK:', primeiroNome);
@@ -24,7 +24,7 @@ await page.waitForTimeout(1000);
 
 const nomeInexistente = `NOME INEXISTENTE`;
 await page.getByLabel(/pesquisar registro/i).fill(nomeInexistente);
-await page.waitForTimeout(600);  
+await page.waitForTimeout(1000);  
 await page.keyboard.press('Enter');
 await page.waitForTimeout(1500);
 console.log('BUSCA INEXISTENTE OK:', nomeInexistente);
