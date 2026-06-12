@@ -17,8 +17,7 @@ test('Validação de cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(camponomefuncionario).toBeVisible();
   await camponomefuncionario.fill(nomefuncionario);  
-
-  console.log('CAMPO NOME FUNCIOÁRIO PREENCHIDO OK', nomefuncionario);  
+  console.log('CAMPO NOME FUNCIOÁRIO PREENCHIDO OK:', nomefuncionario);  
 
   const campoCargo = page.locator('.q-field').filter({ hasText: /cargo/i }).last().locator('input');
   await campoCargo.fill('A');
@@ -30,8 +29,5 @@ test('Validação de cadastro de funcionários', async ({ page }) => {
   
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
 
-  await page.waitForTimeout(4000);
-  
-
-
+  await page.waitForTimeout(4000); 
 });
