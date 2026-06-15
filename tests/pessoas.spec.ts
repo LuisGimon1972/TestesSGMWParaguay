@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
-test('Cadastro de pessoas', async ({ page }) => {
+test('Cadastro de Clientes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
@@ -63,7 +63,6 @@ test('Cadastro de pessoas', async ({ page }) => {
     .filter({ hasText: /cliente/i })
     .click({ force: true });
     console.log('TIPO DE CADASTRO OK');
-
 
     await page.locator('.q-field')
     .filter({ hasText: /departamento/i })
@@ -132,8 +131,7 @@ test('Cadastro de pessoas', async ({ page }) => {
     console.log('CLICOU EM SALVAR');  
       
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);
-    
+    await page.waitForTimeout(4000);    
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
