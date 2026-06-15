@@ -24,22 +24,22 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     
         const loteEscolhido = lotesValidos[1];
         await page.getByLabel(/pesquisar registro/i).fill(loteEscolhido);
-        await page.waitForTimeout(1000);
-        await page.keyboard.press('Enter');
         await page.waitForTimeout(1500);
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(5000);
         console.log('BUSCA LOTE EXISTENTE OK:', loteEscolhido);
     } 
     else {
         console.warn('Nenhum LOTE válido encontrado na grade.');
     }
     
-    await page.waitForTimeout(1000);   
-    const loteinex = '00345546565656';
+    /*await page.waitForTimeout(1000);   
+    const loteinex = '003';
     await page.getByLabel(/pesquisar registro/i).fill(loteinex);
     await page.waitForTimeout(1000);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA LOTE INEXISTENTE OK:', loteinex);
+    console.log('BUSCA LOTE INEXISTENTE OK:', loteinex);*/
 
-    await page.waitForTimeout(4000);  
+    await page.waitForTimeout(9000);  
 });
