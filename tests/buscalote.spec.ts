@@ -11,30 +11,35 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
       page.waitForURL(/lotes/, { timeout: 15000 }),
       page.locator('a[href*="lotes"]').first().click()
     ]);
-    console.log('CLICOU EM LOTES'); 
+    console.log('CLICOU EM LOTES');     
 
     await page.waitForTimeout(1000);    
-    const codigos = await page.locator('table td span[class*="tw-text-ellipsis"][class*="tw-text-nowrap"]').allTextContents();
+    await page.waitForTimeout(1000);
 
-    if (codigos.length > 0) {  
-        const codigoEscolhido = codigos[1].trim();
-        await page.getByLabel(/pesquisar registro/i).fill(codigoEscolhido);
-        await page.waitForTimeout(4000);
+   const lotes = await page.locator('table td span[class*="tw-text-ellipsis"][class*="tw-text-nowrap"]').allTextContents();
+
+   const lotesValidos = lotes.map(l => l.trim()).filter(l => l.length > 0);
+
+    if (lotesValidos.length > 0) {
+    
+        const loteEscolhido = lotesValidos[1];
+        await page.getByLabel(/pesquisar registro/i).fill(loteEscolhido);
+        await page.waitForTimeout(1000);
         await page.keyboard.press('Enter');
-        await page.waitForTimeout(4000);
-        console.log('BUSCA COTAÇÃO EXISTENTE OK:', codigoEscolhido);
-        await page.waitForTimeout(1000);   
-    } else {
-        console.warn('Nenhum código encontrado na grade.');
+        await page.waitForTimeout(1500);
+        console.log('BUSCA LOTE EXISTENTE OK:', loteEscolhido);
+    } 
+    else {
+        console.warn('Nenhum LOTE válido encontrado na grade.');
     }
     
-    await page.waitForTimeout(3000);   
-    const moedainex = '003';
-    await page.getByLabel(/pesquisar registro/i).fill(moedainex);
+    await page.waitForTimeout(1000);   
+    const loteinex = '00345546565656';
+    await page.getByLabel(/pesquisar registro/i).fill(loteinex);
     await page.waitForTimeout(1000);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA COTAÇÃO INEXISTENTE OK:', moedainex);
+    console.log('BUSCA LOTE INEXISTENTE OK:', loteinex);
 
     await page.waitForTimeout(4000);  
 });
