@@ -13,7 +13,7 @@ test('Teste de busca crítico em Faturamento', async ({ page }) => {
     ]);
     console.log('CLICOU EM FATURAMENTO');
 
-     const primeiroNome = `REGISTRO`;
+     const primeiroNome = `TEST CLIENTE`;
      await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
      await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');
@@ -22,7 +22,7 @@ test('Teste de busca crítico em Faturamento', async ({ page }) => {
 
     await page.waitForTimeout(1000);
 
-    const prodInexistente = `FATURA INEXISTENTE`;
+    const prodInexistente = `CLIENTE INEXISTENTE`;
     await page.getByLabel(/pesquisar registro/i).fill(prodInexistente);
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');

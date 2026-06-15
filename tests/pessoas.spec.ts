@@ -51,9 +51,9 @@ test('Cadastro de pessoas', async ({ page }) => {
     .click({ force: true }); 
     console.log('TIPO DE OPERAÇÃO OK');
 
-    const nome = `TEST NOME ${Date.now()}`;
+    const nome = `TEST CLIENTE ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('NOMBRE OK', nome);
+    console.log('NOMBRE DO CLIENTE OK', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
