@@ -26,7 +26,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
         await page.getByLabel(/pesquisar registro/i).fill(loteEscolhido);
         await page.waitForTimeout(1500);
         await page.keyboard.press('Enter');
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(2000);
         console.log('BUSCA LOTE EXISTENTE OK:', loteEscolhido);
     } 
     else {
@@ -41,5 +41,5 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     await page.waitForTimeout(1500);
     console.log('BUSCA LOTE INEXISTENTE OK:', loteinex);*/
 
-    await page.waitForTimeout(9000);  
+    await page.waitForTimeout(4000);  
 });
