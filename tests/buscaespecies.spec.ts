@@ -3,7 +3,6 @@ import { loginCompleto } from '../utils/loginCompleto';
 
 test('Teste de busca crítico em Perfil de Espécies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
-
     await loginCompleto(page);
   
     await page.waitForTimeout(1000);
