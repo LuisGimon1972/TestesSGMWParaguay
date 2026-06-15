@@ -21,7 +21,7 @@ test('Teste de busca crítico em Usuários', async ({ page }) => {
      await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');
      await page.waitForTimeout(1500);
-     console.log('BUSCA EXISTENTE OK:', primeiroNome);
+     console.log('BUSCA  USUÁRIO EXISTENTE OK:', primeiroNome);
 
     await page.waitForTimeout(1000);
 
@@ -30,7 +30,7 @@ test('Teste de busca crítico em Usuários', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA INEXISTENTE OK:', prodInexistente);
+    console.log('BUSCA USUÁRIO INEXISTENTE OK:', prodInexistente);
     
     await page.waitForTimeout(4000);  
 });

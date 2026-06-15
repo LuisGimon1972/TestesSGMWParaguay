@@ -23,7 +23,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
         await page.waitForTimeout(1000);
         await page.keyboard.press('Enter');
         await page.waitForTimeout(1500);
-        console.log('BUSCA EXISTENTE OK:', codigoEscolhido);
+        console.log('BUSCA COTAÇÃO EXISTENTE OK:', codigoEscolhido);
     } else {
         console.warn('Nenhum código encontrado na grade.');
     }
@@ -34,7 +34,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA INEXISTENTE OK:', moedainex);
+    console.log('BUSCA COTAÇÃO INEXISTENTE OK:', moedainex);
 
     await page.waitForTimeout(4000);  
 });

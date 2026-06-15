@@ -17,7 +17,7 @@ await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
 await page.waitForTimeout(1000);  
 await page.keyboard.press('Enter');
 await page.waitForTimeout(1500);
-console.log('BUSCA EXISTENTE OK:', primeiroNome);
+console.log('BUSCA PESSOA EXISTENTE OK:', primeiroNome);
 
 await page.waitForTimeout(1000);
 
@@ -26,7 +26,7 @@ await page.getByLabel(/pesquisar registro/i).fill(nomeInexistente);
 await page.waitForTimeout(1000);  
 await page.keyboard.press('Enter');
 await page.waitForTimeout(1500);
-console.log('BUSCA INEXISTENTE OK:', nomeInexistente);
+console.log('BUSCA PESSOA INEXISTENTE OK:', nomeInexistente);
 
 await page.waitForTimeout(4000);  
 });
