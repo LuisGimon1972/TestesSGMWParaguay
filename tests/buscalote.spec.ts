@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
+test('Teste de busca crítico em Lotes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
 
   await loginCompleto(page);
@@ -13,7 +13,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     ]);
     console.log('CLICOU EM LOTES');     
 
-    await page.waitForTimeout(4000);        
+    await page.waitForTimeout(1000);        
 
    const lotes = await page.locator('table td span[class*="tw-text-ellipsis"][class*="tw-text-nowrap"]').allTextContents();
 
@@ -25,7 +25,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
         await page.getByLabel(/pesquisar registro/i).fill(loteEscolhido);
         await page.waitForTimeout(1500);
         await page.keyboard.press('Enter');
-        await page.waitForTimeout(2500);
+        await page.waitForTimeout(2000);
         console.log('BUSCA LOTE EXISTENTE OK:', loteEscolhido);
     } 
     else {
