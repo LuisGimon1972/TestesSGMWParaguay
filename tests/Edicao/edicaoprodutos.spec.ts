@@ -23,12 +23,12 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       await page.waitForTimeout(1000);
       const localestoque = `TEST LOCAL ESTOQUE ALTERADO ${Date.now()}`;
       await page.getByLabel(/localização/i).fill(localestoque);
-      console.log('LOCALIZAÇÃO ALTERADO DE ESTOQUE OK', localestoque);
+      console.log('LOCALIZAÇÃO ALTERADA DE ESTOQUE OK', localestoque);
 
       await page.waitForTimeout(1000);
       const refestoque = `TEST REFERÊNCIA ESTOQUE ALTERADA ${Date.now()}`;
       await page.getByLabel(/referência/i).fill(refestoque);
-      console.log('REFERÊNCIA ALTERADO ESTOQUE ESTOQUE OK', refestoque);
+      console.log('REFERÊNCIA ALTERADA ESTOQUE ESTOQUE OK', refestoque);
 
       await page.waitForTimeout(1000);
       await page.locator('[aria-label="Fornecedor"]').click({ force: true });
