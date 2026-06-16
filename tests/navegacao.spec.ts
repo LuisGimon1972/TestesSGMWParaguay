@@ -22,10 +22,28 @@ test('Navegação de menus', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await Promise.all([
+      page.waitForURL(/producto/, { timeout: 15000 }),
+      page.locator('a[href*="producto"]').first().click()
+    ]);
+    console.log('CLICOU PRODUTOS');
+
+    await page.waitForTimeout(1000);
+    await page.getByText(/vendas/i).click({ force: true });
+    console.log('CLICOU EM VENDAS');
+
+    await page.waitForTimeout(1000);
+    await Promise.all([
       page.waitForURL(/faturamento/, { timeout: 15000 }),
       page.locator('a[href*="faturamento"]').first().click()
     ]);
     console.log('CLICOU EM FATURAMENTO');
+
+    await page.waitForTimeout(1000);
+    await Promise.all([
+      page.waitForURL(/dav/, { timeout: 15000 }),
+      page.locator('a[href*="dav"]').first().click()
+    ]);
+    console.log('CLICOU EM DAV');
 
     await page.waitForTimeout(1000);
     await Promise.all([
