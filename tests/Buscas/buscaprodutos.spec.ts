@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { loginCompleto } from '../utils/loginCompleto';
+import { loginCompleto } from '../../utils/loginCompleto';
 
 test('Teste de busca crítico em Produtos', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
