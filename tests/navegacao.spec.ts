@@ -73,6 +73,7 @@ test('Navegação de menus', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
+    console.log('CLICOU EM FUNCIONÁRIOS'); 
 
     await page.waitForTimeout(4000);
     await capturarRequisicoesApi(page);         
