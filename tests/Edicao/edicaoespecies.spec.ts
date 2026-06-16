@@ -16,6 +16,7 @@ test('Edição de datos espécies', async ({ page }) => {
     await page.locator('table img[src="/icons/edit.svg"]').first().click();
     console.log('CLICOU NO ÍCONE DE EDITAR');    
 
+    await page.waitForTimeout(1000);
     const descricao = `TEST ESPÉCIE ALTERADA ${Date.now()}`;
     await page.getByLabel(/descrição/i).fill(descricao);
     console.log('DESCRIÇÃO DE ESPÉCIE ALTERADA OK', descricao);
