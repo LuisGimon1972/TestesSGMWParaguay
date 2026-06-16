@@ -13,8 +13,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
     console.log('CLICOU PESSOAS');    
 
     await page.locator('table img[src="/icons/edit.svg"]').first().click();
-    console.log('CLICOU NO ÍCONE DE EDITAR');
-    
+    console.log('CLICOU NO ÍCONE DE EDITAR');    
 
     await page.waitForTimeout(1000);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
