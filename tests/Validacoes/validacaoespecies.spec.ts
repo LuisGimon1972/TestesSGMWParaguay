@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { loginCompleto } from '../utils/loginCompleto';
-import { capturarRequisicoesApi } from '../utils/capturaApi';
+import { loginCompleto } from '../../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Validação de dados espécies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
