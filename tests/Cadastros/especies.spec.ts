@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
@@ -31,6 +31,21 @@ test('Cadastro de espécies', async ({ page }) => {
     .first()
     .click({ force: true });
     console.log('TIPO DO CARTÃO OK');
+
+    await page.waitForTimeout(1000);
+    const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
+    await moedaField.scrollIntoViewIfNeeded();
+    await expect(moedaField).toBeVisible();    
+    await moedaField.evaluate(el => (el as HTMLElement).click());    
+    const menu1= page.locator('.q-menu');
+    await expect(menu1).toBeVisible();    
+    const moedas = ['usd', 'brl', 'pyg', 'cad', 'eur', 'gbp'];    
+    const moedaEscolhida = moedas[Math.floor(Math.random() * moedas.length)];
+    const opcao = menu1.locator('.q-item', {
+    hasText: new RegExp(moedaEscolhida, 'i')
+    }).first();
+    await opcao.click();
+    console.log('MOEDA DE COTAÇÃO OK:', moedaEscolhida);
 
     await page.waitForTimeout(1000);
     await page.locator('[aria-label="Tipo da espécie"]').click({ force: true });
