@@ -14,6 +14,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     await page.locator('table img[src="/icons/edit.svg"]').first().click();
     console.log('CLICOU NO ÍCONE DE EDITAR');
+    
 
     await page.waitForTimeout(1000);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
@@ -26,13 +27,24 @@ test('Cadastro de Clientes', async ({ page }) => {
     console.log('TIPO DE OPERAÇÃO OK');
 
     await page.waitForTimeout(1000);
-
     const nome = `TEST CLIENTE ALTERADO ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
     console.log('NOMBRE DO CLIENTE ALTERADO OK', nome);
 
     await page.waitForTimeout(1000);
+    const direccion = `TEST DIRECCION ALTERADA ${Date.now()}`;
+    await page.getByLabel(/direção/i).fill(direccion);
+    console.log('EDEREÇO ALTERADO OK', nome);
 
+    await page.waitForTimeout(1000);
+    const numero = Math.floor(Math.random() * 4000) + 1;
+    const campoNumero = page.locator('.q-field')
+    .filter({ hasText: /número/i })
+    .last();
+    await campoNumero.locator('input').fill(numero.toString());
+    console.log('NUMERO ALTERADO OK:', numero);
+
+    await page.waitForTimeout(1000);
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
     ).join('');
