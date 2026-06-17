@@ -16,10 +16,8 @@ test('Exclusão de datos Produtos', async ({ page }) => {
     await page.waitForTimeout(1000);        
 
     await page.waitForSelector('table', { state: 'visible' });
-    const menuTresPontos = page.locator('table tr:first-child >> text=more_vert').first();
-    console.log('LOCALIZOU OS TRÊS PONTOS');
-    await menuTresPontos.click();
-    console.log('CLICOU NOS TRÊS PONTOS');
+    const menuTresPontos = page.locator('table tr:first-child >> text=more_vert').first();    
+    await menuTresPontos.click();    
 
     await page.waitForTimeout(1000);    
     await page.waitForSelector('text=Excluir', { state: 'visible' });
