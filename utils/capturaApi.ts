@@ -18,6 +18,6 @@ export async function capturarRequisicoesApi(page: Page) {
   await page.waitForTimeout(3000);
 
   if (requisicoes.length === 0) {
-    console.log('⚠️ Nenhuma requisição capturada');
+    console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
   }
 }
