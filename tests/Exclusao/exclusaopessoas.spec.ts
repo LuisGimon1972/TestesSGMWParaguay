@@ -23,8 +23,8 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
     await page.waitForTimeout(1000);    
     await page.waitForSelector('text=Excluir', { state: 'visible' });
     await page.locator('text=Excluir').click();
-    console.log('CLICOU EM EXCLUIR');
-    await page.waitForTimeout(5000);    
+    console.log('CLICOU EM EXCLUIR');    
         
     await capturarRequisicoesApi(page);   
+    await page.waitForTimeout(5000);    
 });
