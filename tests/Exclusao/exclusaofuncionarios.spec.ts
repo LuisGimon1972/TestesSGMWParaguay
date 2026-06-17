@@ -23,10 +23,6 @@ test('Exclusão de datos funcionários', async ({ page }) => {
   await page.locator('text=Excluir').click();
   console.log('CLICOU EM EXCLUIR');    
 
-  await capturarRequisicoesApi(page); 
-  if(capturarRequisicoesApi.length > 0){
-        console.log('CLICOU EM CONFIRMAR EXCLUIR');
-        console.log(`***REQUISIÇÕES DA API ⬅️***`);
-  }
+  await capturarRequisicoesApi(page);   
   await page.waitForTimeout(4000);  
 });
