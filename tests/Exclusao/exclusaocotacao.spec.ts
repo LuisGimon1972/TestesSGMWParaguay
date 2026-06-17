@@ -11,11 +11,12 @@ test('Exclusão de datos cotação de moedas', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');; 
+    console.log('CLICOU EM COTAÇÃO'); 
 
     await page.waitForTimeout(2000);
     await page.waitForSelector('table img[src*="trash"]', { state: 'visible' });
     await page.locator('table img[src*="trash"]').first().click();
+    console.log('CLICOU EM EXCLUIR');
 
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
