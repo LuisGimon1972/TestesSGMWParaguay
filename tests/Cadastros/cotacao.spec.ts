@@ -55,6 +55,8 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await expect(inputData).toBeVisible();
     await inputData.fill(datahoje);
     console.log('INICIO DE VIGÊNCIA OK', datahoje);
+
+    await page.waitForTimeout(2000);    
     
     const fin = new Date();
     const fimMes = new Date(fin.getFullYear(), hoje.getMonth() + 1, 0);
@@ -77,8 +79,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR COTACAO');  
-
-    console.log(`***REQUISIÇÕES DA API ⬅️***`);
+    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
 });

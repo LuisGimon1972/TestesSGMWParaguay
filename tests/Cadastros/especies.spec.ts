@@ -62,8 +62,7 @@ test('Cadastro de espécies', async ({ page }) => {
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR');  
-
-    console.log(`***REQUISIÇÕES DA API ⬅️***`);
+    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
 });
