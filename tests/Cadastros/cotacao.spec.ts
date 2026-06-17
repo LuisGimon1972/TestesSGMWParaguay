@@ -78,6 +78,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR COTACAO');  
 
+    console.log(`***REQUISIÇÕES DA API ⬅️***`);
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
 });

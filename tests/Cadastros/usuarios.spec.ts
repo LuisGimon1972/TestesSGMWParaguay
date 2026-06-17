@@ -102,6 +102,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .click({ force: true });
   console.log('CLICOU EM SALVAR USUARIO');
   
+  console.log(`***REQUISIÇÕES DA API ⬅️***`);
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
 });

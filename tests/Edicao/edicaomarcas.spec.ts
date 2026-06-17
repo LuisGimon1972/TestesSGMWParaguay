@@ -25,6 +25,7 @@ test('Edição de datos marcas', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR MARCA');  
 
+    console.log(`***REQUISIÇÕES DA API ⬅️***`);
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);      
 });

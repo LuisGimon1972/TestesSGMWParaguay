@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test';
 
-export async function capturarRequisicoesApi(page: Page) {
-  console.log(`***REQUISIÇÕES DA API ⬅️***`);
+export async function capturarRequisicoesApi(page: Page) {  
 
   page.on('request', request => {
     console.log(`➡️ Requisição: ${request.method()} ${request.url()}`);

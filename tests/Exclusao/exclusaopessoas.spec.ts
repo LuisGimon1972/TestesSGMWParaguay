@@ -26,5 +26,9 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
     console.log('CLICOU EM EXCLUIR');    
         
     await capturarRequisicoesApi(page);   
+    if(capturarRequisicoesApi.length > 0){
+        console.log('CLICOU EM CONFIRMAR EXCLUIR');
+        console.log(`***REQUISIÇÕES DA API ⬅️***`);
+      }
     await page.waitForTimeout(5000);    
 });

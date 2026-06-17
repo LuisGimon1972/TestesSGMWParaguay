@@ -15,9 +15,13 @@ test('Exclusão de datos cotação de moedas', async ({ page }) => {
 
     await page.waitForTimeout(2000);
     await page.waitForSelector('table img[src*="trash"]', { state: 'visible' });
-    await page.locator('table img[src*="trash"]').first().click();
-    console.log('CLICOU EM EXCLUIR');
+    await page.locator('table img[src*="trash"]').first().click();    
 
     await capturarRequisicoesApi(page); 
+    if(capturarRequisicoesApi.length > 0){
+        console.log('CLICOU EM CONFIRMAR EXCLUIR');
+        console.log(`***REQUISIÇÕES DA API ⬅️***`);
+      }        
+
     await page.waitForTimeout(4000);    
 });
