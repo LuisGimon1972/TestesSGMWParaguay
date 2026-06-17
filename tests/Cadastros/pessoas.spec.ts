@@ -128,9 +128,8 @@ test('Cadastro de Clientes', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');  
-      
-    console.log(`***REQUISIÇÕES DA API ⬅️***`);
+    console.log('CLICOU EM SALVAR');        
+   
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
 
