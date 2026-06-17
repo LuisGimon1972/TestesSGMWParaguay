@@ -16,6 +16,7 @@ test('Exclusão de datos espécies', async ({ page }) => {
     await page.waitForTimeout(2000);
     await page.waitForSelector('table img[src*="trash"]', { state: 'visible' });
     await page.locator('table img[src*="trash"]').first().click();
+    console.log('CLICOU EM EXCLUIR');
 
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
