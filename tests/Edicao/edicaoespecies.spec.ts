@@ -13,11 +13,7 @@ test('Edição de datos espécies', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/especies"]').click()
-    console.log('CLICOU EM ESPÉCIES'); 
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');         
+    console.log('CLICOU EM ESPÉCIES');     
     
     await page.waitForSelector('table');    
     await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
