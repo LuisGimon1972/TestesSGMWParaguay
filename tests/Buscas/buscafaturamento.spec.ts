@@ -4,11 +4,12 @@ import { loginCompleto } from '../../utils/loginCompleto';
 test('Teste de busca crítico em Faturamento', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
 
-  await loginCompleto(page);
+  await loginCompleto(page); 
 
-  await page.waitForTimeout(1000);
-    await page.getByText(/vendas/i).click({ force: true });
-    console.log('CLICOU EM VENDAS');
+  const venBtn = page.getByText(/vendas/i).first();
+  await expect(venBtn).toBeVisible();
+  await venBtn.click();
+  console.log('CLICOU EM VENDAS');
   
   await page.waitForTimeout(1000);
     await Promise.all([
