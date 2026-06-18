@@ -12,8 +12,8 @@ test('Teste de busca crítico em Faturamento', async ({ page }) => {
   
   await page.waitForTimeout(1000);
     await Promise.all([
-      page.waitForURL(/faturamento/, { timeout: 15000 }),
-      page.locator('a[href*="faturamento"]').first().click()
+      page.waitForURL(/facturacion/, { timeout: 15000 }),
+      page.locator('a[href*="facturacion"]').first().click()
     ]);
     console.log('CLICOU EM FATURAMENTO');
 
