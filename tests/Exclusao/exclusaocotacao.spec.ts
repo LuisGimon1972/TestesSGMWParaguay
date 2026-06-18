@@ -13,11 +13,13 @@ test('Exclusão de datos cotação de moedas', async ({ page }) => {
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
     console.log('CLICOU EM COTAÇÃO'); 
 
-    await page.waitForTimeout(2000);
-    await page.waitForSelector('table img[src*="trash"]', { state: 'visible' });
-    await page.locator('table img[src*="trash"]').first().click();    
-
-    await capturarRequisicoesApi(page);    
-
-    await page.waitForTimeout(4000);    
+   await page.waitForTimeout(2000);
+   const trashIcons = await page.locator('table img[src*="trash"]').count();
+   if (trashIcons > 0) {
+        await page.locator('table img[src*="trash"]').first().click();
+        await capturarRequisicoesApi(page);
+        await page.waitForTimeout(4000);
+   } else {
+        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+  }
 });

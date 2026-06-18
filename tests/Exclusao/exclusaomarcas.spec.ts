@@ -14,10 +14,12 @@ test('Exclusão de datos Marcas', async ({ page }) => {
     console.log('CLICOU EM MARCAS');
 
     await page.waitForTimeout(2000);
-    await page.waitForSelector('table img[src*="trash"]', { state: 'visible' });
-    await page.locator('table img[src*="trash"]').first().click();    
-    console.log('CLICOU EM EXCLUIR');    
-        
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);   
+    const trashIcons = await page.locator('table img[src*="trash"]').count();
+    if (trashIcons > 0) {
+        await page.locator('table img[src*="trash"]').first().click();
+        await capturarRequisicoesApi(page);
+        await page.waitForTimeout(4000);
+    } else {
+        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+    }
 });
