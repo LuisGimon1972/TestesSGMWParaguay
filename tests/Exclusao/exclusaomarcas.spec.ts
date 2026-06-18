@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
@@ -6,8 +6,10 @@ test('Exclusão de datos Marcas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
  
-    await page.waitForTimeout(2000);
-    await page.getByText(/Cadastros/i).click({ force: true });
+    const cadBtn = page.getByText(/cadastros/i).first();
+    await expect(cadBtn).toBeVisible();
+    await cadBtn.click();
+    console.log('CLICOU EM CADASTRO');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/marcas"]').click()
