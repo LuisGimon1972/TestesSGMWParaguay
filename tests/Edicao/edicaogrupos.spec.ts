@@ -16,7 +16,9 @@ test('Edição de datos grupos', async ({ page }) => {
     console.log('CLICOU EM GRUPOS');
 
     await page.waitForSelector('table');    
-    await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
+    await page.waitForTimeout(1000);
+    await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });  
+    await page.waitForTimeout(1000);  
     const trashIcons = await page.locator('table img[src*="trash"]').count();
     console.log('Quantidade de ícones de lixo:', trashIcons);
 
