@@ -33,8 +33,8 @@ test('Navegação de menus', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await Promise.all([
-      page.waitForURL(/faturamento/, { timeout: 15000 }),
-      page.locator('a[href*="faturamento"]').first().click()
+      page.waitForURL(/facturacion/, { timeout: 15000 }),
+      page.locator('a[href*="facturacion"]').first().click()
     ]);
     console.log('CLICOU EM FATURAMENTO');
 
@@ -93,6 +93,5 @@ test('Navegação de menus', async ({ page }) => {
     await page.getByText(/funcionários/i).click({ force: true });
     console.log('CLICOU EM FUNCIONÁRIOS'); 
 
-    await page.waitForTimeout(4000);
-    await capturarRequisicoesApi(page);         
+    await capturarRequisicoesApi(page);            
 });
