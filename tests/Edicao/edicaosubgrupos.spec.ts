@@ -16,8 +16,10 @@ test('Edição de datos subgrupos', async ({ page }) => {
     console.log('CLICOU EM SUBGRUPOS');
 
     await page.waitForSelector('table');    
+    await page.waitForTimeout(1000);
     await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
-    const trashIcons = await page.locator('table img[src*="trash"]').count();
+    await page.waitForTimeout(1000);
+    const trashIcons = await page.locator('table img[src*="trash"]').count();    
     console.log('Quantidade de ícones de lixo:', trashIcons);
 
     if (trashIcons > 0) {     
