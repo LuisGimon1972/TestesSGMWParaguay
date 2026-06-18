@@ -5,10 +5,12 @@ test('Teste de busca crítico em  Marcas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
 
   await loginCompleto(page);
-  
+      
     await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true });
-    console.log('CLICOU EM CADASTROS');
+    const cadBtn = page.getByText(/cadastros/i).first();
+    await expect(cadBtn).toBeVisible();
+    await cadBtn.click();
+    console.log('CLICOU EM CADASTRO');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/marcas"]').click()

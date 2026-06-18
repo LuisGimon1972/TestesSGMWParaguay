@@ -7,8 +7,10 @@ test('Teste de busca crítico em Grupos', async ({ page }) => {
   await loginCompleto(page);
   
     await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true });
-    console.log('CLICOU EM CADASTROS');
+    const cadBtn = page.getByText(/cadastros/i).first();
+    await expect(cadBtn).toBeVisible();
+    await cadBtn.click();
+    console.log('CLICOU EM CADASTRO');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
