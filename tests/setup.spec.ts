@@ -7,6 +7,5 @@ test('Setup login', async ({ page }) => {
   await loginCompleto(page);    
   console.log('AUTENTICAÇÃO OK');  
 
-  await capturarRequisicoesApi(page); 
-  await page.waitForTimeout(4000);
+  await capturarRequisicoesApi(page);   
 });
