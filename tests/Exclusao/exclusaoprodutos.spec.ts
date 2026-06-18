@@ -20,12 +20,11 @@ test('Exclusão de datos Produtos', async ({ page }) => {
     await menuTresPontos.click();    
 
     await page.waitForTimeout(1000);    
-    const trashIcons = await page.locator('table img[src*="trash"]').count();
-    if (trashIcons > 0) {
-        await page.locator('table img[src*="trash"]').first().click();
-        await capturarRequisicoesApi(page);
-        await page.waitForTimeout(4000);
-    } else {
-        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
-    }
+    await page.waitForSelector('text=Excluir', { state: 'visible' });
+    await page.locator('text=Excluir').click();
+    console.log('CLICOU EM EXCLUIR');    
+        
+    await capturarRequisicoesApi(page);   
+    
+    await page.waitForTimeout(5000);    
 });
