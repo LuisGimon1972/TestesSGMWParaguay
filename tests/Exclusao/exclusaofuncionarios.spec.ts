@@ -21,7 +21,8 @@ test('Exclusão de datos funcionários', async ({ page }) => {
   await page.waitForTimeout(1000);    
   await page.waitForSelector('text=Excluir', { state: 'visible' });
   await page.locator('text=Excluir').click();
-  console.log('CLICOU EM EXCLUIR');    
+  console.log('CLICOU EM EXCLUIR');   
+  await page.waitForTimeout(2000);     
 
   await capturarRequisicoesApi(page);   
   await page.waitForTimeout(4000);  

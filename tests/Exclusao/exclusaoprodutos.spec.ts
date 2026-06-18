@@ -23,6 +23,7 @@ test('Exclusão de datos Produtos', async ({ page }) => {
     await page.waitForSelector('text=Excluir', { state: 'visible' });
     await page.locator('text=Excluir').click();
     console.log('CLICOU EM EXCLUIR');    
+    await page.waitForTimeout(2000);        
         
     await capturarRequisicoesApi(page);   
     
