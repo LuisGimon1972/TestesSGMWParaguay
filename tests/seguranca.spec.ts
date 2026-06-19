@@ -16,13 +16,11 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
 }
   console.log('TESTE DE SEGURANÇA BRUTE FORCE OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.waitForSelector('input[type="email"], input[type="text"]', { timeout: 10000 });
   await page.locator('input[type="email"], input[type="text"]').first().fill('<script>alert("xss")</script>');
   await page.locator('input[type="password"]').first().fill('senhaqualquer');
-  console.log('PREENCHIDO');
-  await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU LOGIN');
+  await page.getByRole('button', { name: /sign in|entrar/i }).click();  
   expect(dialogs.length).toBe(0);  
   const bloqueioLocator = page.locator('text=/bloqueado|captcha/i');
   const existe = await bloqueioLocator.count();
@@ -33,7 +31,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('TESTE DE SEGURANÇA XSS INJECTION OK');
     
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const erroLocator = page.locator('.error-message');
   if (await erroLocator.count() > 0) {
     const erroMsg = await erroLocator.innerText();
@@ -43,14 +41,14 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
     }
   console.log('TESTE DE SEGURANÇA MENSAGENS DE ERRO SEGURAS OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const acessoNegado = await page.locator('text=/403|não autorizado/i').isVisible();
   if (acessoNegado) {
     console.log('⚠️ Acesso restrito detectado');
   }
   console.log('TESTE DE SEGURANÇA CONTROLE DE ACESSO PÓS-LOGIN OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const cookies = await page.context().cookies();
   const authCookie = cookies.find(c => c.name.includes('auth') || c.name.includes('session'));
   if (authCookie) {
@@ -61,7 +59,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('TESTE DE SEGURANÇA COOKIES DE SESSÃO OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.goto(process.env.BASE_URL!);
   await page.getByText(/entrar/i).click();
   await page.locator('input[type="email"], input[type="text"]').first().fill('');
@@ -73,7 +71,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('TESTE DE SEGURANÇA CAMPOS VAZIOS OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const response = await request.post(`${process.env.BASE_URL!}/login`, {
     data: { email: process.env.USER!, password: process.env.PASS! }
   });
@@ -83,7 +81,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   expect(replay.status()).not.toBe(200);
   console.log('TESTE DE SEGURANÇA REPLAY DE REQUISIÇÃO OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.goto(`${process.env.BASE_URL!}/py/pessoa`);
   const tituloLocator = page.locator('text=/Pessoas|Cadastro de Pessoas|Lista de Pessoas/i');
   if (await tituloLocator.count() > 0) {
@@ -93,7 +91,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('TESTE DE SEGURANÇA ACESSO MÓDULO PESSOAS OK');
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const conteudo = await page.content();
   if (conteudo) {  
     expect(conteudo).not.toMatch(/senha\s*=\s*|chave\s*=\s*|token\s*=\s*/i);
@@ -102,7 +100,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('TESTE DE SEGURANÇA DADOS SENSÍVEIS OK'); 
   
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.context().clearCookies();
   await page.goto(`${process.env.BASE_URL!}/py/pessoa`);
   const bloqueioLogin = await page.locator('text=/login|entrar/i').isVisible();
