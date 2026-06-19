@@ -63,7 +63,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   await page.getByText(/entrar/i).click();
   await page.locator('input[type="email"], input[type="text"]').first().fill('');
   await page.locator('input[type="password"]').first().fill('');
-   await page.getByRole('button', { name: /sign in|entrar/i }).click();
+  await page.getByRole('button', { name: /sign in|entrar/i }).click();
   const msgCampos = await page.locator('text=/obrigatório|preencha/i').isVisible();
   if (msgCampos) {
     console.log('⚠️ Mensagem de campo obrigatório detectada'); 
@@ -72,10 +72,10 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   
   await page.waitForTimeout(2000);
   const response = await request.post(`${process.env.BASE_URL!}/login`, {
-    data: { email: process.env.USER!, password: process.env.PASS! }
+  data: { email: process.env.USER!, password: process.env.PASS! }
   });
   const replay = await request.post(`${process.env.BASE_URL!}/login`, {
-    data: { email: process.env.USER!, password: process.env.PASS! }
+  data: { email: process.env.USER!, password: process.env.PASS! }
   });
   expect(replay.status()).not.toBe(200);
   console.log('TESTE DE SEGURANÇA REPLAY DE REQUISIÇÃO OK');
