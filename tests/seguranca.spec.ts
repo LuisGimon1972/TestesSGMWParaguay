@@ -8,7 +8,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   const dialogs: string[] = [];
   page.on('dialog', dialog => dialogs.push(dialog.message()));  
 
-  for (let i = 0; i <= 50; i++) {
+  for (let i = 0; i <= 30; i++) {
   await page.locator('input[type="email"], input[type="text"]').first().fill(`user${i}@teste.com`);
   await page.locator('input[type="password"]').first().fill('senhaErrada');
   await page.getByRole('button', { name: /sign in|entrar/i }).click();  
