@@ -19,6 +19,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   await page.waitForSelector('input[type="email"], input[type="text"]', { timeout: 10000 });
   await page.locator('input[type="email"], input[type="text"]').first().fill('<script>alert("xss")</script>');
   await page.locator('input[type="password"]').first().fill('senhaqualquer');
+  await page.waitForTimeout(2000);
   await page.getByRole('button', { name: /sign in|entrar/i }).click();  
   expect(dialogs.length).toBe(0);   
   const bloqueioLocator = page.locator('text=/bloqueado|captcha/i');
