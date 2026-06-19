@@ -13,7 +13,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   await page.locator('input[type="password"]').first().fill('senhaErrada');
   await page.getByRole('button', { name: /sign in|entrar/i }).click();  
 }
-  console.log('TESTE DE SEGURANÇA BRUTE FORCE OK');
+  console.log('1) TESTE DE SEGURANÇA BRUTE FORCE OK');
   
   await page.waitForTimeout(2000);
   await page.waitForSelector('input[type="email"], input[type="text"]', { timeout: 10000 });
@@ -29,7 +29,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   } else {
    console.log('Nenhum bloqueio/captcha detectado');
   }
-  console.log('TESTE DE SEGURANÇA XSS INJECTION OK');
+  console.log('2) TESTE DE SEGURANÇA XSS INJECTION OK');
     
   await page.waitForTimeout(2000);
   const erroLocator = page.locator('.error-message');
@@ -46,7 +46,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   if (acessoNegado) {
     console.log('⚠️ Acesso restrito detectado');
   }
-  console.log('TESTE DE SEGURANÇA CONTROLE DE ACESSO PÓS-LOGIN OK');
+  console.log('3) TESTE DE SEGURANÇA CONTROLE DE ACESSO PÓS-LOGIN OK');
   
   await page.waitForTimeout(2000);
   const cookies = await page.context().cookies();
@@ -69,7 +69,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   if (msgCampos) {
     console.log('⚠️ Mensagem de campo obrigatório detectada'); 
   }
-  console.log('TESTE DE SEGURANÇA CAMPOS VAZIOS OK');
+  console.log('4) TESTE DE SEGURANÇA CAMPOS VAZIOS OK');
   
   await page.waitForTimeout(2000);
   const response = await request.post(`${process.env.BASE_URL!}/login`, {
@@ -89,7 +89,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   } else {
     console.log('Nenhum título de Pessoas encontrado na página');
   }
-  console.log('TESTE DE SEGURANÇA ACESSO MÓDULO PESSOAS OK');
+  console.log('5) TESTE DE SEGURANÇA ACESSO MÓDULO PESSOAS OK');
   
   await page.waitForTimeout(2000);
   const conteudo = await page.content();
@@ -98,7 +98,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   } else {
     console.log('Nenhum conteúdo retornado da página Pessoas');
   }
-  console.log('TESTE DE SEGURANÇA DADOS SENSÍVEIS OK'); 
+  console.log('6) TESTE DE SEGURANÇA DADOS SENSÍVEIS OK'); 
   
   await page.waitForTimeout(2000);
   await page.context().clearCookies();
@@ -109,6 +109,6 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   } else {
     console.log('Página Pessoas não exibiu mensagem de login, verificar comportamento esperado');
   }
-  console.log('TESTE DE SEGURANÇA TESTE SEM LOGIN OK');  
+  console.log('7) TESTE DE SEGURANÇA TESTE SEM LOGIN OK');  
 
 });
