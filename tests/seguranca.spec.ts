@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('teste de segurança completo no login e módulo Pessoas', async ({ page, request }) => {
+test('Teste de segurança completo no login e módulo Pessoas', async ({ page, request }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });      
   await page.goto(process.env.BASE_URL!);
   await page.getByText(/entrar/i).click();
@@ -8,11 +8,10 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   const dialogs: string[] = [];
   page.on('dialog', dialog => dialogs.push(dialog.message()));  
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i <= 20; i++) {
   await page.locator('input[type="email"], input[type="text"]').first().fill(`user${i}@teste.com`);
   await page.locator('input[type="password"]').first().fill('senhaErrada');
-  await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  await page.waitForTimeout(1000);
+  await page.getByRole('button', { name: /sign in|entrar/i }).click();  
 }
   console.log('TESTE DE SEGURANÇA BRUTE FORCE OK');
   
@@ -21,7 +20,7 @@ test('teste de segurança completo no login e módulo Pessoas', async ({ page, r
   await page.locator('input[type="email"], input[type="text"]').first().fill('<script>alert("xss")</script>');
   await page.locator('input[type="password"]').first().fill('senhaqualquer');
   await page.getByRole('button', { name: /sign in|entrar/i }).click();  
-  expect(dialogs.length).toBe(0);  
+  expect(dialogs.length).toBe(0);   
   const bloqueioLocator = page.locator('text=/bloqueado|captcha/i');
   const existe = await bloqueioLocator.count();
   if (existe > 0) {
