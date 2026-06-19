@@ -5,10 +5,12 @@ import { capturarRequisicoesApi } from '../utils/capturaApi';
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
-    
-    await page.getByText(/dashboard/i).click({ force: true });
-    console.log('CLICOU EM DASKBOARD'); 
-    
+
+    const dashboardBtn = page.getByText(/dashboard/i).first();
+    await expect(dashboardBtn).toBeVisible({ timeout: 5000 });
+    await dashboardBtn.click();
+    console.log('CLICOU EM DASKBOARD');      
+        
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
     console.log('CLICOU PESSOAS');
