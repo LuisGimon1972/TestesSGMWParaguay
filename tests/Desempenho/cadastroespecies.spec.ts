@@ -4,7 +4,10 @@ import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Desempenho de Cadastro de espécies', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });    
+
+    const inicioLogin = Date.now();
     await loginCompleto(page);    
+    const fimLogin = Date.now();
 
     const inicio = Date.now();
  
@@ -69,11 +72,14 @@ test('Desempenho de Cadastro de espécies', async ({ page }) => {
     
     await capturarRequisicoesApi(page);   
 
+    const tempoLogin = fimLogin - inicioLogin;
+    console.log(`Tempo total do Login: ${tempoLogin} ms`);
+
     const fim = Date.now();
     const tempoTotal = fim - inicio;
+    
     console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
-
-    console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
+    
     if (tempoTotal > 8000) {
        console.warn('⚠️ Tempo acima do limite esperado');
     }
