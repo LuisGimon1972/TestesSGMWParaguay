@@ -55,7 +55,7 @@ test('Teste de desempenho de Cadastro de Pessoas', async ({ page }) => {
 
     const nome = `TEST PESSOAS DESEMPENHO ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('NOMBRE DO CLIENTE OK', nome);
+    console.log('NOMBRE DO CLIENTE OK:', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -104,7 +104,7 @@ test('Teste de desempenho de Cadastro de Pessoas', async ({ page }) => {
 
     const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
-    console.log('DIRECCIÓN OK', nome);
+    console.log('DIRECCIÓN OK', direccion);
 
     const numero = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field')
