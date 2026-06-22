@@ -42,7 +42,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .locator('input');
   await expect(campoNome).toBeVisible();
   await campoNome.fill(nome);
-  console.log('NOME OK', nome);
+  console.log('NOME USUÁRIO OK:', nome);
 
   const sobrenome = `TEST USUARIO SOBRENOME  ${Date.now()}`;
   const camposobrenome = page
@@ -52,7 +52,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .locator('input');
   await expect(camposobrenome).toBeVisible();
   await camposobrenome.fill(sobrenome);
-  console.log('NOME OK', sobrenome);
+  console.log('SOBRENOME USUÁRIO OK:', sobrenome);
 
   const email = `autotest${Date.now()}@test.com`;
   const campoEmail = page

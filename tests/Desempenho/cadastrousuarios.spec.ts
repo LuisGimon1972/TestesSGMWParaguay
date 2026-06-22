@@ -43,7 +43,7 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   .locator('input');
   await expect(campoNome).toBeVisible();
   await campoNome.fill(nome);
-  console.log('NOME USUÁRIO OK', nome);
+  console.log('NOME USUÁRIO OK:', nome);
 
   const sobrenome = `TEST USUARIO SOBRENOME  ${Date.now()}`;
   const camposobrenome = page
