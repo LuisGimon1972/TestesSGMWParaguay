@@ -53,7 +53,7 @@ test('Teste de desempenho de Cadastro de Pessoas', async ({ page }) => {
     .click({ force: true }); 
     console.log('TIPO DE OPERAÇÃO OK');
 
-    const nome = `TEST CLIENTE ${Date.now()}`;
+    const nome = `TEST PESSOAS DESEMPENHO ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
     console.log('NOMBRE DO CLIENTE OK', nome);
 
