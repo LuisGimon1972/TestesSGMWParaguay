@@ -115,7 +115,7 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   const tempoTotal = fim - inicio;
   console.log(`Tempo total do Cadastro: ${tempoTotal} ms`);  
   if (tempoTotal > 8000) {
-       console.warn('⚠️ Tempo acima do limite esperado');
+      console.log('⚠️ Tempo acima do limite esperado');
   }
    
   const totalGeral = tempoLogin + tempoTotal;

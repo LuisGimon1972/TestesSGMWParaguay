@@ -132,9 +132,9 @@ test('Teste de Desempenho de Cadastro de Pessoas', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');        
+    console.log('CLICOU EM SALVAR');     
    
-    await capturarRequisicoesApi(page);    
+    await capturarRequisicoesApi(page);       
     
     const tempoLogin = fimLogin - inicioLogin;
     console.log(`Tempo total do Login: ${tempoLogin} ms`);
@@ -143,7 +143,7 @@ test('Teste de Desempenho de Cadastro de Pessoas', async ({ page }) => {
     const tempoTotal = fim - inicio;
     console.log(`Tempo total do Cadastro: ${tempoTotal} ms`);    
     if (tempoTotal > 8000) {
-       console.warn('⚠️ Tempo acima do limite esperado');
+       console.log('⚠️ Tempo acima do limite esperado');
     }
    
     const totalGeral = tempoLogin + tempoTotal;
