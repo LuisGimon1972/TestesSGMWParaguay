@@ -131,8 +131,7 @@ test('Teste de Desempenho de Cadastro de Pessoas', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');        
    
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);    
+    await capturarRequisicoesApi(page);     
 
     const fim = Date.now();
     const tempoTotal = fim - inicio;

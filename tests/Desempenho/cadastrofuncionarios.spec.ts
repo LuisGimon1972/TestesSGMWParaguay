@@ -51,17 +51,16 @@ test('Desempenho Cadastro de funcionários', async ({ page }) => {
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR FUNCIONÁRIO');
+  console.log('CLICOU EM SALVAR FUNCIONÁRIO');  
   
-  await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);    
+  await capturarRequisicoesApi(page);   
 
-    const fim = Date.now();
-    const tempoTotal = fim - inicio;
-    console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
+  const fim = Date.now();
+  const tempoTotal = fim - inicio;
+  console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
 
-    console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
-    if (tempoTotal > 8000) {
+  console.log(`Tempo total do cadastro: ${tempoTotal} ms`);
+  if (tempoTotal > 8000) {
        console.warn('⚠️ Tempo acima do limite esperado');
    }
 });
