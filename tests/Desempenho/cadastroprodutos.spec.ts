@@ -52,13 +52,19 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /preço de custo/i })
       .last();
       await campoPrecusto.locator('input').fill(precusto.toString());
-      console.log('PREÇO DE CUSTO OK:', precusto);
+      console.log('PREÇO DE CUSTO OK:', precusto.toFixed(0));
+
+      const campoLucro = page.locator('.q-field')
+      .filter({ hasText: /% lucro/i })
+      .last();
+      const perLucro = await campoLucro.locator('input').inputValue();
+      console.log('% DE LUCRO OK:', perLucro);
 
       const campoPrevenda = page.locator('.q-field')
       .filter({ hasText: /preço de venda/i })
       .last();
       const valorPrevenda = await campoPrevenda.locator('input').inputValue();
-      console.log('PREÇO DE VENDA OK:', valorPrevenda);
+      console.log('PREÇO DE VENDA OK:', valorPrevenda);      
 
       const cantidad = Math.floor(Math.random() * 1000) + 1;
       const campocantidad = page.locator('.q-field')
