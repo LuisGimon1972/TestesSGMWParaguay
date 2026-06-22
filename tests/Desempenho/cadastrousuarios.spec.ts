@@ -64,7 +64,7 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   await campoEmail.scrollIntoViewIfNeeded();
   await expect(campoEmail).toBeVisible();
   await campoEmail.fill(email);
-  console.log('EMAIL OK', email);
+  console.log('EMAIL OK:', email);
 
   const senha = `autosenhaX*${Date.now()}`;
   const camposenha = page
@@ -75,7 +75,7 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   await camposenha.scrollIntoViewIfNeeded();
   await expect(camposenha).toBeVisible();
   await camposenha.fill(senha);
-  console.log('SENHA OK', senha);
+  console.log('SENHA OK:', senha);
 
   const confirmarsenha = senha
   const campoconfirmarsenha = page
@@ -86,7 +86,7 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   await campoconfirmarsenha.scrollIntoViewIfNeeded();
   await expect(campoconfirmarsenha).toBeVisible();
   await campoconfirmarsenha.fill(confirmarsenha);
-  console.log('SENHA CONFIRMAÇÃO OK', confirmarsenha);
+  console.log('SENHA CONFIRMAÇÃO OK:', confirmarsenha);
 
   await page.locator('[aria-label="Perfil de acesso"]').click({ force: true });
   const cartao = page.locator('.q-menu:visible');
