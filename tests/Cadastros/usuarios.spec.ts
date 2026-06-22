@@ -71,6 +71,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .filter({ hasText: /senha/i })
   .first()
   .locator('input');
+  
   await camposenha.scrollIntoViewIfNeeded();
   await expect(camposenha).toBeVisible();
   await camposenha.fill(senha);
