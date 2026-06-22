@@ -38,7 +38,7 @@ console.log(`⏱️ Tempo total do Login: ${tempoLogin} ms`);
 const tempoTotal = tempoBuscaExistente + tempoBuscaInexistente;
 console.log(`⏱️ Tempo total das buscas: ${tempoTotal} ms`);
 if (tempoTotal > 1000) {
-       console.log('⚠️ Tempo acima do limite esperado');
+       console.log('⚠️ Tempo acima do limite esperado [1000 ms]');
 }else {
         console.log(`✅ Tempo da busca dentro do limite[1000 ms]: ${tempoTotal} ms`);
 }

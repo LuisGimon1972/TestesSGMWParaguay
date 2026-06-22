@@ -65,7 +65,7 @@ test('Desempenho Cadastro de funcionários', async ({ page }) => {
   const tempoTotal = fim - inicio;
   console.log(`⏱️Tempo total do Cadastro: ${tempoTotal} ms`);  
   if (tempoTotal > 8000) {
-       console.log('⚠️ Tempo acima do limite esperado');
+       console.log('⚠️ Tempo acima do limite esperado [8000 ms]');
   } else {
         console.log(`✅ Tempo do cadastro dentro do limite[8000 ms]: ${tempoTotal} ms`);
   }
