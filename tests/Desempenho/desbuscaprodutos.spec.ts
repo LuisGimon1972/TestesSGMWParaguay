@@ -41,7 +41,5 @@ test('Teste de Desempenho de buscas em Produtos', async ({ page }) => {
         console.log('⚠️ Tempo acima do limite esperado');
     }
     const totalGeral = tempoLogin + tempoTotal;
-    console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);
-    
-    
+    console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);       
 });
