@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Cadastro de usuários', async ({ page }) => {
+test('Desempenho de Cadastro de usuários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   await loginCompleto(page);
 
@@ -35,7 +35,7 @@ test('Cadastro de usuários', async ({ page }) => {
   await campoCI.type(ruc, { delay: 50 });
   console.log('RUC:', ruc);
   
-  const nome = `TEST USUARIO ${Date.now()}`;
+  const nome = `TEST USUARIO DESEMPENHO ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
   .filter({ hasText: /nome/i })
@@ -43,7 +43,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .locator('input');
   await expect(campoNome).toBeVisible();
   await campoNome.fill(nome);
-  console.log('NOME OK', nome);
+  console.log('NOME USUÁRIO OK', nome);
 
   const sobrenome = `TEST USUARIO SOBRENOME  ${Date.now()}`;
   const camposobrenome = page
@@ -53,7 +53,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .locator('input');
   await expect(camposobrenome).toBeVisible();
   await camposobrenome.fill(sobrenome);
-  console.log('NOME OK', sobrenome);
+  console.log('SOBRENOME USUÁRIO OK:', sobrenome);
 
   const email = `autotest${Date.now()}@test.com`;
   const campoEmail = page
@@ -103,8 +103,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .click({ force: true });
   console.log('CLICOU EM SALVAR USUARIO');  
   
-  await capturarRequisicoesApi(page); 
-  await page.waitForTimeout(4000);    
+  await capturarRequisicoesApi(page);  
 
   const fim = Date.now();
   const tempoTotal = fim - inicio;
