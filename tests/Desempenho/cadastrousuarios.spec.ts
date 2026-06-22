@@ -117,6 +117,9 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   if (tempoTotal > 8000) {
        console.warn('⚠️ Tempo acima do limite esperado');
   }
+   
+  const totalGeral = tempoLogin + tempoTotal;
+  console.log(`Tempo total Módulo: ${totalGeral} ms`);
 });
 
 function gerarRUC() {

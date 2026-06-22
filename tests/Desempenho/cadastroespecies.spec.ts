@@ -78,9 +78,10 @@ test('Desempenho de Cadastro de espécies', async ({ page }) => {
     const fim = Date.now();
     const tempoTotal = fim - inicio;
     
-    console.log(`Tempo total do Cadastro: ${tempoTotal} ms`);
-    
+    console.log(`Tempo total do Cadastro: ${tempoTotal} ms`);    
     if (tempoTotal > 8000) {
        console.warn('⚠️ Tempo acima do limite esperado');
     }
+    const totalGeral = tempoLogin + tempoTotal;
+    console.log(`Tempo total Módulo: ${totalGeral} ms`);
 });

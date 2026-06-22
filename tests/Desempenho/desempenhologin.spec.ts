@@ -11,5 +11,5 @@ test('Desempenho do login - tempo de resposta', async ({ page }) => {
   console.log(`Tempo de resposta do login: ${tempoResposta} ms`);  
   if (tempoResposta > 5000) {
     console.warn('⚠️ Tempo acima do limite esperado');
-  }
+  }  
 });

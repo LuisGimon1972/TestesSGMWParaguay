@@ -144,7 +144,10 @@ test('Teste de Desempenho de Cadastro de Pessoas', async ({ page }) => {
     console.log(`Tempo total do Cadastro: ${tempoTotal} ms`);    
     if (tempoTotal > 8000) {
        console.warn('⚠️ Tempo acima do limite esperado');
-   }
+    }
+   
+    const totalGeral = tempoLogin + tempoTotal;
+    console.log(`Tempo total Módulo: ${totalGeral} ms`);
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
