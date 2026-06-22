@@ -50,14 +50,20 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /preço de custo/i })
       .last();
       await campoPrecusto.locator('input').fill(precusto.toString());
-      console.log('PREÇO DE CUSTO OK:', precusto);
+      console.log('PREÇO DE CUSTO OK:', precusto.toFixed(2));
+      
+      const campoPrevenda = page.locator('.q-field')
+      .filter({ hasText: /preço de venda/i })
+      .last();
+      const valorPrevenda = await campoPrevenda.locator('input').inputValue();
+      console.log('PREÇO DE VENDA OK:', valorPrevenda);
 
       const cantidad = Math.floor(Math.random() * 1000) + 1;
       const campocantidad = page.locator('.q-field')
       .filter({ hasText: /quantidade/i })
       .first();
       await campocantidad.locator('input').fill(cantidad.toString());
-      console.log('QUANTIDADE OK:', cantidad);
+      console.log('QUANTIDADE OK:', cantidad.toString());
 
       const cantidadmin = Math.floor(Math.random() * 100) + 1;
       const campoCantidadMin = page
@@ -67,7 +73,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input = campoCantidadMin.locator('input');
       await expect(input).toBeVisible();
       await input.fill(String(cantidadmin));
-      console.log('QUANTIDADE MÍNIMA OK:', cantidadmin);
+      console.log('QUANTIDADE MÍNIMA OK:', cantidadmin.toString());
 
       const cantidadmax = Math.floor(Math.random() * 1000) + 1;
       const campoCantidadmax = page
@@ -77,7 +83,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input2 = campoCantidadmax.locator('input');
       await expect(input).toBeVisible();
       await input2.fill(String(cantidadmax));
-      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax);
+      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());
 
       const ivaField = page.locator('[aria-label="IVA"]').first();
       await ivaField.scrollIntoViewIfNeeded();
