@@ -8,7 +8,7 @@ test('Desempenho do login - tempo de resposta', async ({ page }) => {
   const fim = Date.now();
 
   const tempoResposta = fim - inicio;
-  console.log(`Tempo de resposta do login: ${tempoResposta} ms`);  
+  console.log(`⏱️Tempo de resposta do login: ${tempoResposta} ms`);  
   if (tempoResposta > 5000) {
     console.log('⚠️ Tempo acima do limite esperado');
   }  

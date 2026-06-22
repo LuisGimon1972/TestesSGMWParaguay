@@ -100,7 +100,7 @@ test('Teste de segurança completo no login e módulo Pessoas', async ({ page, r
   }
   console.log('6) TESTE DE SEGURANÇA DADOS SENSÍVEIS OK'); 
   
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1000);
   await page.context().clearCookies();
   await page.goto(`${process.env.BASE_URL!}/py/pessoa`);
   const bloqueioLogin = await page.locator('text=/login|entrar/i').isVisible();
