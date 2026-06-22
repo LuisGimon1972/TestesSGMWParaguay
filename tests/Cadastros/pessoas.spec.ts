@@ -53,7 +53,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     const nome = `TEST CLIENTE ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('NOMBRE DO CLIENTE OK', nome);
+    console.log('NOMBRE DO CLIENTE OK:', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -102,7 +102,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
-    console.log('DIRECCIÓN OK', nome);
+    console.log('DIRECCIÓN OK', direccion);
 
     const numero = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field')
@@ -115,15 +115,14 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
-    ).join('');
-    console.log('TELEFONE:', telefone);
+    ).join('');    
     const inputTelefone = page.locator('input[type="tel"]').first();
     await inputTelefone.scrollIntoViewIfNeeded();
     await inputTelefone.click({ force: true });
     await inputTelefone.press('Control+A');
     await inputTelefone.press('Backspace');
     await inputTelefone.type(telefone, { delay: 30 });
-    console.log('TELEFONE OK');
+    console.log('TELEFONE OK:', telefone);    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
