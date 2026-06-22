@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
-test('Teste de busca crítico em Produtos', async ({ page }) => {
+test('Teste de Desempenho de buscas em Produtos', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
       
     const inicioLogin = Date.now();
@@ -33,10 +33,10 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
     console.log('BUSCA PRODUTO INEXISTENTE OK:', prodInexistente);
 
     const tempoLogin = fimLogin - inicioLogin;
-    console.log(`⏱️ Tempo total do Login: ${tempoLogin} ms`);
+    console.log(`⏱️Tempo total do Login: ${tempoLogin} ms`);
 
     const tempoTotal = tempoBuscaExistente + tempoBuscaInexistente;
-    console.log(`⏱️ Tempo total das buscas: ${tempoTotal} ms`);
+    console.log(`⏱️Tempo total das buscas: ${tempoTotal} ms`);
     if (tempoTotal > 1000) {
         console.log('⚠️ Tempo acima do limite esperado');
     }
