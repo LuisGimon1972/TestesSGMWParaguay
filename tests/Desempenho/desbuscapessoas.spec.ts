@@ -39,7 +39,10 @@ const tempoTotal = tempoBuscaExistente + tempoBuscaInexistente;
 console.log(`⏱️ Tempo total das buscas: ${tempoTotal} ms`);
 if (tempoTotal > 1000) {
        console.log('⚠️ Tempo acima do limite esperado');
+}else {
+        console.log(`✅ Tempo da busca dentro do limite[1000 ms]: ${tempoTotal} ms`);
 }
+
 const totalGeral = tempoLogin + tempoTotal;
 console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);
 

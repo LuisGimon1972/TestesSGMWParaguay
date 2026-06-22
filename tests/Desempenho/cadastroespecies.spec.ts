@@ -82,6 +82,9 @@ test('Desempenho de Cadastro de espécies', async ({ page }) => {
     if (tempoTotal > 8000) {
        console.log('⚠️ Tempo acima do limite esperado');
     }
+    else {
+        console.log(`✅ Tempo do cadastro dentro do limite[8000 ms]: ${tempoTotal} ms`);
+    }
     const totalGeral = tempoLogin + tempoTotal;
     console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);
 });
