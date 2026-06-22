@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
-import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
