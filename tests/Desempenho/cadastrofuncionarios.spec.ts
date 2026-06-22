@@ -24,7 +24,7 @@ test('Desempenho Cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(camponomefuncionario).toBeVisible();
   await camponomefuncionario.fill(nomefuncionario);
-  console.log('NOME OK', nomefuncionario);
+  console.log('NOME FUNCIONÁRIO OK:', nomefuncionario);
 
   const cargofuncionario = `TEST CARGO ${Date.now()}`;
   const campocargofuncionario = page
@@ -51,7 +51,7 @@ test('Desempenho Cadastro de funcionários', async ({ page }) => {
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR USUARIO');
+  console.log('CLICOU EM SALVAR FUNCIONÁRIO');
   
   await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    

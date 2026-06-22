@@ -23,7 +23,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(camponomefuncionario).toBeVisible();
   await camponomefuncionario.fill(nomefuncionario);
-  console.log('NOME OK', nomefuncionario);
+  console.log('NOME FUNCIONÁRIO OK:', nomefuncionario);
 
   const cargofuncionario = `TEST CARGO ${Date.now()}`;
   const campocargofuncionario = page
@@ -33,7 +33,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(campocargofuncionario).toBeVisible();
   await campocargofuncionario.fill(cargofuncionario);
-  console.log('CARGO FUNCIONÁRIO OK', cargofuncionario);
+  console.log('CARGO FUNCIONÁRIO OK:', cargofuncionario);
   
   const ruc = gerarRUC();
   const campoCI = page
@@ -50,7 +50,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR USUARIO');
+  console.log('CLICOU EM SALVAR FUNCIONÁRIO');
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
