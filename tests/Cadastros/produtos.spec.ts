@@ -50,7 +50,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /preço de custo/i })
       .last();
       await campoPrecusto.locator('input').fill(precusto.toString());
-      console.log('PREÇO DE CUSTO OK:', precusto.toFixed(2));
+      console.log('PREÇO DE CUSTO OK:', precusto);
       
       const campoPrevenda = page.locator('.q-field')
       .filter({ hasText: /preço de venda/i })
