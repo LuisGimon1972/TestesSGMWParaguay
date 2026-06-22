@@ -117,15 +117,14 @@ test('Teste de Desempenho de Cadastro de Pessoas', async ({ page }) => {
 
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
-    ).join('');
-    console.log('TELEFONE:', telefone);
+    ).join('');    
     const inputTelefone = page.locator('input[type="tel"]').first();
     await inputTelefone.scrollIntoViewIfNeeded();
     await inputTelefone.click({ force: true });
     await inputTelefone.press('Control+A');
     await inputTelefone.press('Backspace');
     await inputTelefone.type(telefone, { delay: 30 });
-    console.log('TELEFONE OK');
+    console.log('TELEFONE OK:', telefone);    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
