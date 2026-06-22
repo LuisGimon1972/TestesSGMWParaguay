@@ -124,8 +124,7 @@ test('Navegação de menus', async ({ page }) => {
     function  menumobile() {
       const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
       expect(menuHamburguer).toBeVisible({ timeout: 5000 });
-      menuHamburguer.click();
-      console.log('✅ Menu mobile clicado com sucesso');  
+      menuHamburguer.click();      
     }
 
 });
