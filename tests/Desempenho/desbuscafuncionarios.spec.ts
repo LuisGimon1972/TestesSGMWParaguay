@@ -14,6 +14,7 @@ test('Teste de Desempenho de buscas em Funcionários', async ({ page }) => {
     await page.waitForTimeout(1000);       
     const primeiroNome = `TEST FUNCIONARIO`;
     const inicioBuscaExistente = Date.now();
+    await page.waitForTimeout(200);
     await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);    
     await page.keyboard.press('Enter');    
     const fimBuscaExistente = Date.now();
