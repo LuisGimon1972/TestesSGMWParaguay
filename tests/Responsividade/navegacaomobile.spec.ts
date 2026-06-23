@@ -29,14 +29,7 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     ]);
     console.log('CLICOU PRODUTOS');
 
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/producto/, { timeout: 15000 }),
-      page.locator('a[href*="producto"]').first().click()
-    ]);
-    console.log('CLICOU PRODUTOS');
+    menumobile()    
 
     await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });
@@ -114,15 +107,19 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     page.locator('a[href*="registros/subgrupos"]').click()
     console.log('CLICOU EM SUBGRUPOS');    
 
+    menumobile()
+
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/marcas"]').click()
     console.log('CLICOU EM MARCAS');     
+    
 
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
     await capturarRequisicoesApi(page)
+    
     
     function  menumobile() {
       const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
