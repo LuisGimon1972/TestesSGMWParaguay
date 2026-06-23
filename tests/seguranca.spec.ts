@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-test('Teste de segurança completo no login e módulo Pessoas', async ({ page, request }) => {
-  await page.setViewportSize({ width: 375, height: 812 });
-  //await page.setViewportSize({ width: 1920, height: 1080 });      
+test('Teste de segurança completo no login e módulo Pessoas', async ({ page, request }) => {  
+  await page.setViewportSize({ width: 1920, height: 1080 });      
   await page.goto(process.env.BASE_URL!);
   await page.getByText(/entrar/i).click();
   
