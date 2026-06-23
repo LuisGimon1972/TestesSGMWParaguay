@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
+import { Page } from '@playwright/test';
 
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
@@ -119,11 +120,35 @@ test('Navegação de menus', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
     console.log('CLICOU EM FUNCIONÁRIOS');         
+
+    await capturarRequisicoesApi(page)
     
     function  menumobile() {
       const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
       expect(menuHamburguer).toBeVisible({ timeout: 5000 });
       menuHamburguer.click();      
     }
+
+   async function capturarRequisicoesApi(page: Page) {  
+   console.log(`***REQUISIÇÕES DA API ⬅️***`);
+   const requisicoes: any[] = [];
+
+  page.on('request', request => {
+    requisicoes.push({ metodo: request.method(), url: request.url() });
+    console.log(`➡️ Requisição: ${request.method()} ${request.url()}`);
+  });
+  
+  page.on('response', async response => {
+    const status = response.status();
+    console.log(`⬅️ Resposta: [${status}] ${response.url()}`);    
+  });
+
+  // aguarda um tempo para verificar se houve requisições
+  await page.waitForTimeout(3000);
+
+  if (requisicoes.length === 0) {
+    console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
+  }
+}
 
 });
