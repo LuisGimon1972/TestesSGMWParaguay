@@ -162,5 +162,4 @@ function gerarRUC() {
   const dv = resto > 1 ? 11 - resto : 0;
   return `${base}-${dv}`;
 }
-
 });
