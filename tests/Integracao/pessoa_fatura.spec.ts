@@ -131,7 +131,6 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     console.log('CLICOU EM FATURAMENTO');
 
     await page.waitForTimeout(1000);
-
     const btnCadastrar = page.getByText(/cadastrar fatura/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
