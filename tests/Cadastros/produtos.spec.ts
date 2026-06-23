@@ -27,6 +27,10 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnGerar.click({ force: true });
       console.log('CLICOU GERAR CÓDIGO DE BARRAS');
 
+      await page.waitForTimeout(2000);      
+      const codigoBarras = await page.locator('input[aria-label="Código de barras interno"]').inputValue();
+      console.log(`✅ Código de barras interno gerado: ${codigoBarras}`);
+
       const localestoque = `TEST LOCAL ESTOQUE ${Date.now()}`;
       await page.getByLabel(/localização/i).fill(localestoque);
       console.log('LOCALIZAÇÃO DE ESTOQUE OK', localestoque);
