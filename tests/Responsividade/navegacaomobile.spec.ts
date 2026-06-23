@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
 import { Page } from '@playwright/test';
 
-test('Teste Responsividade mobile menu', async ({ page }) => {
+test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });   
 
     await loginCompletomobile(page);    
