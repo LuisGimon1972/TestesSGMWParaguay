@@ -3,7 +3,7 @@ import { loginCompletomobile } from '../../utils/logincompletomobile';
 import { Page } from '@playwright/test';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Responsividade Navegação de menu(Tablet)', async ({ page }) => {
+test('Teste Responsividade tablet menu', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
 
     await loginCompletomobile(page);      
