@@ -1,35 +1,28 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
 import { Page } from '@playwright/test';
+import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Navegação de menus', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });   
+test('Teste de Responsividade Navegação de menu(Tablet)', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
 
-    await loginCompletomobile(page);    
+    await loginCompletomobile(page);      
     
-    menumobile(); 
-
     const dashboardBtn = page.getByText(/dashboard/i).first();
     await expect(dashboardBtn).toBeVisible({ timeout: 5000 });
     await dashboardBtn.click();
-    console.log('CLICOU EM DASKBOARD');      
-
-    menumobile()
+    console.log('CLICOU EM DASKBOARD');          
         
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
-
-    menumobile()
+    console.log('CLICOU PESSOAS');    
 
     await page.waitForTimeout(1000);
     await Promise.all([
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
     ]);
-    console.log('CLICOU PRODUTOS');
-
-    menumobile()
+    console.log('CLICOU PRODUTOS');    
 
     await page.waitForTimeout(1000);
     await Promise.all([
@@ -56,8 +49,6 @@ test('Navegação de menus', async ({ page }) => {
     ]);
     console.log('CLICOU EM DAV');
 
-    menumobile()
-
     await page.waitForTimeout(1000);
     await Promise.all([
       page.waitForURL(/lotes/, { timeout: 15000 }),
@@ -65,50 +56,46 @@ test('Navegação de menus', async ({ page }) => {
     ]);
     console.log('CLICOU EM LOTES'); 
 
-    menumobile()
-
     const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
     await expect(usuariosBtn).toBeVisible({ timeout: 5000 });
     await usuariosBtn.click();
     console.log('CLICOU EM USUÁRIOS');
 
-    menumobile()
-
     await page.waitForTimeout(1000);
     page.locator('a[href*="usuario/listado"]').click()
     console.log('CLICOU EM LISTAGEM DE USUARIOS');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="usuario/perfil"]').click()
     console.log('CLICOU EM PERFIL DE ACESSO');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true });
     console.log('CLICOU EM CADASTROS');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/especies"]').click()
     console.log('CLICOU EM ESPÉCIES');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
     console.log('CLICOU EM COTAÇÃO');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
     console.log('CLICOU EM GRUPOS');
 
-    menumobile()
+
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/subgrupos"]').click()
@@ -122,34 +109,6 @@ test('Navegação de menus', async ({ page }) => {
     await page.getByText(/funcionários/i).click({ force: true });
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
-    await capturarRequisicoesApi(page)
-    
-    function  menumobile() {
-      const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
-      expect(menuHamburguer).toBeVisible({ timeout: 5000 });
-      menuHamburguer.click();      
-    }
-
-  async function capturarRequisicoesApi(page: Page) {  
-   console.log(`***REQUISIÇÕES DA API ⬅️***`);
-   const requisicoes: any[] = [];
-
-  page.on('request', request => {
-    requisicoes.push({ metodo: request.method(), url: request.url() });
-    console.log(`➡️ Requisição: ${request.method()} ${request.url()}`);
-  });
-  
-  page.on('response', async response => {
-    const status = response.status();
-    console.log(`⬅️ Resposta: [${status}] ${response.url()}`);    
-  });
-
-  // aguarda um tempo para verificar se houve requisições
-  await page.waitForTimeout(3000);
-
-  if (requisicoes.length === 0) {
-    console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
-  }
-}
+    await capturarRequisicoesApi(page);                
 
 });
