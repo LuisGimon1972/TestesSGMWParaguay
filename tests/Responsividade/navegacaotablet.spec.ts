@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
-import { Page } from '@playwright/test';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
@@ -65,37 +64,25 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     page.locator('a[href*="usuario/listado"]').click()
     console.log('CLICOU EM LISTAGEM DE USUARIOS');
 
-
-
     await page.waitForTimeout(1000);
     page.locator('a[href*="usuario/perfil"]').click()
     console.log('CLICOU EM PERFIL DE ACESSO');
-
-
 
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true });
     console.log('CLICOU EM CADASTROS');
 
-
-
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/especies"]').click()
     console.log('CLICOU EM ESPÉCIES');
-
-
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
     console.log('CLICOU EM COTAÇÃO');
 
-
-
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
     console.log('CLICOU EM GRUPOS');
-
-
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/subgrupos"]').click()
@@ -110,5 +97,4 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
     await capturarRequisicoesApi(page);                
-
 });
