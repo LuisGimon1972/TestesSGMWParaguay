@@ -117,6 +117,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR');       
+    console.log(`✅ Cliente salvo com sucesso!`);
     
     await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });
