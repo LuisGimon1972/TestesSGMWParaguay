@@ -19,7 +19,7 @@ test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => {
   const btnCadastrar = page.getByText(/cadastrar perfil/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU CADASTRAR PERFIL DE ACESSO'); 
+  console.log('CLICOU EM CADASTRAR PERFIL DE ACESSO'); 
     
   const nome = `TEST PERFIL INTEGRAÇÃO ${Date.now()}`;
   const campoNome = page
@@ -55,7 +55,7 @@ test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => {
   const btnCadastraru = page.getByText(/cadastrar usuário/i).first();
   await expect(btnCadastraru).toBeVisible();
   await btnCadastraru.click();
-  console.log('CLICOU CADASTRAR USUÁRIO');
+  console.log('CLICOU EM CADASTRAR USUÁRIO');
 
   await page.waitForTimeout(2000);
   await page.locator('.q-select').nth(0).click();
