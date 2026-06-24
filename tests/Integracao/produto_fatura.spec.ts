@@ -119,7 +119,9 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
     await page.getByText(/vendas/i).click({ force: true });
     console.log('CLICOU EM VENDAS');
 
-    await page.waitForTimeout(1000);
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(2000);
+    
     await Promise.all([
       page.waitForURL(/facturacion/, { timeout: 15000 }),
       page.locator('a[href*="facturacion"]').first().click()
@@ -144,13 +146,12 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
 
     console.log(`✅ Código de barras inserido e pesquisado: ${codigoBarras}`);       
 
+    await page.waitForTimeout(2000);
     const gradeVazia = await page.locator('text=Nenhum item adicionado').isVisible();
     if (!gradeVazia) {
     console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com Faturamento`);
     } else {
     console.log(`⚠️ Produto não integrado com Faturamento — grade vazia`);
-    }
-      
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);
+    }     
+    
 });

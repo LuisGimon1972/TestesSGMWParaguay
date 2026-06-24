@@ -132,11 +132,9 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
     await btnCadastrarf.click({ force: true });
     console.log('CLICOU CADASTRAR');    
 
-    /*await page.emulateMedia({ media: 'screen' });
-    await page.evaluate(() => {
-      document.body.style.zoom = '0.9';
-    });
-    console.log('🔍 Zoom ajustado para 70% via CSS');*/
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(2000);
+    
 
     await page.getByPlaceholder(/insira o código ou use/i).fill(codigoBarras);
     await page.waitForTimeout(1000);
@@ -152,6 +150,5 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
     console.log(`⚠️ Produto não integrado com DAV — grade vazia`);
     }
       
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);
+    
 });
