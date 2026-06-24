@@ -150,7 +150,7 @@ test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {
     const campoPesquisa = page.locator('input[placeholder="Pesquisar"]');
     await campoPesquisa.waitFor({ state: 'visible', timeout: 5000 });    
     await campoPesquisa.fill(nome);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
     console.log(`✅ Nome de fornecedor inserido e pesquisado: ${nome}`);       
     if (nome !=''){console.log(`✅ Fornecedor ${nome} corretamente integrado com Produtos`);      
     }      
