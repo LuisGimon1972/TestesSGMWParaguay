@@ -76,10 +76,10 @@ test('Teste de Integração Funcionário e Faturamento', async ({ page }) => {
   await campoPesquisa.fill(nomefuncionario);
   await page.waitForTimeout(2000);
   console.log(`✅ Nome de pessoa inserida e pesquisada: ${nomefuncionario}`);       
-  if (nomefuncionario !=''){console.log(`✅ Cliente "${nomefuncionario}" corretamente integrado com Faturamento`);      
+  if (nomefuncionario !=''){console.log(`✅ Funcionário ${nomefuncionario} corretamente integrado com Faturamento`);      
     }      
     else{
-        console.log(`✅ Cliente não integrado com Faturamento`);
+        console.log(`✅ Funcionário não integrado com Faturamento`);
     }       
     
 

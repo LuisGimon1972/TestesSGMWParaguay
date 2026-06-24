@@ -12,7 +12,7 @@ test('Teste de Integração Funcionário e DAV', async ({ page }) => {
   const btnCadastrar = page.getByText(/cadastrar funcionário/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU CADASTRAR FUNCIONÁRIO');
+  console.log('CLICOU EM CADASTRAR FUNCIONÁRIO');
 
   const nomefuncionario = `TEST FUNCIONÁRIO INTEGRAÇÃO DAV ${Date.now()}`;
   const camponomefuncionario = page
@@ -76,11 +76,11 @@ test('Teste de Integração Funcionário e DAV', async ({ page }) => {
   await campoPesquisa.waitFor({ state: 'visible', timeout: 5000 });    
   await campoPesquisa.fill(nomefuncionario);
   await page.waitForTimeout(2000);
-  console.log(`✅ Nome de pessoa inserida e pesquisada: ${nomefuncionario}`);       
-  if (nomefuncionario !=''){console.log(`✅ Cliente "${nomefuncionario}" corretamente integrado com DAV`);      
+  console.log(`✅ Nome de funcionário inserido e pesquisado: ${nomefuncionario}`);       
+  if (nomefuncionario !=''){console.log(`✅ Funcionário ${nomefuncionario} corretamente integrado com DAV`);      
   }      
   else{
-       console.log(`✅ Cliente não integrado com Faturamento`);
+       console.log(`✅ Funcionário não integrado com DAV`);
   }       
     
 
