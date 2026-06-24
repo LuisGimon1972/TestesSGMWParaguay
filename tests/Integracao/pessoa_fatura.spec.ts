@@ -143,6 +143,7 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     const campoPesquisa = page.locator('input[placeholder="Pesquisar"]');
     await campoPesquisa.waitFor({ state: 'visible', timeout: 5000 });    
     await campoPesquisa.fill(nome);
+    await page.waitForTimeout(3000);        
     console.log(`✅ Nome de pessoa inserida e pesquisada: ${nome}`);       
     if (nome !=''){console.log(`✅ Cliente "${nome}" corretamente integrado com Faturamento`);      
     }      
