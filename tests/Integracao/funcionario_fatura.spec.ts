@@ -14,7 +14,7 @@ test('Teste de Integração Funcionário e Faturamento', async ({ page }) => {
   await btnCadastrar.click();
   console.log('CLICOU CADASTRAR FUNCIONÁRIO');
 
-  const nomefuncionario = `TEST FUNCIONARIO  ${Date.now()}`;
+  const nomefuncionario = `TEST FUNCIONÁRIO INTEGRAÇÃO ${Date.now()}`;
   const camponomefuncionario = page
   .locator('.q-field')
   .filter({ hasText: /funcionário/i })
