@@ -116,9 +116,7 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .filter({ hasText: /número/i })
     .last();
     await campoNumero.locator('input').fill(numero.toString());
-    console.log('NUMERO OK:', numero);
-
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    console.log('NUMERO OK:', numero);    
 
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
