@@ -51,7 +51,7 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     .click({ force: true }); 
     console.log('TIPO DE OPERAÇÃO OK');
 
-    const nome = `TEST CLIENTE INTEGRAÇÃO ${Date.now()}`;
+    const nome = `TEST CLIENTE INTEGRAÇÃO DAV ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
     console.log('NOMBRE DO CLIENTE OK:', nome);
 
