@@ -132,7 +132,7 @@ test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {
     console.log('CLICOU EM SALVAR');    
 
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);    
+    await page.waitForTimeout(2000);    
     
     await Promise.all([
     page.waitForURL(/producto/, { timeout: 15000 }),
