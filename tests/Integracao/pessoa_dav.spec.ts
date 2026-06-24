@@ -10,12 +10,13 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
       page.waitForURL(/pessoa/, { timeout: 15000 }),
       page.locator('a[href*="pessoa"]').first().click()
     ]);
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU EM PESSOAS');
       
     await Promise.all([
     page.waitForURL(/cadastro/, { timeout: 15000 }),
     page.locator('a[href*="pessoa/cadastro"]').click()
     ]);
+    console.log('CLICOU EM CADASTRAR PESSOA');
 
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
@@ -116,8 +117,8 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');       
-    console.log(`✅ Cliente salvo com sucesso!`);
+    console.log('CLICOU EM SALVAR PESSOA');       
+    console.log(`✅ Pessoa salva com sucesso!`);
 
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(2000);        
@@ -143,6 +144,7 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     await campoPesquisa.waitFor({ state: 'visible', timeout: 5000 });    
     await campoPesquisa.fill(nome);
     await page.waitForTimeout(2000);
+    console.log(`✅ Nome de pessoa inserida e pesquisada: ${nome}`);       
     if (nome !=''){console.log(`✅ Cliente "${nome}" corretamente integrado com DAV`);      
     }      
     else{
