@@ -105,6 +105,12 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     await page.getByLabel(/direção/i).fill(direccion);
     console.log('DIRECCIÓN OK', nome);
 
+    await page.emulateMedia({ media: 'screen' });
+    await page.evaluate(() => {
+      document.body.style.zoom = '0.9';
+    });
+    console.log('🔍 Zoom ajustado para 90% via CSS');
+
     const numero = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field')
     .filter({ hasText: /número/i })

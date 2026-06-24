@@ -10,12 +10,12 @@ test('Cadastro de Clientes', async ({ page }) => {
       page.waitForURL(/pessoa/, { timeout: 15000 }),
       page.locator('a[href*="pessoa"]').first().click()
     ]);
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU PESSOAS');    
       
     await Promise.all([
     page.waitForURL(/cadastro/, { timeout: 15000 }),
     page.locator('a[href*="pessoa/cadastro"]').click()
-    ]);
+    ]);    
 
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
@@ -104,6 +104,12 @@ test('Cadastro de Clientes', async ({ page }) => {
     await page.getByLabel(/direção/i).fill(direccion);
     console.log('DIRECCIÓN OK', direccion);
 
+    await page.emulateMedia({ media: 'screen' });
+    await page.evaluate(() => {
+      document.body.style.zoom = '0.9';
+    });
+    console.log('🔍 Zoom ajustado para 90% via CSS');
+
     const numero = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field')
     .filter({ hasText: /número/i })
@@ -111,7 +117,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     await campoNumero.locator('input').fill(numero.toString());
     console.log('NUMERO OK:', numero);
 
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(1000);    
 
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
