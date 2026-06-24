@@ -113,7 +113,7 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })
       .click({ force: true });
-      console.log('CLICOU EM SALVAR');  
+      console.log('CLICOU EM SALVAR PRODUTO');  
 
       await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });
