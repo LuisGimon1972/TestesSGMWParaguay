@@ -118,8 +118,10 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');       
     console.log(`✅ Cliente salvo com sucesso!`);
+
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(2000);        
     
-    await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });
     console.log('CLICOU EM VENDAS');
 
@@ -145,10 +147,8 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     }      
     else{
       console.log(`✅ Cliente não integrado com Faturamento`);
-    }     
-   
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);    
+    }       
+    
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
