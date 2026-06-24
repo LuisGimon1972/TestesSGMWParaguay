@@ -152,6 +152,5 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
     console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com Faturamento`);
     } else {
     console.log(`⚠️ Produto não integrado com Faturamento — grade vazia`);
-    }     
-    
+    }    
 });

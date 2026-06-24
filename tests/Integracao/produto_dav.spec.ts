@@ -148,7 +148,5 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
     console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com DAV`);
     } else {
     console.log(`⚠️ Produto não integrado com DAV — grade vazia`);
-    }
-      
-    
+    }     
 });
