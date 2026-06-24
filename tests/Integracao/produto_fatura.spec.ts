@@ -139,6 +139,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
     console.log('🔍 Zoom ajustado para 70% via CSS');
 
     await page.getByPlaceholder(/insira o código ou use/i).fill(codigoBarras);
+    await page.waitForTimeout(1000);
     await page.getByPlaceholder(/insira o código ou use/i).press('Enter');
 
     console.log(`✅ Código de barras inserido e pesquisado: ${codigoBarras}`);       
