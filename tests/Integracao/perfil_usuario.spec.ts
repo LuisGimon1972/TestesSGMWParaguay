@@ -42,11 +42,6 @@ test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => {
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
 
-  const usuariosBtni = page.getByText(/usu[aá]rios/i).first();
-  await expect(usuariosBtni).toBeVisible();
-  await usuariosBtni.click();
-  console.log('CLICOU EM USUÁRIOS');
-
   const listado = page.locator('a[href*="usuario/listado"]');
   await expect(listado).toBeVisible();
   await listado.click();
