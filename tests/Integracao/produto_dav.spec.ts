@@ -18,7 +18,7 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
       const btnCadastrar = page.getByText(/cadastrar produto|serviço/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
-      console.log('CLICOU CADASTRAR');
+      console.log('CLICOU EM CADASTRAR PRODUTO');
 
       const nomeproduto = `TEST PRODUTO INTEGRAÇÃO DAV ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
@@ -130,7 +130,7 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
     const btnCadastrarf = page.getByText(/cadastrar dav/i).first();
     await btnCadastrarf.waitFor();
     await btnCadastrarf.click({ force: true });
-    console.log('CLICOU CADASTRAR');    
+    console.log('CLICOU EM CADASTRAR DAV');    
 
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(2000);

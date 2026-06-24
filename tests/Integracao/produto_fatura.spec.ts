@@ -13,12 +13,12 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU PRODUTOS');
+      console.log('CLICOU EM PRODUTOS');
 
       const btnCadastrar = page.getByText(/cadastrar produto|serviço/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
-      console.log('CLICOU CADASTRAR');
+      console.log('CLICOU EM CADASTRAR PRODUTOS');
 
       const nomeproduto = `TEST PRODUTO INTEGRAÇÃO ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
@@ -132,7 +132,7 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
     const btnCadastrarf = page.getByText(/cadastrar fatura/i).first();
     await btnCadastrarf.waitFor();
     await btnCadastrarf.click({ force: true });
-    console.log('CLICOU CADASTRAR');    
+    console.log('CLICOU EM CADASTRAR FATURAS');    
 
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {

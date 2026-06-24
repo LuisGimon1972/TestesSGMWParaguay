@@ -136,13 +136,13 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar dav/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR');
-
-    await page.waitForTimeout(2000);
+    console.log('CLICOU EM CADASTRAR DAV');
+    
     await page.locator('.q-select').nth(2).click();
     const campoPesquisa = page.locator('input[placeholder="Pesquisar"]');
     await campoPesquisa.waitFor({ state: 'visible', timeout: 5000 });    
     await campoPesquisa.fill(nome);
+    await page.waitForTimeout(2000);
     if (nome !=''){console.log(`✅ Cliente "${nome}" corretamente integrado com DAV`);      
     }      
     else{
