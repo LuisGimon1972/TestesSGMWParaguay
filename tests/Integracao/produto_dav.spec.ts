@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Integração Produto e DAV', async ({ page }) => {
+test('Teste de Integração Produto e Faturamento', async ({ page }) => {
 
       await page.setViewportSize({ width: 1920, height: 1080 });
 
@@ -20,7 +20,7 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
 
-      const nomeproduto = `TEST PRODUTO INTEGRAÇÃO ${Date.now()}`;
+      const nomeproduto = `TEST PRODUTO INTEGRAÇÃO DAV ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
       console.log('NOME DE PRODUTO OK', nomeproduto);
 
@@ -121,34 +121,35 @@ test('Teste de Integração Produto e DAV', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await Promise.all([
-      page.waitForURL(/facturacion/, { timeout: 15000 }),
-      page.locator('a[href*="facturacion"]').first().click()
+      page.waitForURL(/dav/, { timeout: 15000 }),
+      page.locator('a[href*="dav"]').first().click()
     ]);
-    console.log('CLICOU EM FATURAMENTO');
+    console.log('CLICOU EM DAV');
 
     await page.waitForTimeout(1000);
-    const btnCadastrarf = page.getByText(/cadastrar fatura/i).first();
+    const btnCadastrarf = page.getByText(/cadastrar dav/i).first();
     await btnCadastrarf.waitFor();
     await btnCadastrarf.click({ force: true });
     console.log('CLICOU CADASTRAR');    
 
-    await page.emulateMedia({ media: 'screen' });
+    /*await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
       document.body.style.zoom = '0.9';
     });
-    console.log('🔍 Zoom ajustado para 70% via CSS');
+    console.log('🔍 Zoom ajustado para 70% via CSS');*/
 
     await page.getByPlaceholder(/insira o código ou use/i).fill(codigoBarras);
     await page.waitForTimeout(1000);
     await page.getByPlaceholder(/insira o código ou use/i).press('Enter');
 
     console.log(`✅ Código de barras inserido e pesquisado: ${codigoBarras}`);       
-
+    
+    await page.waitForTimeout(2000);
     const gradeVazia = await page.locator('text=Nenhum item adicionado').isVisible();
     if (!gradeVazia) {
-    console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com Faturamento`);
+    console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com DAV`);
     } else {
-    console.log(`⚠️ Produto não integrado com Faturamento — grade vazia`);
+    console.log(`⚠️ Produto não integrado com DAV — grade vazia`);
     }
       
     await capturarRequisicoesApi(page); 
