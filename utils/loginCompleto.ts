@@ -31,7 +31,7 @@ export async function loginCompleto(page: Page) {
     el.style.border = '5px solid red';
     el.click();
   });
-  console.log('CLIQUE EM ENTRAR');
+  console.log('CLICOU EM ENTRAR');
 
   await page.waitForTimeout(3000);
   console.log('URL:', await page.url());
