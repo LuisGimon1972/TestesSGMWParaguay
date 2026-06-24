@@ -148,10 +148,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
     }      
     else{
       console.log(`✅ Produto não integrado com Faturamento`);
-    }     
-
-
-    //await page.waitForTimeout(4000);
+    }         
       
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);
