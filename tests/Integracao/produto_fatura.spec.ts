@@ -20,7 +20,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
 
-      const nomeproduto = `TEST PRODUTO ${Date.now()}`;
+      const nomeproduto = `TEST PRODUTO INTEGRAÇÃO ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
       console.log('NOME DE PRODUTO OK', nomeproduto);
 
