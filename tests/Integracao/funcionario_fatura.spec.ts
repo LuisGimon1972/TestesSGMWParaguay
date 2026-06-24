@@ -69,6 +69,7 @@ test('Teste de Integração Funcionário e Faturamento', async ({ page }) => {
   await btnCadastrar1.waitFor();
   await btnCadastrar1.click({ force: true });
   console.log('CLICOU EM CADASTRAR FATURA');
+  
   await page.waitForTimeout(2000);
   await page.locator('.q-select').nth(0).click();
   const campoPesquisa = page.locator('input[placeholder="Pesquisar"]');
