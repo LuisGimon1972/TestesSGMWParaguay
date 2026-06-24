@@ -115,7 +115,7 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
 
-      await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });
     console.log('CLICOU EM VENDAS');
 
