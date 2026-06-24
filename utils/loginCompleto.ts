@@ -7,7 +7,7 @@ export async function loginCompleto(page: Page) {
   await page.goto(process.env.BASE_URL!);
   console.log('ABRIU SITE');
   await page.getByText(/entrar/i).click();
-  console.log('CLICOU ENTRAR');
+  console.log('CLICOU EM ENTRAR');
   
   await page.waitForSelector('input[type="email"], input[type="text"]', {
     timeout: 15000
@@ -19,10 +19,10 @@ export async function loginCompleto(page: Page) {
   await page.waitForTimeout(1000);
   console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU LOGIN');
+  console.log('CLICOU EM LOGIN');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
-  console.log('CHEGOU EMPRESAS');  
+  console.log('CHEGOU EM EMPRESAS');  
   
   //const botao = page.locator('button:has-text("ENTRAR")').nth(1);
   const botao = page.locator('button:has-text("ENTRAR")').first();
@@ -31,13 +31,13 @@ export async function loginCompleto(page: Page) {
     el.style.border = '5px solid red';
     el.click();
   });
-  console.log('CLIQUE FORÇADO EXECUTADO');
+  console.log('CLIQUE EM ENTRAR');
 
   await page.waitForTimeout(3000);
   console.log('URL:', await page.url());
-  console.log('CLICOU EMPRESA');
+  console.log('CLICOU EM EMPRESA');
 
-  // 🔥 remover modais
+  
   await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
       el.remove();
