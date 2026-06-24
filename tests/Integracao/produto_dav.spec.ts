@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Integração Produto e Faturamento', async ({ page }) => {
+test('Teste de Integração Produto e Dav', async ({ page }) => {
 
       await page.setViewportSize({ width: 1920, height: 1080 });
 
