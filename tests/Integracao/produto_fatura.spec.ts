@@ -3,7 +3,9 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
+
       await page.setViewportSize({ width: 1920, height: 1080 });
+
       await loginCompleto(page);    
 
       await page.waitForTimeout(1000);
@@ -128,24 +130,27 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
     const btnCadastrarf = page.getByText(/cadastrar fatura/i).first();
     await btnCadastrarf.waitFor();
     await btnCadastrarf.click({ force: true });
-    console.log('CLICOU CADASTRAR');
+    console.log('CLICOU CADASTRAR');    
+
+    await page.emulateMedia({ media: 'screen' });
+    await page.evaluate(() => {
+      document.body.style.zoom = '0.9';
+    });
+    console.log('🔍 Zoom ajustado para 70% via CSS');
+
+    await page.getByPlaceholder(/insira o código ou use/i).fill(codigoBarras);
+    await page.getByPlaceholder(/insira o código ou use/i).press('Enter');
+
+    console.log(`✅ Código de barras inserido e pesquisado: ${codigoBarras}`);       
+
+    if (codigoBarras !=''){console.log(`✅ Produto ${nomeproduto} de Cod. Barras:${codigoBarras} corretamente integrado com Faturamento`);      
+    }      
+    else{
+      console.log(`✅ Produto não integrado com Faturamento`);
+    }     
 
 
-
-    
-    // Digita o código de barras e confirma com Enter
-await page.getByPlaceholder(/insira o código ou use/i).fill(codigoBarras);
-await page.getByPlaceholder(/insira o código ou use/i).press('Enter');
-
-console.log(`✅ Código de barras inserido e pesquisado: ${codigoBarras}`);
-
-
-
-
-
-
- await page.waitForTimeout(4000);
-
+    //await page.waitForTimeout(4000);
       
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);
