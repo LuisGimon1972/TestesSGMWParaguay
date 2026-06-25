@@ -73,6 +73,5 @@ test('Integridade do Sistema', async ({ request, page }) => {
     await page.screenshot({ path: `evidencia_${url.split('/').pop()}.png`, fullPage: true });
     console.log(`📸 Evidência capturada para ${url}`);
   }
-
   console.log('🏁 Teste geral de Integridade do Sistema concluído com sucesso');
 });
