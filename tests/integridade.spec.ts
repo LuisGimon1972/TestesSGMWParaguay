@@ -74,5 +74,5 @@ test('Integridade do Sistema', async ({ request, page }) => {
     console.log(`📸 Evidência capturada para ${url}`);
   }
 
-  console.log('🏁 Health Check geral concluído com sucesso');
+  console.log('🏁 Teste geral de Integridade do Sistema concluído com sucesso');
 });
