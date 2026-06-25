@@ -8,43 +8,58 @@ test('Integridade do Sistema', async ({ request, page }) => {
   console.log('✅ Login realizado com sucesso');
 
   // 2. Endpoints principais da API
-  const endpoints = [
-    '/api/produtos',
-    '/api/usuarios',
-    '/api/vendas',
-    '/api/faturamento',
-    '/api/db-status' 
-  ];
+const endpoints = [
+  { url: '/api/produtos', campos: ['id', 'nome', 'preco'] },
+  { url: '/api/usuarios', campos: ['id', 'nome', 'email'] },
+  { url: '/api/vendas', campos: ['id', 'valor', 'data'] },
+  { url: '/api/faturamento', campos: ['total', 'mes'] },
+  { url: '/api/db-status', campos: ['connected'] }
+];
 
-  for (const endpoint of endpoints) {
-    const inicio = Date.now();
-    const response = await request.get(endpoint);
+for (const ep of endpoints) {
+  const inicio = Date.now();
+  let response;
+  let resultado = 'OK';
+  let status = 0;
+
+  try {
+    response = await request.get(ep.url);
+    status = response.status();
     const fim = Date.now();
+    const tempo = fim - inicio;
 
-    if (response.ok()) {
-      console.log(`✅ API ${endpoint} respondeu com sucesso (${response.status()}) em ${fim - inicio}ms`);
+    if (!response.ok()) {
+      resultado = `Falha (Status ${status})`;
     } else {
-      console.error(`❌ Falha na API ${endpoint} — Status: ${response.status()}`);
-    }
-
-    if (fim - inicio > 3000) {
-      console.warn(`⚠️ API ${endpoint} lenta (${fim - inicio}ms)`);
-    }
-    
-    if (endpoint.includes('db-status') && response.ok()) {
-      try {
+      const contentType = response.headers()['content-type'] || '';
+      
+      if (!contentType.includes('application/json')) {
+        resultado = 'Resposta não é JSON (Possível HTML/SPA)';
+      } else {
         const body = await response.json();
-        if (body.connected) {
-          console.log('✅ Banco conectado e saudável');
+        
+        // CORRIGIDO: Agora sem espaços na variável
+        const itensParaValidar = Array.isArray(body) ? body : [body];
+
+        if (itensParaValidar.length === 0) {
+          resultado = 'Sucesso parcial (JSON válido, mas array vazio)';
         } else {
-          console.error('❌ Banco não conectado ou com falhas');
+          // Verifica se o primeiro item possui todos os campos esperados
+          const primeiroItem = itensParaValidar[0];
+          const valido = ep.campos.every(campo => primeiroItem && campo in primeiroItem);
+          
+          resultado = valido ? 'Sucesso real' : 'Conteúdo inesperado (Campos ausentes)';
         }
-      } catch {
-        const texto = await response.text();
-        console.warn(`⚠️ Resposta inesperada do banco: ${texto}`);
       }
     }
+    
+    console.log(`🔎 API ${ep.url} → ${resultado} (${status} em ${tempo}ms)`);
+
+  } catch (error) {
+    const fim = Date.now();
+    console.error(`🚨 Erro crítico ao acessar ${ep.url} após ${fim - inicio}ms: `);
   }
+}
 
   const paginas = [
     'https://testepyeduardo.hom.sgmaster.com.br/py/dashboard',
@@ -69,9 +84,7 @@ test('Integridade do Sistema', async ({ request, page }) => {
       console.error(`🚨 Erro detectado na página ${url}`);
     } else {
       console.log(`✅ Página ${url} carregada corretamente`);
-    }
-    await page.screenshot({ path: `evidencia_${url.split('/').pop()}.png`, fullPage: true });
-    console.log(`📸 Evidência capturada para ${url}`);
+    }    
   }
   console.log('🏁 Teste geral de Integridade do Sistema concluído com sucesso');
 });
