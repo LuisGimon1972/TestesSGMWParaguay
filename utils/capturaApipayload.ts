@@ -8,8 +8,7 @@ export async function capturarRequisicaoApiCadastro(page: Page): Promise<{ paylo
     page.on('request', request => {
     if (['POST', 'PUT', 'PATCH'].includes(request.method()) && request.url().includes('/api/usuario')) {
     try {
-      payloadCapturado = request.postDataJSON();
-      console.log('📤 Payload capturado:', payloadCapturado);
+      payloadCapturado = request.postDataJSON();      
     } catch (err) {
       console.error('⚠️ Erro ao capturar payload:', err);
     }
@@ -19,9 +18,12 @@ export async function capturarRequisicaoApiCadastro(page: Page): Promise<{ paylo
     page.on('response', async response => {
     if (['POST', 'PUT', 'PATCH'].includes(response.request().method()) && response.url().includes('/api/usuario')) {
     try {
-      respostaCapturada = await response.json();
-      console.log(`⬅️ Resposta [${response.status()}]:`, respostaCapturada);
-      resolve({ payload: payloadCapturado, resposta: respostaCapturada });
+    respostaCapturada = await response.json();    
+    const respostaLimpa = limparObjeto(respostaCapturada);    
+    console.log(
+    `📥 RESPOSTA DA API [${response.status()}]:\n${JSON.stringify(respostaLimpa, null, 2)}`
+    );
+    resolve({ payload: payloadCapturado, resposta: respostaLimpa });
     } catch (err) {
       reject('⚠️ Erro ao capturar resposta: ' + err);
     }
@@ -33,5 +35,34 @@ export async function capturarRequisicaoApiCadastro(page: Page): Promise<{ paylo
         reject('⚠️ Nenhuma requisição de cadastro capturada!');
       }
     }, 5000);
-  });
+  }); 
+
 }
+
+function limparAnsi(texto: string): string {
+  // Remove sequências ANSI (cores, resets e outros escapes invisíveis)
+  const regex = /\x1B\[[0-9;]*[A-Za-z]|[\x00-\x1F\x7F]/g;
+  return texto.replace(regex, '');
+}
+
+function limparObjeto(obj: Record<string, unknown>): Record<string, unknown> {
+  const limpo: Record<string, unknown> = {};
+  for (const [chave, valor] of Object.entries(obj)) {
+    limpo[chave] = typeof valor === 'string' ? limparAnsi(valor) : valor;
+  }
+  return limpo;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

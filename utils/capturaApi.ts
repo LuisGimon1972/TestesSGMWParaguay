@@ -17,7 +17,7 @@ export async function capturarRequisicoesApi(page: Page) {
   // aguarda um tempo para verificar se houve requisições
   await page.waitForTimeout(3000);
 
-  if (requisicoes.length === 0) {
+ /* if (requisicoes.length === 0) {
     console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
-  }
+  }*/
 }

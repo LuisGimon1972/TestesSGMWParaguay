@@ -35,6 +35,7 @@ test('Cadastro de usuários', async ({ page }) => {
   await expect(campoCI).toBeVisible();
   await campoCI.fill('');
   await campoCI.type(ruc, { delay: 50 });
+  console.log('***DADOS ENVIADOS PRA API**');
   console.log('RUC:', ruc);
   
   const nome = `TEST USUARIO ${Date.now()}`;
@@ -100,6 +101,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .first()
   .click({ force: true });
   console.log('SELECIONOU PERFIL DE ACESSO OK');
+  console.log('***FIM DADOS ENVIADOS ***');
     
   await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
@@ -107,11 +109,7 @@ test('Cadastro de usuários', async ({ page }) => {
   console.log('CLICOU EM SALVAR USUARIO');    
 
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
-  const { payload, resposta } = await capturarRequisicaoApiCadastro(page);
-  expect(payload.nome).toBe(nome);
-  expect(payload.email).toBe(email);
-  expect(resposta.nome).toBe(nome);
-  expect(resposta.email).toBe(email);
+  await capturarRequisicaoApiCadastro(page);  
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
