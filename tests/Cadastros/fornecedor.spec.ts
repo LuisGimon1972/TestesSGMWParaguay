@@ -16,6 +16,7 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR');
 
+    console.log('***DADOS ENVIADOS PRA API***');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
     await menu.waitFor();
@@ -24,7 +25,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .filter({ hasText: /não contribuinte/i })
     .first()
     .click({ force: true });
-    console.log('NATURALEZA OK');
+        const natureza = await page.locator('input[aria-label="Natureza"]').inputValue();      
+    console.log('NATURALEZA OK:',natureza);
 
     await page.locator('[aria-label="Tipo do documento de identificação"]').click({ force: true });
     const menuDoc = page.locator('.q-menu').last();
@@ -33,7 +35,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /carteira de identidade paraguaia/i })
     .click({ force: true });
-    console.log('TIPO DE DOCUMENTO OK');
+    const tipodoc = await page.locator('input[aria-label="Tipo do documento de identificação"]').inputValue();      
+    console.log('TIPO DE DOCUMENTO OK:',tipodoc);
     
     await page.waitForTimeout(700);
     const ruc = gerarRUC();
@@ -48,7 +51,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /B2C/i })
     .click({ force: true }); 
-    console.log('TIPO DE OPERAÇÃO OK');
+    const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();      
+    console.log('TIPO DE OPERAÇÃO OK:', tipoop );
 
     const nome = `TEST FORNECEDOR ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
@@ -61,8 +65,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /proveedor|fornecedor/i })
     .click({ force: true });
-    console.log('TIPO DE CADASTRO OK');
-
+    const tipocad = await page.locator('input[aria-label="Tipo de cadastro"]').inputValue();      
+    console.log('TIPO DE CADASTRO OK:',tipocad);
 
     await page.locator('.q-field')
     .filter({ hasText: /departamento/i })
@@ -74,7 +78,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /alto paraná|alto parana/i })
     .click({ force: true });
-    console.log('DEPARTAMENTO OK');
+    const dep = await page.locator('input[aria-label="Departamento"]').inputValue();      
+    console.log('DEPARTAMENTO OK:',dep);
 
     await page.locator('.q-field')
     .filter({ hasText: /distrito/i })
@@ -86,7 +91,8 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /ciudad/i })
     .click({ force: true });
-    console.log('DISTRITO OK');
+    const distrito = await page.locator('input[aria-label="Distrito"]').inputValue();      
+    console.log('DISTRITO OK:',distrito);
 
     await page.locator('.q-field')
     .filter({ hasText: /cidade/i })
@@ -98,11 +104,12 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .locator('.q-item')
     .filter({ hasText: /2A/i })
     .click({ force: true });
-    console.log('CIUDAD OK');
+    const city = await page.locator('input[aria-label="Cidade/Bairro"]').inputValue();      
+    console.log('CIUDAD OK:',city);
 
     const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
-    console.log('DIRECCIÓN OK', nome);
+    console.log('DIRECCIÓN OK:', nome);
 
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
@@ -120,14 +127,14 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
     ).join('');
-    console.log('TELEFONE:', telefone);
+    console.log('TELEFONE OK:', telefone);
     const inputTelefone = page.locator('input[type="tel"]').first();
     await inputTelefone.scrollIntoViewIfNeeded();
     await inputTelefone.click({ force: true });
     await inputTelefone.press('Control+A');
     await inputTelefone.press('Backspace');
-    await inputTelefone.type(telefone, { delay: 30 });
-    console.log('TELEFONE OK');
+    await inputTelefone.type(telefone, { delay: 30 });         
+    console.log('***FIM DE DADOS ENVIADOSI***');
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
