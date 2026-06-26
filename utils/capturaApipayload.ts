@@ -1,12 +1,13 @@
 import { Page } from '@playwright/test';
 
-export async function capturarRequisicaoApiCadastro(page: Page): Promise<{ payload: any; resposta: any }> {
+export async function capturarRequisicaoApiCadastro(page: Page, endpoint: string,
+  methods: string[] = ['POST', 'PUT', 'PATCH', 'GET']): Promise<{ payload: any; resposta: any }> {
   return new Promise((resolve, reject) => {
     let payloadCapturado: any = null;
     let respostaCapturada: any = null;
 
     page.on('request', request => {
-    if (['POST', 'PUT', 'PATCH'].includes(request.method()) && request.url().includes('/api/usuario')) {
+    if (['POST', 'PUT', 'PATCH'].includes(request.method()) && request.url().includes(endpoint)) {
     try {
       payloadCapturado = request.postDataJSON();      
     } catch (err) {
@@ -16,7 +17,7 @@ export async function capturarRequisicaoApiCadastro(page: Page): Promise<{ paylo
   });
 
     page.on('response', async response => {
-    if (['POST', 'PUT', 'PATCH'].includes(response.request().method()) && response.url().includes('/api/usuario')) {
+    if (['POST', 'PUT', 'PATCH'].includes(response.request().method()) && response.url().includes(endpoint)) {
     try {
     respostaCapturada = await response.json();    
     const respostaLimpa = limparObjeto(respostaCapturada);    

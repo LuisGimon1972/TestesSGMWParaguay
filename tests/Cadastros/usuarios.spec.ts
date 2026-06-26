@@ -3,8 +3,6 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
-
-
 test('Cadastro de usuários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
@@ -109,7 +107,7 @@ test('Cadastro de usuários', async ({ page }) => {
   console.log('CLICOU EM SALVAR USUARIO');    
 
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
-  await capturarRequisicaoApiCadastro(page);  
+  await capturarRequisicaoApiCadastro(page, '/api/usuario');  
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  

@@ -1,8 +1,7 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiCadastroPessoas } from '../../utils/capturaApiPessoas';
-
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de Clientes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -137,7 +136,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');          
     
-    await capturarRequisicaoApiCadastroPessoas(page); 
+    await capturarRequisicaoApiCadastro(page, '/api/py/pessoa'); 
    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    

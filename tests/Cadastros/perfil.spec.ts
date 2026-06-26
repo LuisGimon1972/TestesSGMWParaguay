@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiPerfil } from '../../utils/capturaApiPerfil';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 
 test('Cadastro de perfil de acesso', async ({ page }) => {
@@ -41,7 +41,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .click({ force: true });
   console.log('CLICOU EM SALVAR PERFIL DE ACCESO');
 
-  await capturarRequisicaoApiPerfil(page);  
+  await capturarRequisicaoApiCadastro(page, '/api/perfil');  
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
