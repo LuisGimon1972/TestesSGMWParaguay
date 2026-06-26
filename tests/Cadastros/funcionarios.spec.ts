@@ -36,6 +36,9 @@ test('Cadastro de funcionários', async ({ page }) => {
   await expect(campocargofuncionario).toBeVisible();
   await campocargofuncionario.fill(cargofuncionario);
   console.log('CARGO FUNCIONÁRIO OK:', cargofuncionario);
+
+  const tipdoc = await page.locator('input[aria-label="Tipo de documento"]').inputValue();      
+  console.log('TIPO DE DOCUMENTO OK:', tipdoc); 
   
   const ruc = gerarRUC();
   const campoCI = page
