@@ -39,7 +39,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
 
       const refestoque = `TEST REFERÊNCIA ESTOQUE ${Date.now()}`;
       await page.getByLabel(/referência/i).fill(refestoque);
-      console.log('REFERÊNCIA ESTOQUE ESTOQUE OK', refestoque);
+      console.log('REFERÊNCIA ESTOQUE ESTOQUE OK', refestoque);      
 
       await page.locator('[aria-label="Fornecedor"]').click({ force: true });
       const menu = page.locator('.q-menu:visible');
@@ -49,7 +49,14 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /registro estándar/i })
       .first()
       .click({ force: true });
-      console.log('FORNECEDOR OK');
+      const fornece = await page.locator('input[aria-label="Fornecedor"]').inputValue();      
+      console.log('FORNECEDOR OK:',fornece);
+      
+      const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
+      console.log('TIPO DE USO OK:', uso);
+      
+      const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
+      console.log('UNIDADE OK:', unid);
 
       const precusto = Math.floor(Math.random() * 1000) + 1;
       const campoPrecusto = page.locator('.q-field')
@@ -108,7 +115,8 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /10%|isento/i })
       .first()
       .click();
-      console.log('IVA OK');
+      const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
+      console.log('IVA OK:',iva);      
       console.log('***FIM DE DADOS ENVIADOS***');
 
       await page.locator('.q-btn')
