@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
+
+
 
 test('Cadastro de usuários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -97,11 +100,18 @@ test('Cadastro de usuários', async ({ page }) => {
   .first()
   .click({ force: true });
   console.log('SELECIONOU PERFIL DE ACESSO OK');
-
+    
   await page.locator('.q-btn')
-  .filter({ hasText: /salvar|guardar/i })
-  .click({ force: true });
-  console.log('CLICOU EM SALVAR USUARIO');  
+    .filter({ hasText: /salvar|guardar/i })
+    .click({ force: true });
+  console.log('CLICOU EM SALVAR USUARIO');    
+
+  await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
+  const { payload, resposta } = await capturarRequisicaoApiCadastro(page);
+  expect(payload.nome).toBe(nome);
+  expect(payload.email).toBe(email);
+  expect(resposta.nome).toBe(nome);
+  expect(resposta.email).toBe(email);
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
