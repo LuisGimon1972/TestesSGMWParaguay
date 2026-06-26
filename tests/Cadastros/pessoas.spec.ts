@@ -1,6 +1,8 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastroPessoas } from '../../utils/capturaApiPessoas';
+
 
 test('Cadastro de Clientes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -133,7 +135,10 @@ test('Cadastro de Clientes', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');        
+    console.log('CLICOU EM SALVAR');      
+    
+    //await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
+    await capturarRequisicaoApiCadastroPessoas(page); 
    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
