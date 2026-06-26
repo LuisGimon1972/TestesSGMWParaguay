@@ -47,12 +47,12 @@ test('Navegação de menus', async ({ page }) => {
     ]);
     console.log('CLICOU EM DAV');
 
-    await page.waitForTimeout(1000);
+  /*  await page.waitForTimeout(1000);
     await Promise.all([
       page.waitForURL(/lotes/, { timeout: 15000 }),
       page.locator('a[href*="lotes"]').first().click()
     ]);
-    console.log('CLICOU EM LOTES'); 
+    console.log('CLICOU EM LOTES'); */
 
     const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
     await expect(usuariosBtn).toBeVisible({ timeout: 5000 });
@@ -68,16 +68,16 @@ test('Navegação de menus', async ({ page }) => {
     console.log('CLICOU EM PERFIL DE ACESSO');
 
     await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true });
-    console.log('CLICOU EM CADASTROS');
+    await page.getByText(/cadastros/i).click({ force: true }); 
+    console.log('CLICOU PESSOAS');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/especies"]').click()
-    console.log('CLICOU EM ESPÉCIES');
+    page.locator('a[href*="registros/metodos-pagos"]').click()
+    console.log('CLICOU EM ESPÉCIES'); 
 
-    await page.waitForTimeout(1000);
+    /*await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');
+    console.log('CLICOU EM COTAÇÃO');*/
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()

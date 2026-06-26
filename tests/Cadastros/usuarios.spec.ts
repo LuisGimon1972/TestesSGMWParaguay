@@ -99,7 +99,8 @@ test('Cadastro de usuários', async ({ page }) => {
   .filter({ hasText: /vendedor/i })
   .first()
   .click({ force: true });
-  console.log('SELECIONOU PERFIL DE ACESSO OK');
+  const tipace = await page.locator('input[aria-label="Perfil de acesso"]').inputValue();      
+  console.log('SELECIONOU PERFIL DE ACESSO OK:',tipace);
   console.log('***FIM DADOS ENVIADOS ***');
     
   await page.locator('.q-btn')
