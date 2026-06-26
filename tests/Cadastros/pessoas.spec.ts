@@ -109,7 +109,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
-    console.log('DIRECCIÓN OK', direccion);
+    console.log('DIRECCIÓN OK:', direccion);
 
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
