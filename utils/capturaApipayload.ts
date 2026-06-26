@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test';
 
-export async function capturarRequisicaoApiCadastro(page: Page, endpoint: string,
-  methods: string[] = ['POST', 'PUT', 'PATCH', 'GET']): Promise<{ payload: any; resposta: any }> {
+export async function capturarRequisicaoApiCadastro(page: Page, endpoint: string): Promise<{ payload: any; resposta: any }> {
   return new Promise((resolve, reject) => {
     let payloadCapturado: any = null;
     let respostaCapturada: any = null;
