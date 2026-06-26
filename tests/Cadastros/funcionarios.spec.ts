@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -15,6 +16,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await btnCadastrar.click();
   console.log('CLICOU CADASTRAR FUNCIONÁRIO');
 
+  console.log('***DADOS ENVIADOS PRA API**'); 
   const nomefuncionario = `TEST FUNCIONARIO  ${Date.now()}`;
   const camponomefuncionario = page
   .locator('.q-field')
@@ -46,11 +48,14 @@ test('Cadastro de funcionários', async ({ page }) => {
   await campoCI.fill('');
   await campoCI.type(ruc, { delay: 50 });
   console.log('RUC:', ruc); 
+  console.log('***FIM DADOS ENVIADOS ***');
   
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR FUNCIONÁRIO');
+  console.log('CLICOU EM SALVAR FUNCIONÁRIO');  
+
+  await capturarRequisicaoApiCadastro(page, '/api/py/funcionario'); 
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  

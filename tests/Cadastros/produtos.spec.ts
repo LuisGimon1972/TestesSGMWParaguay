@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
@@ -17,10 +18,11 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
-
+      console.log('***DADOS ENVIADOS PRA API***');
+      
       const nomeproduto = `TEST PRODUTO ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
-      console.log('NOME DE PRODUTO OK', nomeproduto);
+      console.log('NOME DE PRODUTO OK:', nomeproduto);
 
       const btnGerar = page.getByText(/gerar/i).first();
       await btnGerar.waitFor();
@@ -28,7 +30,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       console.log('CLICOU GERAR CÓDIGO DE BARRAS');
 
       await page.waitForTimeout(2000);      
-      const codigoBarras = await page.locator('input[aria-label="Código de barras interno"]').inputValue();
+      const codigoBarras = await page.locator('input[aria-label="Código de barras interno"]').inputValue();      
       console.log(`✅ Código de barras interno gerado: ${codigoBarras}`);
 
       const localestoque = `TEST LOCAL ESTOQUE ${Date.now()}`;
@@ -107,11 +109,14 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .first()
       .click();
       console.log('IVA OK');
+      console.log('***FIM DE DADOS ENVIADOS***');
 
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
+
+      await capturarRequisicaoApiCadastro(page, '/api/py/produto'); 
       
       await capturarRequisicoesApi(page); 
       await page.waitForTimeout(4000);

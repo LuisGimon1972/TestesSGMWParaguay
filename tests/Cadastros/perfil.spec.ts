@@ -23,6 +23,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   await btnCadastrar.click();
   console.log('CLICOU CADASTRAR PERFIL DE ACESSO'); 
     
+  console.log('***DADOS ENVIADOS PRA API***');
   const nome = `TEST PERFIL ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
@@ -40,6 +41,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
   console.log('CLICOU EM SALVAR PERFIL DE ACCESO');
+  console.log('***FIM DE DADOS ENVIADOS***');
 
   await capturarRequisicaoApiCadastro(page, '/api/perfil');  
   

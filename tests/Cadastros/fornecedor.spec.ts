@@ -7,16 +7,14 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
-    await Promise.all([
-      page.waitForURL(/pessoa/, { timeout: 15000 }),
-      page.locator('a[href*="pessoa"]').first().click()
-    ]);
+    await page.waitForTimeout(1000);
+    await page.getByText(/pessoas/i).click({ force: true }); 
     console.log('CLICOU PESSOAS');
       
-    await Promise.all([
-    page.waitForURL(/cadastro/, { timeout: 15000 }),
-    page.locator('a[href*="pessoa/cadastro"]').click()
-    ]);
+    const btnCadastrar = page.getByText(/cadastrar pessoas/i).first();
+    await btnCadastrar.waitFor();
+    await btnCadastrar.click({ force: true });
+    console.log('CLICOU CADASTRAR');
 
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');

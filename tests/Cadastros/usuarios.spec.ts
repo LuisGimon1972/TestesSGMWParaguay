@@ -22,7 +22,8 @@ test('Cadastro de usuários', async ({ page }) => {
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
   console.log('CLICOU CADASTRAR USUÁRIO');
-  
+
+  console.log('***DADOS ENVIADOS PRA API***');
   const ruc = gerarRUC();
   const campoCI = page
   .locator('.q-field')
@@ -32,9 +33,9 @@ test('Cadastro de usuários', async ({ page }) => {
   await campoCI.scrollIntoViewIfNeeded();
   await expect(campoCI).toBeVisible();
   await campoCI.fill('');
-  await campoCI.type(ruc, { delay: 50 });
-  console.log('***DADOS ENVIADOS PRA API**');
+  await campoCI.type(ruc, { delay: 50 });  
   console.log('RUC:', ruc);
+  
   
   const nome = `TEST USUARIO ${Date.now()}`;
   const campoNome = page
@@ -108,6 +109,7 @@ test('Cadastro de usuários', async ({ page }) => {
 
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
   await capturarRequisicaoApiCadastro(page, '/api/usuario');  
+
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de subgrupos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -20,6 +21,7 @@ test('Cadastro de subgrupos', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('CLICOU CADASTRAR SUBGRUPO');    
 
+    console.log('***DADOS ENVIADOS PRA API***');
     const nomesubgrupo = `TEST SUBGRUPO ${Date.now()}`;
     await page.getByLabel(/cadastrar novo subgrupo/i).fill(nomesubgrupo);
     console.log('NOME DE SUBGRUPO OK', nomesubgrupo);   
@@ -34,7 +36,8 @@ test('Cadastro de subgrupos', async ({ page }) => {
     .filter({ hasText: /test/i })
     .first()
     .click({ force: true });
-    console.log('GRUPO OK',grupo);    
+    console.log('GRUPO OK:',grupo);    
+    console.log('***FIM DADOS ENVIADOS***');
 
     await page.waitForTimeout(1000);
 
@@ -42,6 +45,8 @@ test('Cadastro de subgrupos', async ({ page }) => {
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR SUBGRUPO');  
+
+    await capturarRequisicaoApiCadastro(page, '/api/produto/subgrupo');  
     
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);   
