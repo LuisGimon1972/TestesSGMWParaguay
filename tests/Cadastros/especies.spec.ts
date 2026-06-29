@@ -9,7 +9,7 @@ test('Cadastro de espécies', async ({ page }) => {
  
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU EM CADASTROS');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/metodos-pagos"]').click()
@@ -70,7 +70,7 @@ test('Cadastro de espécies', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');  
 
-     await capturarRequisicaoApiCadastro(page, '/api/especie');  
+    await capturarRequisicaoApiCadastro(page, '/api/especie');  
     
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
