@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Edição de datos subgrupos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -19,16 +20,18 @@ test('Edição de datos subgrupos', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
     await page.waitForTimeout(1000);
-    const trashIcons = await page.locator('table img[src*="trash"]').count();    
-    console.log('Quantidade de ícones de lixo:', trashIcons);
+    const trashIcons = await page.locator('table img[src*="trash"]').count();        
 
     if (trashIcons > 0) {     
     await page.locator('table img[src="/icons/edit.svg"]').first().click();
     console.log('CLICOU NO ÍCONE DE EDITAR');    
 
+    console.log('***DADOS ENVIADOS PRA API***');  
+    await page.waitForTimeout(2000);
     const nomesubgrupo = `TEST SUBGRUPO ALTERADO ${Date.now()}`;
     await page.getByLabel(/editar subgrupo/i).fill(nomesubgrupo);
     console.log('NOME DE SUBGRUPO ALTERADO OK:', nomesubgrupo);       
+    console.log('***FIM DE DADOS ENVIADOS***');  
 
     await page.waitForTimeout(1000);
 
@@ -36,6 +39,8 @@ test('Edição de datos subgrupos', async ({ page }) => {
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
     console.log('CLICOU EM SALVAR SUBGRUPO');     
+
+    await capturarRequisicaoApiCadastro(page, '/api/produto/subgrupo');  
     }
     else{
         console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
