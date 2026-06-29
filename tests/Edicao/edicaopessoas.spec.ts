@@ -31,17 +31,18 @@ test('Edição de datos Pessoas', async ({ page }) => {
       .locator('.q-item')
       .filter({ hasText: /B2F/i })
       .click({ force: true }); 
-      console.log('TIPO DE OPERAÇÃO OK');
+      const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();      
+      console.log('TIPO DE OPERAÇÃO OK:', tipoop );
 
       await page.waitForTimeout(1000);
       const nome = `TEST CLIENTE ALTERADO ${Date.now()}`;
       await page.getByLabel(/nome completo/i).fill(nome);
-      console.log('NOMBRE DO CLIENTE ALTERADO OK', nome);
+      console.log('NOMBRE DO CLIENTE ALTERADO OK:', nome);
 
       await page.waitForTimeout(1000);
       const direccion = `TEST DIRECCION ALTERADA ${Date.now()}`;
       await page.getByLabel(/direção/i).fill(direccion);
-      console.log('EDEREÇO ALTERADO OK', nome);
+      console.log('ENDEREÇO ALTERADO OK:', direccion);
 
       await page.waitForTimeout(1000);
       const numero = Math.floor(Math.random() * 4000) + 1;
@@ -49,20 +50,19 @@ test('Edição de datos Pessoas', async ({ page }) => {
       .filter({ hasText: /número/i })
       .last();
       await campoNumero.locator('input').fill(numero.toString());
-      console.log('NUMERO ALTERADO OK:', numero);
+      console.log('NÚMERO ALTERADO OK:', numero.toFixed(0));
 
       await page.waitForTimeout(1000);
       const telefone = Array.from({ length: 9 }, () =>
         Math.floor(Math.random() * 10)
-      ).join('');
-      console.log('TELEFONE:', telefone);
+      ).join('');      
       const inputTelefone = page.locator('input[type="tel"]').first();
       await inputTelefone.scrollIntoViewIfNeeded();
       await inputTelefone.click({ force: true });
       await inputTelefone.press('Control+A');
       await inputTelefone.press('Backspace');
       await inputTelefone.type(telefone, { delay: 30 });
-      console.log('TELEFONE ALTERADO OK');
+      console.log('TELEFONE ALTERADO OK:', telefone);    
       console.log('***FIM DE DADOS ENVIADOS**'); 
 
       await page.locator('.q-btn')
@@ -78,17 +78,5 @@ test('Edição de datos Pessoas', async ({ page }) => {
   else  {
       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
   }
-
-function gerarRUC() {
-  const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
-  const pesos = [2,3,4,5,6,7,2];
-  let soma = 0;
-  for (let i = 0; i < base.length; i++) {
-    soma += parseInt(base[i]) * pesos[i];
-  }
-  const resto = soma % 11;
-  const dv = resto > 1 ? 11 - resto : 0;
-  return `${base}-${dv}`;
-}
 
 });
