@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiDelete } from '../../utils/capturaApidelete';
 
 test('Exclusão de datos Produtos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -26,6 +27,8 @@ test('Exclusão de datos Produtos', async ({ page }) => {
       await page.waitForSelector('text=Excluir', { state: 'visible' });
       await page.locator('text=Excluir').click();
       console.log('CLICOU EM EXCLUIR');
+
+      await capturarRequisicaoApiDelete(page, '/api/py/produto'); 
 
       await page.waitForTimeout(2000);
       await capturarRequisicoesApi(page);

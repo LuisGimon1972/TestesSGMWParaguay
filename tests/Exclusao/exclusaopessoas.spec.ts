@@ -1,16 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiDelete } from '../../utils/capturaApidelete';
 
 test('Exclusão de datos Pessoas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
-    await Promise.all([
-      page.waitForURL(/pessoa/, { timeout: 15000 }),
-      page.locator('a[href*="pessoa"]').first().click()
-    ]);
-    console.log('CLICOU PESSOAS');    
+    await page.waitForTimeout(1000);
+    await page.getByText(/pessoas/i).click({ force: true }); 
+    console.log('CLICOU PESSOAS');
 
     await page.waitForTimeout(2000);
   
@@ -26,7 +25,8 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       await page.locator('text=Excluir').click();
       console.log('CLICOU EM EXCLUIR');
 
-      await page.waitForTimeout(2000);
+      await capturarRequisicaoApiDelete(page, '/api/py/pessoa'); 
+  
       await capturarRequisicoesApi(page);
       await page.waitForTimeout(4000);
     } else {

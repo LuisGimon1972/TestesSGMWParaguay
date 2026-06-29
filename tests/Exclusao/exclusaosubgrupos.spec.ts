@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiDelete } from '../../utils/capturaApidelete';
 
 test('Exclusão de datos Subgrupos', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -19,6 +20,8 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
     const trashIcons = await page.locator('table img[src*="trash"]').count();
     if (trashIcons > 0) {
         await page.locator('table img[src*="trash"]').first().click();
+        await capturarRequisicaoApiDelete(page, '/api/produto/subgrupo');  
+
         await capturarRequisicoesApi(page);
         await page.waitForTimeout(4000);
     } else {
