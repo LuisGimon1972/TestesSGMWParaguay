@@ -16,7 +16,7 @@ test('Cadastro de Clientes', async ({ page }) => {
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
 
-     console.log('***DADOS ENVIADOS PRA API***');
+    console.log('***DADOS ENVIADOS PRA API***');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
     await menu.waitFor();

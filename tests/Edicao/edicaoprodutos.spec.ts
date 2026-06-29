@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Edição de datos produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
@@ -22,19 +23,21 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await page.locator('table img[src="/icons/edit.svg"]').first().click();
             console.log('CLICOU NO ÍCONE DE EDITAR');
 
+            console.log('***DADOS ENVIADOS PRA API***');            
+
             const nomeproduto = `TEST PRODUTO ALTERADO ${Date.now()}`;
             await page.getByLabel(/nome/i).fill(nomeproduto);
-            console.log('NOME DE PRODUTO ALTERADO OK', nomeproduto);      
+            console.log('NOME DE PRODUTO ALTERADO OK:', nomeproduto);      
 
             await page.waitForTimeout(1000);
             const localestoque = `TEST LOCAL ESTOQUE ALTERADO ${Date.now()}`;
             await page.getByLabel(/localização/i).fill(localestoque);
-            console.log('LOCALIZAÇÃO ALTERADA DE ESTOQUE OK', localestoque);
+            console.log('LOCALIZAÇÃO ALTERADA DE ESTOQUE OK:', localestoque);
 
             await page.waitForTimeout(1000);
             const refestoque = `TEST REFERÊNCIA ESTOQUE ALTERADA ${Date.now()}`;
             await page.getByLabel(/referência/i).fill(refestoque);
-            console.log('REFERÊNCIA ALTERADA ESTOQUE ESTOQUE OK', refestoque);
+            console.log('REFERÊNCIA ALTERADA ESTOQUE ESTOQUE OK:', refestoque);
 
             await page.waitForTimeout(1000);
             await page.locator('[aria-label="Fornecedor"]').click({ force: true });
@@ -45,7 +48,14 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .filter({ hasText: /registro estándar/i })
             .first()
             .click({ force: true });
-            console.log('FORNECEDOR OK');
+            const fornece = await page.locator('input[aria-label="Fornecedor"]').inputValue();      
+            console.log('FORNECEDOR OK:',fornece);
+
+            const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
+            console.log('TIPO DE USO OK:', uso);
+      
+            const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
+            console.log('UNIDADE OK:', unid);
 
             await page.waitForTimeout(1000);
             const precusto = Math.floor(Math.random() * 1000) + 1;
@@ -53,17 +63,27 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .filter({ hasText: /preço de custo/i })
             .last();
             await campoPrecusto.locator('input').fill(precusto.toString());
-            console.log('PREÇO DE CUSTO ALTERADO OK:', precusto);
+            console.log('PREÇO DE CUSTO ALTERADO OK:', precusto.toFixed(0));
 
-            await page.waitForTimeout(1000);
+            const campoLucro = page.locator('.q-field')
+            .filter({ hasText: /% lucro/i })
+            .last();
+            const perLucro = await campoLucro.locator('input').inputValue();
+            console.log('% DE LUCRO OK:', perLucro);
+            
+            const campoPrevenda = page.locator('.q-field')
+            .filter({ hasText: /preço de venda/i })
+            .last();
+            const valorPrevenda = await campoPrevenda.locator('input').inputValue();
+            console.log('PREÇO DE VENDA ALTERADO OK:', valorPrevenda);
+
             const cantidad = Math.floor(Math.random() * 1000) + 1;
             const campocantidad = page.locator('.q-field')
             .filter({ hasText: /quantidade/i })
             .first();
             await campocantidad.locator('input').fill(cantidad.toString());
-            console.log('QUANTIDADE ALTERADA OK:', cantidad);
+            console.log('QUANTIDADE ALTERADA OK:', cantidad.toString());
 
-            await page.waitForTimeout(1000);
             const cantidadmin = Math.floor(Math.random() * 100) + 1;
             const campoCantidadMin = page
             .locator('.q-field')
@@ -72,9 +92,8 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             const input = campoCantidadMin.locator('input');
             await expect(input).toBeVisible();
             await input.fill(String(cantidadmin));
-            console.log('QUANTIDADE MÍNIMA ALTERADA OK:', cantidadmin);
+            console.log('QUANTIDADE MÍNIMA ALTERADA OK:', cantidadmin.toString());
 
-            await page.waitForTimeout(1000);
             const cantidadmax = Math.floor(Math.random() * 1000) + 1;
             const campoCantidadmax = page
             .locator('.q-field')
@@ -83,7 +102,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             const input2 = campoCantidadmax.locator('input');
             await expect(input).toBeVisible();
             await input2.fill(String(cantidadmax));
-            console.log('QUANTIDADE MÁXIMA ALTERADA OK:', cantidadmax);
+            console.log('QUANTIDADE MÁXIMA ALTERARA OK:', cantidadmax.toString());
 
             await page.waitForTimeout(1000);
             const ivaField = page.locator('[aria-label="IVA"]').first();
@@ -94,19 +113,26 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await expect(menuIva).toBeVisible();
             await menuIva
             .locator('.q-item')
-            .filter({ hasText: /10%|isento/i })
+            .filter({ hasText: /5%|isento/i })
             .first()
             .click();
-            console.log('IVA OK');
+            const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
+            console.log('IVA ALTERADO OK:',iva);      
+            console.log('***FIM DE DADOS ENVIADOS***');            
 
             await page.locator('.q-btn')
             .filter({ hasText: /salvar|guardar/i })
             .click({ force: true });
-            console.log('CLICOU EM SALVAR');  
+            console.log('CLICOU EM SALVAR');            
+
+            await capturarRequisicaoApiCadastro(page, '/api/py/produto');                                
+   
        }
       else  {
             console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
-      }      
+      }     
+      
       await capturarRequisicoesApi(page); 
-      await page.waitForTimeout(4000);
+      await page.waitForTimeout(4000);          
+      
 });
