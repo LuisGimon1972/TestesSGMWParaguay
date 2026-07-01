@@ -6,16 +6,17 @@ test('Validação cadastro de produtos/serviços', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1085 });
   await loginCompleto(page);
   
+  await page.waitForTimeout(1000);
   await Promise.all([
-    page.waitForURL(/producto/, { timeout: 15000 }),
-    page.locator('a[href*="producto"]').first().click()
+  page.waitForURL(/producto/, { timeout: 15000 }),
+  page.locator('a[href*="producto"]').first().click()
   ]);
   console.log('CLICOU PRODUTOS');
-  
+
   const btnCadastrar = page.getByText(/cadastrar produto|serviço/i).first();
   await btnCadastrar.waitFor();
   await btnCadastrar.click({ force: true });
-  console.log('CLICOU CADASTRAR');  
+  console.log('CLICOU CADASTRAR');
   
   const nomeproduto = `AUTO TEST ${Date.now()}`;
   await page.getByLabel(/nome/i).fill(nomeproduto);
