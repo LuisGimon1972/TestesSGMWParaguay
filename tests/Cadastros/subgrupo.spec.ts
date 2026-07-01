@@ -36,7 +36,8 @@ test('Cadastro de subgrupos', async ({ page }) => {
     .filter({ hasText: /test/i })
     .first()
     .click({ force: true });
-    console.log('GRUPO OK:',grupo);    
+    const grupoc = await page.locator('input[aria-label="Grupo"]').inputValue();
+    console.log('GRUPO OK:',grupoc);    
     console.log('***FIM DADOS ENVIADOS***');
 
     await page.waitForTimeout(1000);
