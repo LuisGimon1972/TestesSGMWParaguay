@@ -80,20 +80,20 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     menumobile()
 
     await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true });
+    await page.getByText(/cadastros/i).click({ force: true }); 
     console.log('CLICOU EM CADASTROS');
 
-    menumobile()
+    menumobile()    
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/especies"]').click()
-    console.log('CLICOU EM ESPÉCIES');
+    page.locator('a[href*="registros/metodos-pagos"]').click()
+    console.log('CLICOU EM ESPÉCIES');     
 
-    menumobile()
+    /*menumobile()
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');
+    console.log('CLICOU EM COTAÇÃO');*/
 
     menumobile()
 
@@ -105,22 +105,21 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');    
-
-    menumobile()
+    console.log('CLICOU EM SUBGRUPOS');        
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/marcas"]').click()
-    console.log('CLICOU EM MARCAS');     
+    console.log('CLICOU EM MARCAS');  
+    
+     menumobile()
     
 
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
-    await capturarRequisicoesApi(page)
-    
-    
+    await capturarRequisicoesApi(page) 
+        
     function  menumobile() {
       const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
       expect(menuHamburguer).toBeVisible({ timeout: 5000 });
