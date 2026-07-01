@@ -107,6 +107,11 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .first()
       .click();
       console.log('IVA OK');
+      
+      const obsproduto = `TEST OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
+      await page.locator('textarea.q-field__native').fill(obsproduto);
+      console.log('OBSERVAÇÕES OK:', obsproduto);
+      await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);
 
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })

@@ -117,7 +117,14 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .first()
             .click();
             const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
-            console.log('IVA ALTERADO OK:',iva);      
+            console.log('IVA ALTERADO OK:',iva);    
+
+            await page.waitForTimeout(1000); 
+            const obsproduto = `TEST ALTERAÇÃO DE OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
+            await page.locator('textarea.q-field__native').fill(obsproduto);
+            console.log('OBSERVAÇÕES OK:', obsproduto);
+            await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);            
+            
             console.log('***FIM DE DADOS ENVIADOS***');            
 
             await page.locator('.q-btn')
