@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Desempenho de Cadastro de usuários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -105,6 +106,8 @@ test('Desempenho de Cadastro de usuários', async ({ page }) => {
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
   console.log('CLICOU EM SALVAR USUARIO');  
+
+  await capturarRequisicaoApiCadastro(page, '/api/usuario');  
   
   await capturarRequisicoesApi(page);  
 

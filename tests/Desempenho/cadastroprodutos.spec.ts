@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
@@ -117,6 +118,8 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /salvar|guardar/i })
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
+
+      await capturarRequisicaoApiCadastro(page, '/api/py/produto'); 
       
       await capturarRequisicoesApi(page);       
 
