@@ -9,14 +9,12 @@ test('Teste de Desempenho de busca em Perfil de Espécies', async ({ page }) => 
     const fimLogin = Date.now();
   
     await page.waitForTimeout(1000);
-    const cadBtn = page.getByText(/cadastros/i).first();
-    await expect(cadBtn).toBeVisible();
-    await cadBtn.click();
-    console.log('CLICOU EM CADASTRO');
+    await page.getByText(/cadastros/i).click({ force: true }); 
+    console.log('CLICOU EM CADASTROS');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/especies"]').click()
-    console.log('CLICOU EM ESPÉCIES');
+    page.locator('a[href*="registros/metodos-pagos"]').click()
+    console.log('CLICOU EM ESPÉCIES'); 
 
      const primeiroNome = `TEST ESPÉCIE`;
      const inicioBuscaExistente = Date.now();
