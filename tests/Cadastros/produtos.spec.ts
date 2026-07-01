@@ -41,16 +41,14 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.getByLabel(/referência/i).fill(refestoque);
       console.log('REFERÊNCIA ESTOQUE ESTOQUE OK', refestoque);      
 
-      await page.locator('[aria-label="Fornecedor"]').click({ force: true });
-      const menu = page.locator('.q-menu:visible');
-      await menu.waitFor();
-      await menu
-      .locator('.q-item')
-      .filter({ hasText: /registro estándar/i })
-      .first()
-      .click({ force: true });
-      const fornece = await page.locator('input[aria-label="Fornecedor"]').inputValue();      
-      console.log('FORNECEDOR OK:',fornece);
+      await page.locator('input[aria-label="Fornecedor"]').focus();      
+      await page.keyboard.press('ArrowDown');      
+      await page.waitForSelector('.q-menu:visible');      
+      await page.locator('.q-menu:visible .q-item')
+      .filter({ hasText: /REGISTRO\s+ESTÁNDAR/i })
+      .click();      
+      const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
+      console.log('FORNECEDOR OK:', fornecedor);      
       
       const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
       console.log('TIPO DE USO OK:', uso);
@@ -123,7 +121,6 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /salvar|guardar/i })
       .click({ force: true });
       console.log('CLICOU EM SALVAR');  
-
       await capturarRequisicaoApiCadastro(page, '/api/py/produto'); 
       
       await capturarRequisicoesApi(page); 
