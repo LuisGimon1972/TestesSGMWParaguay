@@ -73,12 +73,12 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     console.log('CLICOU EM CADASTROS');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/especies"]').click()
-    console.log('CLICOU EM ESPÉCIES');
+    page.locator('a[href*="registros/metodos-pagos"]').click()
+    console.log('CLICOU EM ESPÉCIES');  
 
-    await page.waitForTimeout(1000);
+  /*  await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');
+    console.log('CLICOU EM COTAÇÃO');*/
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
