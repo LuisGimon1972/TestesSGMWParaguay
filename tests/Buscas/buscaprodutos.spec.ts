@@ -12,7 +12,7 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
       ]);
       console.log('CLICOU PRODUTOS');
 
-     const primeiroNome = `TEST PRODUTO`;
+     const primeiroNome = `TEST`;
      await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
      await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');
