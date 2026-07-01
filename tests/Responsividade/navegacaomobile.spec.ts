@@ -18,7 +18,7 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
         
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU EM PESSOAS');
 
     menumobile()
 
@@ -27,7 +27,7 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
     ]);
-    console.log('CLICOU PRODUTOS');
+    console.log('CLICOU EM PRODUTOS');
 
     menumobile()    
 

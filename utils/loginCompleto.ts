@@ -13,13 +13,13 @@ export async function loginCompleto(page: Page) {
     timeout: 15000
   });
   await page.waitForTimeout(1000);
-  console.log('FORM APARECEU');  
+  console.log('FORM LOGIN APARECEU');  
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
   await page.waitForTimeout(1000);
   console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU EM LOGIN');
+  console.log('CLICOU EM SIGN LN');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
   console.log('CHEGOU EM EMPRESAS');  
@@ -31,11 +31,10 @@ export async function loginCompleto(page: Page) {
     el.style.border = '5px solid red';
     el.click();
   });
-  console.log('CLICOU EM ENTRAR');
+  console.log('CLICOU EM ACESSAR EMPRESA');
 
   await page.waitForTimeout(3000);
-  console.log('URL:', await page.url());
-  console.log('CLICOU EM EMPRESA');
+  console.log('URL:', await page.url()); 
 
   
   await page.evaluate(() => {

@@ -14,21 +14,14 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
         
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');    
+    console.log('CLICOU EM PESSOAS');    
 
     await page.waitForTimeout(1000);
     await Promise.all([
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
     ]);
-    console.log('CLICOU PRODUTOS');    
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/producto/, { timeout: 15000 }),
-      page.locator('a[href*="producto"]').first().click()
-    ]);
-    console.log('CLICOU PRODUTOS');
+    console.log('CLICOU EM PRODUTOS');        
 
     await page.waitForTimeout(1000);
     await page.getByText(/vendas/i).click({ force: true });

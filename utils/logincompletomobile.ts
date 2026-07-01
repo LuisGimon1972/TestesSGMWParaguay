@@ -16,22 +16,22 @@ export async function loginCompletomobile(page: Page) {
   await page.waitForTimeout(1000);
 
   await page.getByText(/entrar/i).click();
-  console.log('CLICOU ENTRAR');
+  console.log('CLICOU EM ENTRAR');
   
   await page.waitForSelector('input[type="email"], input[type="text"]', {
     timeout: 15000
   });
   await page.waitForTimeout(1000);
-  console.log('FORM APARECEU');  
+  console.log('FORM LOGIN APARECEU');  
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
   await page.waitForTimeout(1000);
   console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU LOGIN');
+  console.log('CLICOU EM SIGN LN');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
-  console.log('CHEGOU EMPRESAS');  
+  console.log('CHEGOU EM EMPRESAS');  
   
   //const botao = page.locator('button:has-text("ENTRAR")').nth(1);
   const botao = page.locator('button:has-text("ENTRAR")').first();
@@ -44,7 +44,7 @@ export async function loginCompletomobile(page: Page) {
 
   await page.waitForTimeout(3000);
   console.log('URL:', await page.url());
-  console.log('CLICOU EMPRESA');
+  console.log('CLICOU EM ACESSAR EMPRESA');
 
   // 🔥 remover modais
   await page.evaluate(() => {
