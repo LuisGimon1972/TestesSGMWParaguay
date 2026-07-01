@@ -109,8 +109,8 @@ test('Cadastro de usuários', async ({ page }) => {
   console.log('CLICOU EM SALVAR USUARIO');    
 
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
-  await capturarRequisicaoApiCadastro(page, '/api/usuario');  
 
+  await capturarRequisicaoApiCadastro(page, '/api/usuario');  
   
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);  
