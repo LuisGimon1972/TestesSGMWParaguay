@@ -32,7 +32,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .locator('input');
   await expect(campoNome).toBeVisible();
   await campoNome.fill(nome);
-  console.log('NOME OK', nome);
+  console.log('NOME OK:', nome);
 
   await page.locator('[aria-label="Selecionar todos"]').click({ force: true });
   console.log('CLICLOU EM SELECIONAR TODOS OK');
