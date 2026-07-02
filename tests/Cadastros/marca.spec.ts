@@ -19,7 +19,7 @@ test('Cadastro de marcas', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar marca/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR MARCA');    
+    console.log('CLICOU EM CADASTRAR MARCA');    
 
     console.log('***DADOS ENVIADOS PRA API***');
     const marca = `TEST MARCA ${Date.now()}`;
