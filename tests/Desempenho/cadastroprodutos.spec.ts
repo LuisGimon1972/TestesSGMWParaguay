@@ -24,6 +24,13 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
 
+      await page.emulateMedia({ media: 'screen' });
+      await page.evaluate(() => {
+      document.body.style.zoom = '0.7'; });
+      console.log('🔍 Zoom ajustado para 70% via CSS');
+
+      console.log('***DADOS ENVIADOS PRA API***');
+
       const nomeproduto = `TEST PRODUTO DESEMPENHO ${Date.now()}`;
       await page.getByLabel(/nome/i).fill(nomeproduto);
       console.log('NOME DE PRODUTO OK:', nomeproduto);
