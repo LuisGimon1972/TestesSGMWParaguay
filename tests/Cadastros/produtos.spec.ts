@@ -5,7 +5,7 @@ import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await loginCompleto(page);    
+      await loginCompleto(page);                
 
       await page.waitForTimeout(1000);
       await Promise.all([
@@ -18,6 +18,12 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
       console.log('CLICOU CADASTRAR');
+
+      await page.emulateMedia({ media: 'screen' });
+      await page.evaluate(() => {
+      document.body.style.zoom = '0.7'; });
+      console.log('🔍 Zoom ajustado para 70% via CSS');
+
       console.log('***DADOS ENVIADOS PRA API***');
       
       const nomeproduto = `TEST PRODUTO ${Date.now()}`;
@@ -100,7 +106,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input2 = campoCantidadmax.locator('input');
       await expect(input).toBeVisible();
       await input2.fill(String(cantidadmax));
-      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());
+      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());      
 
       const ivaField = page.locator('[aria-label="IVA"]').first();
       await ivaField.scrollIntoViewIfNeeded();

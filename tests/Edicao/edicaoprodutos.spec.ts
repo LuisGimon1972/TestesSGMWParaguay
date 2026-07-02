@@ -5,19 +5,24 @@ import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Edição de datos produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await loginCompleto(page);    
+      await loginCompleto(page);          
 
       await page.waitForTimeout(1000);
       await Promise.all([
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU PRODUTOS');
+      console.log('CLICOU PRODUTOS');      
 
       await page.waitForSelector('table');
       await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });           
       const editIcons = await page.locator('table img[src*="edit"], table svg').count();
       console.log('Quantidade de ícones de edição:', editIcons);
+
+      await page.emulateMedia({ media: 'screen' });
+      await page.evaluate(() => {
+      document.body.style.zoom = '0.7'; });
+      console.log('🔍 Zoom ajustado para 70% via CSS');
 
       if (editIcons > 0) {      
             await page.locator('table img[src="/icons/edit.svg"]').first().click();
@@ -39,17 +44,14 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await page.getByLabel(/referência/i).fill(refestoque);
             console.log('REFERÊNCIA ALTERADA ESTOQUE ESTOQUE OK:', refestoque);
 
-            await page.waitForTimeout(1000);
-            await page.locator('[aria-label="Fornecedor"]').click({ force: true });
-            const menu = page.locator('.q-menu:visible');
-            await menu.waitFor();
-            await menu
-            .locator('.q-item')
-            .filter({ hasText: /registro estándar/i })
-            .first()
-            .click({ force: true });
-            const fornece = await page.locator('input[aria-label="Fornecedor"]').inputValue();      
-            console.log('FORNECEDOR OK:',fornece);
+            await page.locator('input[aria-label="Fornecedor"]').focus();      
+            await page.keyboard.press('ArrowDown');      
+            await page.waitForSelector('.q-menu:visible');      
+            await page.locator('.q-menu:visible .q-item')
+            .filter({ hasText: /REGISTRO\s+ESTÁNDAR/i })
+            .click();      
+            const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
+            console.log('FORNECEDOR OK:', fornecedor); 
 
             const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
             console.log('TIPO DE USO OK:', uso);
