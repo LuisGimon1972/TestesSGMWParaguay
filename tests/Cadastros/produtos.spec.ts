@@ -62,6 +62,8 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
       console.log('UNIDADE OK:', unid);
 
+      await page.waitForTimeout(2000);
+
       const precusto = Math.floor(Math.random() * 1000) + 1;
       const campoPrecusto = page.locator('.q-field')
       .filter({ hasText: /preço de custo/i })
@@ -107,6 +109,8 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await expect(input).toBeVisible();
       await input2.fill(String(cantidadmax));
       console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());      
+
+      await page.waitForTimeout(2000);
 
       const ivaField = page.locator('[aria-label="IVA"]').first();
       await ivaField.scrollIntoViewIfNeeded();
