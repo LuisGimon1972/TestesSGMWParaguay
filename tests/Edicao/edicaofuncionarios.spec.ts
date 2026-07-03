@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Edição de datos funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });

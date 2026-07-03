@@ -1,51 +1,113 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
-test('Edição de datos subgrupos', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);    
- 
-    const cadBtn = page.getByText(/cadastros/i).first();
-    await expect(cadBtn).toBeVisible();
-    await cadBtn.click();
-    console.log('CLICOU EM CADASTRO');
+test('Edição de dados subgrupos', async ({ page }) => {
+  test.setTimeout(120000);
 
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await loginCompleto(page);
+  
+  await page.getByText(/cadastros/i).first().click();
+  console.log('CLICOU EM CADASTRO');
 
-    await page.waitForSelector('table');    
-    await page.waitForTimeout(1000);
-    await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
-    await page.waitForTimeout(1000);
-    const trashIcons = await page.locator('table img[src*="trash"]').count();        
+  await page.locator('a[href*="registros/subgrupos"]').click();
+  console.log('CLICOU EM SUBGRUPOS');
+  
+  const getSubgrupoPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/produto/subgrupo') &&
+    response.request().method() === 'GET' &&
+    response.status() === 200 &&
+    response.url().includes('page=')
+  );
 
-    if (trashIcons > 0) {     
-    await page.locator('table img[src="/icons/edit.svg"]').first().click();
-    console.log('CLICOU NO ÍCONE DE EDITAR');    
+  await page.waitForSelector('table tbody tr');
+  await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {});
 
-    console.log('***DADOS ENVIADOS PRA API***');  
-    await page.waitForTimeout(2000);
-    const nomesubgrupo = `TEST SUBGRUPO ALTERADO ${Date.now()}`;
-    await page.getByLabel(/editar subgrupo/i).fill(nomesubgrupo);
-    console.log('NOME DE SUBGRUPO ALTERADO OK:', nomesubgrupo);       
-    console.log('***FIM DE DADOS ENVIADOS***');  
+  const getSubgrupoResponse = await getSubgrupoPromise;
+  const dadosAntes = await getSubgrupoResponse.json();
+  const headersOriginais = getSubgrupoResponse.request().headers();
 
-    await page.waitForTimeout(1000);
+  console.log('***DADOS ANTES DA ALTERAÇÃO***');
+  console.log(JSON.stringify(dadosAntes, null, 2));
+  
+  const editIcons = await page.locator('img[src*="edit.svg"]').count();
+  console.log('Quantidade de ícones de edição:', editIcons);
 
-    await page.locator('.q-btn')
-    .filter({ hasText: /confirmar|guardar/i })
-    .click({ force: true });
-    console.log('CLICOU EM SALVAR SUBGRUPO');     
+  if (editIcons === 0) {
+    console.log('NENHUM ÍCONE DE EDIÇÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+    return;
+  }
 
-    await capturarRequisicaoApiCadastro(page, '/api/produto/subgrupo');  
-    }
-    else{
-        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
-    }  
-    
-    await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);   
+  await page.locator('img[src*="edit.svg"]').first().click();
+  console.log('CLICOU NO ÍCONE DE EDITAR');
+  
+  const primeiroRegistro =
+    dadosAntes.data?.data?.[0] ??
+    dadosAntes.data?.[0] ??
+    dadosAntes.rows?.[0] ??
+    dadosAntes.items?.[0] ??
+    dadosAntes.result?.[0] ??
+    dadosAntes[0];
+
+  const subgrupoId =
+    primeiroRegistro?.id ??
+    primeiroRegistro?.codigo ??
+    primeiroRegistro?.uuid ??
+    primeiroRegistro?.controle;
+
+  if (!subgrupoId) {
+    console.log('PRIMEIRO REGISTRO ENCONTRADO:', JSON.stringify(primeiroRegistro, null, 2));
+    throw new Error('Não foi possível obter o ID do grupo editado.');
+  }
+
+  const baseUrl = new URL(getSubgrupoResponse.url()).origin;
+  const urlRegistroEditado = `${baseUrl}/api/produto/subgrupo/${subgrupoId}`;
+
+  console.log('ID DO REGISTRO EDITADO:', subgrupoId);
+  console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
+  
+  console.log('DADOS ENVIADOS PRA API');
+  await page.waitForTimeout(2000);    
+  const nomesubgrupo = `TEST SUBGRUPO ALTERADO ${Date.now()}`;
+  await page.getByLabel(/editar subgrupo/i).fill(nomesubgrupo);
+  console.log('NOME DE SUBGRUPO ALTERADO OK:', nomesubgrupo);
+  await page.waitForTimeout(2000);    
+  console.log('FIM DE DADOS ENVIADOS');
+  
+  const salvarSubgrupoPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/produto/subgrupo') &&
+    ['PUT', 'PATCH', 'POST'].includes(response.request().method()) &&
+    response.status() >= 200 &&
+    response.status() < 300
+  );
+
+  await page.locator('.q-btn').filter({ hasText: /confirmar|guardar/i }).click({ force: true });
+  console.log('CLICOU EM SALVAR SUBGRUPO');
+
+  await salvarSubgrupoPromise;
+  
+  const headersGetRegistro: Record<string, string> = {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    authorization: headersOriginais.authorization,
+    'x-xsrf-token': headersOriginais['x-xsrf-token'],
+    'x-tenant': headersOriginais['x-tenant'],
+    'x-empresa': headersOriginais['x-empresa'],
+  };
+
+  const getGrupoResponse = await page.request.get(urlRegistroEditado, { headers: headersGetRegistro });
+  console.log(`STATUS GET REGISTRO EDITADO: ${getGrupoResponse.status()}`);
+
+  if (!getGrupoResponse.ok()) {
+    throw new Error(`GET registro editado falhou: ${getGrupoResponse.status()} - ${await getGrupoResponse.text()}`);
+  }
+
+  const dadosDepois = await getGrupoResponse.json();
+  console.log('***DADOS APÓS A ALTERAÇÃO***');
+  console.log(JSON.stringify(dadosDepois, null, 2));
+
+  expect(JSON.stringify(dadosDepois)).toContain(nomesubgrupo);
+
+  await capturarRequisicoesApi(page);
 });
