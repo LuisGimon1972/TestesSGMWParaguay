@@ -108,7 +108,7 @@ test('Edição de datos funcionários', async ({ page }) => {
       const getFuncionarioResponse = await page.request.get(urlRegistroEditado, {
         headers: headersGetRegistro,
       });
-      console.log('STATUS GET REGISTRO EDITADO:', getFuncionarioResponse.status());
+      console.log(`STATUS GET REGISTRO EDITADO: ${String(getFuncionarioResponse.status())}`);
       const textoResposta = await getFuncionarioResponse.text();
       if (!getFuncionarioResponse.ok()) {
         throw new Error(`GET registro editado falhou: ${getFuncionarioResponse.status()} - ${textoResposta}`);
