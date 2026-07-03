@@ -116,37 +116,27 @@ test('Edição de datos Pessoas', async ({ page }) => {
     Accept: 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   };
-
   if (headersOriginais.authorization) {
     headersGetRegistro.authorization = headersOriginais.authorization;
   }
-
   if (headersOriginais['x-xsrf-token']) {
     headersGetRegistro['x-xsrf-token'] = headersOriginais['x-xsrf-token'];
   }
-
   if (headersOriginais['x-tenant']) {
     headersGetRegistro['x-tenant'] = headersOriginais['x-tenant'];
   }
-
   if (headersOriginais['x-empresa']) {
     headersGetRegistro['x-empresa'] = headersOriginais['x-empresa'];
   }
-
   const getPessoaResponse = await page.request.get(urlRegistroEditado, {
     headers: headersGetRegistro,
   });
-
-  console.log('STATUS GET REGISTRO EDITADO:', getPessoaResponse.status());
-
+  console.log(`STATUS GET REGISTRO EDITADO: ${String(getPessoaResponse.status())}`);
   const textoResposta = await getPessoaResponse.text();
-
   if (!getPessoaResponse.ok()) {
     throw new Error(`GET registro editado falhou: ${getPessoaResponse.status()} - ${textoResposta}`);
   }
-
   const dadosDepois = JSON.parse(textoResposta);
-
   console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
   console.log(JSON.stringify(dadosDepois, null, 2));
 

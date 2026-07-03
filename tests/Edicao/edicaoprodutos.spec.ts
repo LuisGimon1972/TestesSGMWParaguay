@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Edição de datos produtos/serviços', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
@@ -24,9 +23,38 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       document.body.style.zoom = '0.7'; });
       console.log('🔍 Zoom ajustado para 70% via CSS');
 
-      if (editIcons > 0) {      
+      if (editIcons > 0) {   
+            
+            const getRegistroEditadoPromise = page.waitForResponse((response) =>
+            response.url().includes('/api/py/produto') &&
+            response.request().method() === 'GET' &&
+            response.status() === 200 &&
+            /\/api\/py\/produto\/[^/?]+/.test(response.url())
+            );
+
+            //Captura Dados Antes de Alterar
+            const getProdutoPromise = page.waitForResponse((response) =>
+            response.url().includes('/api/py/produto') &&
+            response.request().method() === 'GET' &&
+            response.status() === 200
+            );
+            //Captura Dados Antes de Alterar
+
             await page.locator('table img[src="/icons/edit.svg"]').first().click();
             console.log('CLICOU NO ÍCONE DE EDITAR');
+
+             //Mostra Dados Antes de Alterar
+            const getProdutoResponsee = await getProdutoPromise;
+            const dadosAntes = await getProdutoResponsee.json();
+            console.log('***DADOS ANTES DA ALTERAÇÃO***');
+            console.log(JSON.stringify(dadosAntes, null, 2));
+            //Mostra Dados Antes de Alterar  
+
+            const getRegistroEditadoResponse = await getRegistroEditadoPromise;
+            const urlRegistroEditado = getRegistroEditadoResponse.url();
+            const headersOriginais = getRegistroEditadoResponse.request().headers();
+
+            console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
 
             console.log('***DADOS ENVIADOS PRA API***');            
 
@@ -127,14 +155,49 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             console.log('OBSERVAÇÕES OK:', obsproduto);
             await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);            
             
-            console.log('***FIM DE DADOS ENVIADOS***');            
+            console.log('***FIM DE DADOS ENVIADOS***');  
+            
+            const salvarProdutoPromise = page.waitForResponse((response) =>
+            response.url().includes('/api/py/produto') &&
+            ['PUT', 'PATCH', 'POST'].includes(response.request().method()) &&
+            response.status() >= 200 &&
+            response.status() < 300
+            );
 
             await page.locator('.q-btn')
             .filter({ hasText: /salvar|guardar/i })
             .click({ force: true });
             console.log('CLICOU EM SALVAR');            
 
-            await capturarRequisicaoApiCadastro(page, '/api/py/produto');                                
+            await salvarProdutoPromise;
+
+            const headersGetRegistro: Record<string, string> = {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            };
+            if (headersOriginais.authorization) {
+            headersGetRegistro.authorization = headersOriginais.authorization;
+            }
+            if (headersOriginais['x-xsrf-token']) {
+            headersGetRegistro['x-xsrf-token'] = headersOriginais['x-xsrf-token'];
+            }
+            if (headersOriginais['x-tenant']) {
+            headersGetRegistro['x-tenant'] = headersOriginais['x-tenant'];
+            }
+            if (headersOriginais['x-empresa']) {
+            headersGetRegistro['x-empresa'] = headersOriginais['x-empresa'];
+            }
+            const getProdutoResponse = await page.request.get(urlRegistroEditado, {
+            headers: headersGetRegistro,
+            });
+            console.log(`STATUS GET REGISTRO EDITADO: ${String(getProdutoResponse.status())}`);
+            const textoResposta = await getProdutoResponse.text();
+            if (!getProdutoResponse.ok()) {
+            throw new Error(`GET registro editado falhou: ${getProdutoResponse.status()} - ${textoResposta}`);
+            }
+            const dadosDepois = JSON.parse(textoResposta);
+            console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
+            console.log(JSON.stringify(dadosDepois, null, 2));           
    
        }
       else  {
