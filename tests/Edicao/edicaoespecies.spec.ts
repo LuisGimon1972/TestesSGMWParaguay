@@ -21,9 +21,36 @@ test('Edição de datos espécies', async ({ page }) => {
     await page.waitForTimeout(1000);  
     const trashIcons = await page.locator('table img[src*="trash"]').count();    
 
-    if (trashIcons > 0) {       
+    if (trashIcons > 0) {    
+        
+        const getRegistroEditadoPromise = page.waitForResponse((response) =>
+        response.url().includes('/api/especie') &&
+        response.request().method() === 'GET' &&
+        response.status() === 200 &&
+        /\/api\/especie\/[^/?]+/.test(response.url()));
+
+        //Captura Dados Antes de Alterar
+        const getEspeciePromise = page.waitForResponse((response) =>
+        response.url().includes('/api/especie') &&
+        response.request().method() === 'GET' &&
+        response.status() === 200);
+        //Captura Dados Antes de Alterar
+
         await page.locator('table img[src="/icons/edit.svg"]').first().click();
         console.log('CLICOU NO ÍCONE DE EDITAR');  
+
+        //Mostra Dados Antes de Alterar
+        const getEspecieResponsee = await getEspeciePromise;
+        const dadosAntes = await getEspecieResponsee.json();
+        console.log('***DADOS ANTES DA ALTERAÇÃO***');
+        console.log(JSON.stringify(dadosAntes, null, 2));
+        //Mostra Dados Antes de Alterar  
+
+        const getRegistroEditadoResponse = await getRegistroEditadoPromise;
+        const urlRegistroEditado = getRegistroEditadoResponse.url();
+        const headersOriginais = getRegistroEditadoResponse.request().headers();
+
+        console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
         
         console.log('***DADOS ENVIADOS PRA API***');
 
@@ -71,12 +98,46 @@ test('Edição de datos espécies', async ({ page }) => {
         console.log('TIPO DA ESPÉCIE ALTERADA OK:',tipoesp);
         console.log('***FIM DE DADOS ENVIADOS***');
 
+        const salvarEspeciePromise = page.waitForResponse((response) =>
+        response.url().includes('/api/especie') &&
+        ['PUT', 'PATCH', 'POST'].includes(response.request().method()) &&
+        response.status() >= 200 &&
+        response.status() < 300);
+
         await page.locator('.q-btn')
         .filter({ hasText: /salvar|guardar/i })
         .click({ force: true });
         console.log('CLICOU EM SALVAR');  
 
-        await capturarRequisicaoApiCadastro(page, '/api/especie'); 
+        await salvarEspeciePromise;
+
+        const headersGetRegistro: Record<string, string> = {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        };
+        if (headersOriginais.authorization) {
+            headersGetRegistro.authorization = headersOriginais.authorization;
+        }
+        if (headersOriginais['x-xsrf-token']) {
+            headersGetRegistro['x-xsrf-token'] = headersOriginais['x-xsrf-token'];
+        }
+        if (headersOriginais['x-tenant']) {
+            headersGetRegistro['x-tenant'] = headersOriginais['x-tenant'];
+        }
+        if (headersOriginais['x-empresa']) {
+            headersGetRegistro['x-empresa'] = headersOriginais['x-empresa'];
+        }
+        const getEspecieResponse = await page.request.get(urlRegistroEditado, {
+            headers: headersGetRegistro,
+        });
+        console.log(`STATUS GET REGISTRO EDITADO: ${String(getEspecieResponse.status())}`);
+        const textoResposta = await getEspecieResponse.text();
+        if (!getEspecieResponse.ok()) {
+            throw new Error(`GET registro editado falhou: ${getEspecieResponse.status()} - ${textoResposta}`);
+        }
+        const dadosDepois = JSON.parse(textoResposta);
+        console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
+        console.log(JSON.stringify(dadosDepois, null, 2));        
     }
     else{
         console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
