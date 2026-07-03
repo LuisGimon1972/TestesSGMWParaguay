@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
-test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
+test('Teste de Cadastro de Faturas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);            
     
@@ -38,6 +39,7 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(5).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();
+    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK');  
 
     await page.waitForTimeout(4000);
 
@@ -46,41 +48,66 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     ).first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
-
+    console.log('CLICOU EM ITEM DA FATURA OK');  
+    
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
     await ativos.nth(0).click({ force: true });
     await ativos.nth(1).click({ force: true });
     await ativos.nth(2).click({ force: true });
     await ativos.nth(3).click({ force: true });
+    console.log('SELECIONOU VÁRIOS ITENS DA FATURA OK');  
 
     await page.waitForTimeout(3000);
 
     await page.locator('.q-btn')
-      .filter({ hasText: /adicionar/i })
-      .click({ force: true });
-      console.log('CLICOU EM ADICIONAR');  
+    .filter({ hasText: /adicionar/i })
+    .click({ force: true });
+    console.log('CLICOU EM ADICIONAR');  
 
     await page.waitForTimeout(1000);
 
-        await page.locator('.q-btn')
-      .filter({ hasText: /salvar/i })
-      .click({ force: true });
-      console.log('CLICOU EM SALVAR');  
+    const finalizar = page
+    .locator('button.q-btn')
+    .filter({ hasText: 'FINALIZAR' });
+    await finalizar.first().waitFor({ state: 'visible' });
+    await finalizar.first().click({ force: true }); 
 
-    await page.waitForTimeout(5000);
-    
-    
+    const saldoTexto = await page
+    .locator('text=Saldo venda')
+    .locator('xpath=following::*[contains(text(),"Gs")][1]')
+    .innerText();
 
-function gerarRUC() {
-  const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
-  const pesos = [2,3,4,5,6,7,2];
-  let soma = 0;
-  for (let i = 0; i < base.length; i++) {
-    soma += parseInt(base[i]) * pesos[i];
-  }
-  const resto = soma % 11;
-  const dv = resto > 1 ? 11 - resto : 0;
-  return `${base}-${dv}`;
-}
+    const saldo = Number(
+      saldoTexto
+        .replace('Gs', '')
+        .trim()
+        .replace(/\./g, '')
+        .replace(',', '.')
+    );
+    console.log(saldo); // 3686       
+
+    const valorMaior = Math.ceil(saldo + 10);
+    const efectivoTexto = page.getByText('EFECTIVO', { exact: true });
+    await efectivoTexto.waitFor({ state: 'visible' });
+    const pos = await efectivoTexto.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        x: r.left + r.width / 2,
+        y: r.top + r.height / 2,
+      };
+    });
+    await page.mouse.click(pos.x, pos.y);
+    await page.locator('input:visible').last().fill(String(valorMaior));   
+
+    const confirmar = page
+    .locator('button.q-btn')
+    .filter({ hasText: 'CONFIRMAR' });
+    await confirmar.first().waitFor({ state: 'visible' });
+    await confirmar.first().click({ force: true }); 
+
+    await capturarRequisicaoApiCadastro(page, '/api/py/venda'); 
+     
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(4000);         
 });
