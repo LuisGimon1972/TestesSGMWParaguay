@@ -45,5 +45,16 @@ export async function loginCompleto(page: Page) {
 
   console.log('MODAL + OVERLAY REMOVIDOS');
 
+  // Fecha o popup de atualização se aparecer
+  const botaoFecharPopup = page.locator('button:has-text("×"), .close, .modal-close, [aria-label="Close"]');
+
+  if (await botaoFecharPopup.isVisible()) {
+    console.log('Popup de atualização detectado, fechando...');
+    await botaoFecharPopup.click().catch(() => {});
+    console.log('Popup fechado com sucesso.');
+  }
+
+  
+
  // await talVez(page);   
 }
