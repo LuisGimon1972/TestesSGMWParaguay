@@ -23,7 +23,7 @@ test('Exclusão de datos funcionários', async ({ page }) => {
   console.log('Quantidade de ícones de edição:', trashIcons);
 
     if (trashIcons === 0) {
-       console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+       console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
        return;
     } 
       const primeiraLinha = page.locator('table tr:first-child td');
