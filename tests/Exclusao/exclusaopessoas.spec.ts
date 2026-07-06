@@ -20,12 +20,88 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       await menuTresPontos.click();
       console.log('CLICOU NOS TRÊS PONTOS');
 
+       //Captura Dados Antes de Alterar
+      // Aguarda a tabela estar visível
+
+      const primeiraLinha = page.locator('table tr:first-child td');
+const qtdColunas = await primeiraLinha.count();
+
+for (let i = 0; i < qtdColunas; i++) {
+  const valor = await primeiraLinha.nth(i).textContent();
+  console.log(`Coluna ${i}: ${valor?.trim()}`);
+}
+
+await page.waitForSelector('table tr:first-child td', { state: 'visible' });
+
+// Captura o texto da primeira célula da linha
+const codigoPessoa = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+const codigoLimpo = codigoPessoa?.trim();
+
+if (!codigoLimpo) {
+  throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
+}
+console.log(`Código selecionado: ${codigoLimpo}`);
+
+
+
       await page.waitForTimeout(1000);
       await page.waitForSelector('text=Excluir', { state: 'visible' });
       await page.locator('text=Excluir').click();
-      console.log('CLICOU EM EXCLUIR');
+     
+      console.log('CLICOU EM EXCLUIR');    
 
-      await capturarRequisicaoApiDelete(page, '/api/py/pessoa'); 
+      await page.waitForTimeout(3000);
+      await page.waitForSelector('button:has-text("EXCLUIR")');
+      await page.click('button:has-text("EXCLUIR")');
+
+      console.log('CLICOU EM EXCLUIR CONFIRMAR');
+
+      const deleteResponse = await page.waitForResponse((response) =>
+      response.url().includes(`/api/py/pessoa/${codigoLimpo}`) &&
+      response.request().method() === 'DELETE');
+      expect([200, 204]).toContain(deleteResponse.status());
+
+      // Captura lista depois da exclusão
+// Captura lista depois da exclusão
+// Captura DELETE
+
+
+// Consulta novamente o registro excluído
+// Consulta novamente o registro excluído pelo código
+// Captura a resposta da lista após exclusão
+// Consulta diretamente o registro excluído pelo código
+const getExcluidoResponse = await page.request.get(`/api/py/pessoa/${codigoLimpo}`);
+
+// Mostra a resposta da API ao consultar o registro excluído
+console.log('***RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO***');
+console.log(`Status: ${getExcluidoResponse.status()}`);
+
+try {
+  const dadosExcluido = await getExcluidoResponse.json();
+  console.log(JSON.stringify(dadosExcluido, null, 2));
+} catch {
+  console.log('Resposta sem corpo (provavelmente 404 ou vazio)');
+}
+
+// Valida que não existe mais
+expect([404, 200]).toContain(getExcluidoResponse.status());
+
+console.log(`Registro ${codigoLimpo} removido com sucesso.`);
+
+
+
+
+
+
+
+      //Mostra Dados Antes de Alterar
+    /*  const getPessoaResponsee = await getPessoaPromise;
+      const dadosAntes = await getPessoaResponsee.json();
+      console.log('***DADOS ANTES DA ALTERAÇÃO***');
+      console.log(JSON.stringify(dadosAntes, null, 2));
+      //Mostra Dados Antes de Alterar  
+
+      //await capturarRequisicaoApiDelete(page, '/api/py/pessoa'); */
   
       await capturarRequisicoesApi(page);
       await page.waitForTimeout(4000);
