@@ -18,7 +18,7 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
 
     await page.waitForTimeout(2000);
      const trashIcons = await page.locator('table img[src*="trash"]').count();
-  console.log('Quantidade de ícones de edição:', trashIcons);
+    console.log('Quantidade de ícones de edição:', trashIcons);
 
     if (trashIcons === 0) {
        console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
@@ -35,8 +35,8 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
     
           await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
-      const codigoPessoa = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
-      const codigoLimpo = codigoPessoa?.trim();
+      const codigoSubgrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+      const codigoLimpo = codigoSubgrupo?.trim();
 
       if (!codigoLimpo) {
         throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');

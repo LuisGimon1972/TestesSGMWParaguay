@@ -35,8 +35,8 @@ test('Exclusão de datos grupos', async ({ page }) => {
     
           await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
-      const codigoPessoa = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
-      const codigoLimpo = codigoPessoa?.trim();
+      const codigoGrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+      const codigoLimpo = codigoGrupo?.trim();
 
       if (!codigoLimpo) {
         throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
