@@ -17,10 +17,10 @@ test('Exclusão de datos marcas', async ({ page }) => {
 
     await page.waitForTimeout(2000);
      const trashIcons = await page.locator('table img[src*="trash"]').count();
-  console.log('Quantidade de ícones de edição:', trashIcons);
+    console.log('Quantidade de ícones de edição:', trashIcons);
 
     if (trashIcons === 0) {
-       console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
        return;
     } 
     const primeiraLinha = page.locator('table tr:first-child td');
