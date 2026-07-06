@@ -64,7 +64,7 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
         const dadosExcluido = await getExcluidoResponse.json();
         console.log(JSON.stringify(dadosExcluido, null, 2));
       } catch {
-        console.log('Resposta sem corpo (provavelmente 404 ou vazio)');
+        console.log('Resposta sem corpo. (Status Code: 404)');
       }
       
       expect([404, 200]).toContain(getExcluidoResponse.status());
