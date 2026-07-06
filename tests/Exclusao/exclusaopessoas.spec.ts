@@ -49,7 +49,7 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       await page.waitForSelector('button:has-text("EXCLUIR")');
       await page.click('button:has-text("EXCLUIR")');
 
-      console.log('CLICOU EM EXCLUIR DIÁLOGO DE CONFIRMAÇÃO');
+      console.log('CLICOU EM EXCLUIR NO DIÁLOGO DE CONFIRMAÇÃO');
 
       const deleteResponse = await page.waitForResponse((response) =>
       response.url().includes(`/api/py/pessoa/${codigoLimpo}`) &&
