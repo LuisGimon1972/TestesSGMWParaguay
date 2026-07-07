@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import { talVez } from '../utils/talvez';
+import { fecharPopupAtualizacao } from '../utils/novidade';
 
 export async function loginCompleto(page: Page) {
 
@@ -42,6 +43,13 @@ export async function loginCompleto(page: Page) {
       el.remove();
     });
   });
+  
+  await page.waitForTimeout(2000);
+  await page.evaluate(() => {
+    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
+      el.remove();
+    });
+  });
 
   console.log('MODAL + OVERLAY REMOVIDOS');
 
@@ -53,6 +61,7 @@ export async function loginCompleto(page: Page) {
     console.log('Popup fechado com sucesso.');
   }
   
+  await fecharPopupAtualizacao(page)   
 
  // await talVez(page);   
 }

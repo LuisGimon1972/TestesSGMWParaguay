@@ -5,9 +5,10 @@ import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
 
 test('Cadastro de Fornecedores', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);    
+    
+    await loginCompleto(page);      
 
-    await page.waitForTimeout(1000);
+        await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
     console.log('CLICOU PESSOAS');
       
