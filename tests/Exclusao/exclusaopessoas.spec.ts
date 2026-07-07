@@ -47,7 +47,7 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       const codigoLimpo = codigoPessoa?.trim();
       
       if(codigoLimpo=='1'){
-        console.log('REGISTRO PADRÃO NÃO PODE SER EXCLUIDO!');
+        console.log('O REGISTRO PADRÃO NÃO PODE SER EXCLUIDO!');
         return
       }
 

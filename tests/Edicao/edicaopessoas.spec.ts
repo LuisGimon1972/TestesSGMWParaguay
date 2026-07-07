@@ -20,7 +20,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
   console.log('Quantidade de ícones de edição:', editIcons);
 
   if (editIcons === 0) {
-    console.log('REGISTRO PADRÃO NÃO PODE SER ALTERADO!');
+    console.log('O REGISTRO PADRÃO NÃO PODE SER ALTERADO!');
     return;
   }
 
