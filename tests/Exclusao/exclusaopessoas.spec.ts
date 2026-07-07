@@ -6,9 +6,22 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
+    const botaoFecharPopup = page.locator('button:has-text("×"), svg[aria-label="Close"], .modal-close');
+    if (await botaoFecharPopup.isVisible()) {
+      console.log('Popup de atualização detectado, fechando...');
+      await botaoFecharPopup.click().catch(() => {});
+      console.log('Popup fechado com sucesso.');
+    }
+
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
     console.log('CLICOU PESSOAS');
+
+    if (await botaoFecharPopup.isVisible()) {
+      console.log('Popup de atualização detectado, fechando...');
+      await botaoFecharPopup.click().catch(() => {});
+      console.log('Popup fechado com sucesso.');
+    }
 
     await page.waitForTimeout(2000);
   
@@ -32,6 +45,11 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       
       const codigoPessoa = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
       const codigoLimpo = codigoPessoa?.trim();
+      
+      if(codigoLimpo=='1'){
+        console.log('REGISTRO PADRÃO NÃO PODE SER EXCLUIDO!');
+        return
+      }
 
       if (!codigoLimpo) {
         throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
