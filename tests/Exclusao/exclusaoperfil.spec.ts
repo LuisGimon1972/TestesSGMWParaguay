@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Exclusão de datos Usuários', async ({ page }) => {
+test('Exclusão de datos Perfil de Acesso', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
   await loginCompleto(page);
@@ -12,10 +12,9 @@ test('Exclusão de datos Usuários', async ({ page }) => {
   await usuariosBtn.click();
   console.log('CLICOU EM USUÁRIOS');
 
-  const listado = page.locator('a[href*="usuario/listado"]');
-  await expect(listado).toBeVisible();
-  await listado.click();
-  console.log('CLICOU EM LISTAGEM DE USUARIOS');
+  await page.waitForTimeout(1000);
+  page.locator('a[href*="usuario/perfil"]').click()
+  console.log('CLICOU EM PERFIL DE ACESSO');
   
   await page.waitForTimeout(2000);
   
@@ -37,8 +36,8 @@ test('Exclusão de datos Usuários', async ({ page }) => {
 
       await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
-      const codigoPessoa = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
-      const codigoLimpo = codigoPessoa?.trim();
+      const codigoPerfil = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+      const codigoLimpo = codigoPerfil?.trim();
 
       if (!codigoLimpo) {
         throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
@@ -55,11 +54,11 @@ test('Exclusão de datos Usuários', async ({ page }) => {
       console.log('CLICOU EM EXCLUIR NO DIÁLOGO DE CONFIRMAÇÃO');
 
       const deleteResponse = await page.waitForResponse((response) =>
-      response.url().includes(`/api/usuario/${codigoLimpo}`) &&
+      response.url().includes(`/api/perfil/${codigoLimpo}`) &&
       response.request().method() === 'DELETE');
       expect([200, 204]).toContain(deleteResponse.status());
 
-      const getExcluidoResponse = await page.request.get(`/api/usuario/${codigoLimpo}`);
+      const getExcluidoResponse = await page.request.get(`/api/perfil/${codigoLimpo}`);
 
       console.log('***RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO***');
       console.log(`Status: ${getExcluidoResponse.status()}`);
@@ -79,5 +78,4 @@ test('Exclusão de datos Usuários', async ({ page }) => {
       await page.waitForTimeout(2000);
       await capturarRequisicoesApi(page);
       await page.waitForTimeout(4000);
-
 });
