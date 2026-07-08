@@ -61,6 +61,15 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     page.locator('a[href*="usuario/perfil"]').click()
     console.log('CLICOU EM PERFIL DE ACESSO');
 
+    const comprasBtn = page.getByText(/compras/i).first();
+    await expect(comprasBtn).toBeVisible({ timeout: 5000 });
+    await comprasBtn.click();
+    console.log('CLICOU EM COMPRAS');
+
+    await page.waitForTimeout(1000);
+    page.locator('a[href*="compras/listagem"]').click()
+    console.log('CLICOU EM LISTAGEM DE COMPRAS'); 
+
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true });
     console.log('CLICOU EM CADASTROS');
