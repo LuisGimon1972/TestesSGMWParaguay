@@ -8,7 +8,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     await page.waitForTimeout(2000);       
     
-     const salvarPessoaPromise = page.waitForResponse((response) =>
+    const salvarPessoaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/pessoa') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
