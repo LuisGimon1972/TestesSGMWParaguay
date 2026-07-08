@@ -157,7 +157,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
     const idPessoa = dadosSalvos.pessoa.controle.toString().trim();
-    console.log('CONTROLE OK:', idPessoa);    
+    console.log('CONTROLE:', idPessoa);    
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/pessoa/${idPessoa}`;    
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {

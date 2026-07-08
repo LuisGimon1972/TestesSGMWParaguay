@@ -72,7 +72,7 @@ test('Cadastro de funcionários', async ({ page }) => {
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
     const idPessoa = dadosSalvos.funcionario.controle.toString().trim();
-    console.log('CONTROLE OK:', idPessoa);    
+    console.log('CONTROLE:', idPessoa);    
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/funcionario/${idPessoa}`;    
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
