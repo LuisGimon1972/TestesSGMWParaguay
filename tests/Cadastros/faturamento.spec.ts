@@ -80,38 +80,6 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await finalizar.first().waitFor({ state: 'visible' });
     await finalizar.first().click({ force: true }); 
 
-/*    const saldoTexto = await page
-    .locator('text=Saldo venda')
-    .locator('xpath=following::*[contains(text(),"Gs")][1]')
-    .innerText();
-
-    const saldo = Number(
-      saldoTexto
-        .replace('Gs', '')
-        .trim()
-        .replace(/\./g, '')
-        .replace(',', '.')
-    );
-    console.log(saldo); // 3686       
-
-    const valorMaior = Math.ceil(saldo + 10);
-    const efectivoTexto = page.getByText('EFECTIVO', { exact: true });
-    await efectivoTexto.waitFor({ state: 'visible' });
-    const pos = await efectivoTexto.evaluate((el) => {
-      const r = el.getBoundingClientRect();
-      return {
-        x: r.left + r.width / 2,
-        y: r.top + r.height / 2,
-      };
-    });
-    await page.mouse.click(pos.x, pos.y);
-    await page.locator('input:visible').last().fill(String(valorMaior));   
-
-    const confirmar = page
-    .locator('button.q-btn')
-    .filter({ hasText: 'CONFIRMAR' });
-    await confirmar.first().waitFor({ state: 'visible' });
-    await confirmar.first().click({ force: true }); */
 
     const salvarPessoaResponse = await salvarFaturaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
