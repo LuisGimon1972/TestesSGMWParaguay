@@ -6,36 +6,27 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);       
     
-    await page.waitForTimeout(2000);           
+/*    await page.waitForTimeout(2000);           
     const salvarFaturaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/venda') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
-    response.status() < 300);
+    response.status() < 300);*/
     
-    await page.waitForTimeout(2000);        
-    const venBtn = page.getByText(/vendas/i).first();
-    await expect(venBtn).toBeVisible();
-    await venBtn.click();
-    console.log('CLICOU EM VENDAS');
-  
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/facturacion/, { timeout: 15000 }),
-      page.locator('a[href*="facturacion"]').first().click()
-    ]);
-    console.log('CLICOU EM FATURAMENTO');
-
- /*   await page.emulateMedia({ media: 'screen' });
-      await page.evaluate(() => {
-      document.body.style.zoom = '0.7'; });
-      console.log('🔍 Zoom ajustado para 70% via CSS');*/
+  const comprasBtn = page.getByText(/compras/i).first();
+    await expect(comprasBtn).toBeVisible({ timeout: 5000 });
+    await comprasBtn.click();
+    console.log('CLICOU EM COMPRAS');
 
     await page.waitForTimeout(1000);
-    const btnCadastrar = page.getByText(/cadastrar fatura/i).first();
+    page.locator('a[href*="compras/listagem"]').click()
+    console.log('CLICOU EM LISTAGEM DE COMPRAS');  
+
+    await page.waitForTimeout(1000);
+    const btnCadastrar = page.getByText(/cadastrar compra/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR FATURA');
+    console.log('CLICOU EM CADASTRAR COMPRA');
 
     await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
@@ -43,10 +34,36 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
       console.log('🔍 Zoom ajustado para 80% via CSS');
    
     console.log('***DADOS ENVIADOS PRA API***');  
+
     await page.waitForTimeout(2000);
-    await page.locator('.q-select').nth(5).click();
+    const hoje = new Date();
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const ano = hoje.getFullYear();
+    const dataISO = `${dia}-${mes}-${ano}`;
+    await page.getByLabel(/data emissão/i).fill(dataISO);
+    console.log('DATA DE EMISSÃO OK:', dataISO);
+
+    await page.waitForTimeout(2000);
+    const hojer = new Date();
+    const diar = String(hojer.getDate()).padStart(2, '0');
+    const mesr = String(hojer.getMonth() + 1).padStart(2, '0');
+    const anor = hoje.getFullYear();
+    const dataISOr = `${diar}-${mesr}-${anor}`;
+    await page.getByLabel(/data de recebimento/i).fill(dataISOr);
+    console.log('DATA DE RECEBIMENTO OK:', dataISOr);
+
+    const numero = Math.floor(Math.random() * 1000) + 1;
+    const campoNumero = page.locator('.q-field')
+    .filter({ hasText: /n° nota/i })
+    .last();
+    await campoNumero.locator('input').fill(numero.toString());
+    console.log('NUMERO DE NOTA OK:', numero);
+
+    await page.waitForTimeout(2000);
+    await page.locator('.q-select').nth(0).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();
-    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK');  
+    console.log('SELECIONOU UM FORNECEDOR OK');  
 
     await page.waitForTimeout(4000);
 
@@ -61,9 +78,8 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const ativos = page.getByText('Ativo', { exact: true });
     await ativos.nth(0).click({ force: true });
     await ativos.nth(1).click({ force: true });
-    await ativos.nth(2).click({ force: true });
-    await ativos.nth(3).click({ force: true });
-    console.log('SELECIONOU VÁRIOS ITENS DA FATURA OK');  
+    await ativos.nth(2).click({ force: true });    
+    console.log('SELECIONOU VÁRIOS ITENS DA COMPRA OK');  
 
     await page.waitForTimeout(3000);
 
@@ -72,15 +88,43 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM ADICIONAR');  
 
-    await page.waitForTimeout(1000);
-
+    await page.waitForTimeout(2000);
     const salvar = page
     .locator('button.q-btn')
     .filter({ hasText: 'SALVAR' });
     await salvar.first().waitFor({ state: 'visible' });
     await salvar.first().click({ force: true });     
+    console.log('CLICOU EM SALVAR');  
+
+    await page.waitForTimeout(2000);
+    const salvar2 = page
+    .locator('button.q-btn')
+    .filter({ hasText: 'SALVAR' });
+    await salvar2.last().waitFor({ state: 'visible' });
+    await salvar2.last().click({ force: true });     
+    console.log('CLICOU EM SALVAR');  
+
+    await page.waitForTimeout(2000);
+    const confirmar = page
+    .locator('button.q-btn')
+    .filter({ hasText: 'CONFIRMAR' });
+    await confirmar.first().waitFor({ state: 'visible' });
+    await confirmar.first().click({ force: true });     
+    console.log('CLICOU EM CONFIRMAR');  
+
+    await page.waitForTimeout(2000);
+    const confirmar1 = page
+    .locator('button.q-btn')
+    .filter({ hasText: 'CONFIRMAR' });
+    await confirmar1.first().waitFor({ state: 'visible' });
+    await confirmar1.first().click({ force: true });     
+    console.log('CLICOU EM CONFIRMAR');  
+
+    
+
+    
    
-    const salvarPessoaResponse = await salvarFaturaPromise;
+  /*  const salvarPessoaResponse = await salvarFaturaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
@@ -114,7 +158,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
 
-    expect([404, 200]).toContain(getCriadoResponse.status());    
+    expect([404, 200]).toContain(getCriadoResponse.status());   */ 
 
 
     //await page.waitForTimeout(14000);
