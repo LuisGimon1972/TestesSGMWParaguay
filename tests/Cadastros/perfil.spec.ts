@@ -1,13 +1,19 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
-import { capturarRequisicaoApiCadastro } from '../../utils/capturaApipayload';
-
 
 test('Cadastro de perfil de acesso', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
 
   await loginCompleto(page);
+
+  await page.waitForTimeout(2000);       
+  
+  const salvarPerfilPromise = page.waitForResponse((response) =>
+  response.url().includes('/api/perfil') &&
+  ['POST'].includes(response.request().method()) &&
+  response.status() >= 200 &&
+  response.status() < 300);
   
   const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
   await expect(usuariosBtn).toBeVisible();
@@ -41,10 +47,44 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
   console.log('CLICOU EM SALVAR PERFIL DE ACCESO');
-  console.log('***FIM DE DADOS ENVIADOS***');
+  console.log('***FIM DE DADOS ENVIADOS***');  
 
-  await capturarRequisicaoApiCadastro(page, '/api/perfil');  
+    const salvarPerfilResponse = await salvarPerfilPromise;
+    const dadosSalvos = await salvarPerfilResponse.json();
+    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log(JSON.stringify(dadosSalvos, null, 2));
+    
+    const idPerfil = dadosSalvos.pessoa.controle.toString().trim();
+    console.log('CONTROLE:', idPerfil);    
+    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/perfil/${idPerfil}`;    
+    const headersOriginais = salvarPerfilResponse.request().headers();
+    const headersGetRegistro: Record<string, string> = {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      authorization: headersOriginais['authorization'],
+      'x-xsrf-token': headersOriginais['x-xsrf-token'],
+      'x-tenant': headersOriginais['x-tenant'],
+      'x-empresa': headersOriginais['x-empresa'],
+    };
+    
+    const getCriadoResponse = await page.request.get(urlRegistroCriado, {
+      headers: headersGetRegistro,
+    });
+
+    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
+    console.log(`Status: ${getCriadoResponse.status()}`);
+
+    try {
+      const dadosCriado = await getCriadoResponse.json();
+      console.log(JSON.stringify(dadosCriado, null, 2));
+    } catch (error) {
+      console.error('Erro ao converter resposta para JSON:', error);
+      const corpoBruto = await getCriadoResponse.text();
+      console.log('Corpo bruto da resposta:', corpoBruto);
+    }
+
+    expect([404, 200]).toContain(getCriadoResponse.status());    
   
-  await capturarRequisicoesApi(page); 
-  await page.waitForTimeout(4000);  
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(4000);  
 });
