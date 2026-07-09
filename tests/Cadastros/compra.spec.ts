@@ -103,17 +103,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await salvar2.first().click({ force: true });     
     console.log('CLICOU EM SALVAR');   
 
-
-    await page.locator('.q-dialog.q-dialog--modal').waitFor({ state: 'visible' });
+    await page.locator('.q-dialog.q-dialog--modal').waitFor({ state: 'visible', timeout: 10000 });
     await page.getByRole('button', { name: /confirmar/i }).click();
-    console.log('CLICOU EM CONFIRMAR');
-
-
-
-
-
-   
-    
-   
-   
+    console.log('CLICOU EM CONFIRMAR');     
 });
