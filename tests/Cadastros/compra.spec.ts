@@ -44,7 +44,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const numeroNota = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field').filter({ hasText: /n° nota/i }).last();
     await campoNumero.locator('input').fill(numeroNota.toString());
-    console.log('NUMERO DE NOTA OK:', numeroNota);
+    console.log('NUMERO DE NOTA OK:', numeroNota.toString().trim());
 
     // Seleção de Fornecedor no componente Quasar
     await page.locator('.q-select').nth(0).click();
