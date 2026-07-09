@@ -101,11 +101,18 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     .filter({ hasText: 'SALVAR' });
     await salvar2.first().waitFor({ state: 'visible' });
     await salvar2.first().click({ force: true });     
-    console.log('CLICOU EM SALVAR');  
-    
-    await page.waitForSelector('button:has-text("CONFIRMAR")', { state: 'visible' });
+    console.log('CLICOU EM SALVAR');   
+
+
+    await page.locator('.q-dialog.q-dialog--modal').waitFor({ state: 'visible' });
     await page.getByRole('button', { name: /confirmar/i }).click();
-    console.log('CLICOU EM CONFIRMAR');         
+    console.log('CLICOU EM CONFIRMAR');
+
+
+
+
+
+   
     
    
    
