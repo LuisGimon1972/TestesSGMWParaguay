@@ -95,76 +95,18 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await salvar.first().waitFor({ state: 'visible' });
     await salvar.first().click({ force: true });     
     console.log('CLICOU EM SALVAR');  
-
-    await page.waitForTimeout(2000);
+    
     const salvar2 = page
     .locator('button.q-btn')
     .filter({ hasText: 'SALVAR' });
-    await salvar2.last().waitFor({ state: 'visible' });
-    await salvar2.last().click({ force: true });     
+    await salvar2.first().waitFor({ state: 'visible' });
+    await salvar2.first().click({ force: true });     
     console.log('CLICOU EM SALVAR');  
-
-    await page.waitForTimeout(2000);
-    const confirmar = page
-    .locator('button.q-btn')
-    .filter({ hasText: 'CONFIRMAR' });
-    await confirmar.first().waitFor({ state: 'visible' });
-    await confirmar.first().click({ force: true });     
-    console.log('CLICOU EM CONFIRMAR');  
-
-    await page.waitForTimeout(2000);
-    const confirmar1 = page
-    .locator('button.q-btn')
-    .filter({ hasText: 'CONFIRMAR' });
-    await confirmar1.first().waitFor({ state: 'visible' });
-    await confirmar1.first().click({ force: true });     
-    console.log('CLICOU EM CONFIRMAR');  
-
     
-
+    await page.waitForSelector('button:has-text("CONFIRMAR")', { state: 'visible' });
+    await page.getByRole('button', { name: /confirmar/i }).click();
+    console.log('CLICOU EM CONFIRMAR');         
     
    
-  /*  const salvarPessoaResponse = await salvarFaturaPromise;
-    const dadosSalvos = await salvarPessoaResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
-    console.log(JSON.stringify(dadosSalvos, null, 2));
-    
-    const idPessoa = dadosSalvos.venda.controle.toString().trim();
-    console.log('CONTROLE:', idPessoa);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/venda/${idPessoa}`;    
-    const headersOriginais = salvarPessoaResponse.request().headers();
-    const headersGetRegistro: Record<string, string> = {
-      Accept: 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-      authorization: headersOriginais['authorization'],
-      'x-xsrf-token': headersOriginais['x-xsrf-token'],
-      'x-tenant': headersOriginais['x-tenant'],
-      'x-empresa': headersOriginais['x-empresa'],
-    };
-    
-    const getCriadoResponse = await page.request.get(urlRegistroCriado, {
-      headers: headersGetRegistro,
-    });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
-
-    try {
-      const dadosCriado = await getCriadoResponse.json();
-      console.log(JSON.stringify(dadosCriado, null, 2));
-    } catch (error) {
-      console.error('Erro ao converter resposta para JSON:', error);
-      const corpoBruto = await getCriadoResponse.text();
-      console.log('Corpo bruto da resposta:', corpoBruto);
-    }
-
-    expect([404, 200]).toContain(getCriadoResponse.status());   */ 
-
-
-    //await page.waitForTimeout(14000);
-
-    //await capturarRequisicaoApiCadastro(page, '/api/py/venda'); 
-     
-   // await capturarRequisicoesApi(page); 
-   // await page.waitForTimeout(4000);         
+   
 });
