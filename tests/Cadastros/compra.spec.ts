@@ -49,7 +49,8 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     // Seleção de Fornecedor no componente Quasar
     await page.locator('.q-select').nth(0).click();
     await page.locator('.q-menu .q-item').first().click();
-    console.log('SELECIONOU UM FORNECEDOR OK');  
+    const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
+    console.log('SELECIONOU UM FORNECEDOR OK:', fornecedor);  
 
     // Abertura da listagem de itens
     const botaoItens = page.locator('button').filter({ has: page.locator('i:text("format_list_bulleted")') }).first();
