@@ -19,7 +19,7 @@ test('Exclusão de datos espécies', async ({ page }) => {
     console.log('Quantidade de ícones de edição:', trashIcons);
 
     if (trashIcons === 0) {
-       console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
        return;
     }
     

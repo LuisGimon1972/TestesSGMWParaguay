@@ -19,7 +19,7 @@ test('Exclusão de datos cotação de moedas', async ({ page }) => {
    const trashIcons = await page.locator('table img[src*="trash"]').count();
 
    if (trashIcons === 0) {
-       console.log('NENHUM ÍCONE DE EXCLUSÃO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
        return;
     }
     const primeiraLinha = page.locator('table tr:first-child td');
