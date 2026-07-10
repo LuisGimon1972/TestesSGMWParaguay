@@ -143,7 +143,7 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR COTACAO');  
+    console.log('CLICOU EM SALVAR COTAÇÃO');  
 
     await salvarCotacaoPromise;
 
