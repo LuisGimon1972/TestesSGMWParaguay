@@ -19,14 +19,12 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
       page.locator('a[href*="dav"]').first().click()
     ]);
     console.log('CLICOU EM DAV');
-
-    // 2. Abrir tela de cadastro
+    
     const btnCadastrar = page.getByText(/cadastrar dav/i).first();
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR FATURA');
-   
-    // 3. Preencher Validade
+    console.log('CLICOU EM CADASTRAR DAV');   
+    
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
@@ -42,7 +40,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
-    console.log('CLICOU EM ITEM DA FATURA OK');  
+    console.log('CLICOU EM ITEM DA DAV OK');  
     
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
@@ -52,7 +50,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await ativos.nth(1).click({ force: true });
     await ativos.nth(2).click({ force: true });
     await ativos.nth(3).click({ force: true });
-    console.log('SELECIONOU VÁRIOS ITENS DA FATURA OK');  
+    console.log('SELECIONOU VÁRIOS ITENS DA DAV OK');  
 
     // 5. Adicionar Itens selecionados
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
