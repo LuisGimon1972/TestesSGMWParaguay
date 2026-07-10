@@ -131,6 +131,7 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     await inputDatafin.fill('');
     await inputDatafin.type(datafin, { delay: 50 });
     console.log('FIM DE VIGÊNCIA OK:', datafin);
+    console.log('***FIM DE DADOS ENVIADOS PRA API**');    
 
     const salvarCotacaoPromise = page.waitForResponse((response) =>
     response.url().includes('/api/moeda/cotacao') &&
