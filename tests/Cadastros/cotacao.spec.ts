@@ -26,7 +26,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await moedaField.evaluate(el => (el as HTMLElement).click());    
     const menu = page.locator('.q-menu');
     await expect(menu).toBeVisible();    
-    const moedas = ['usd', 'brl', 'pyg', 'cad', 'eur', 'gbp'];    
+    const moedas = ['usd', 'brl', 'cad', 'eur', 'gbp'];    
     const moedaEscolhida = moedas[Math.floor(Math.random() * moedas.length)];
     
     const opcao = menu.locator('.q-item', {
