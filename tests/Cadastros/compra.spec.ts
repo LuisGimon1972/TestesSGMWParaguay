@@ -1,9 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Cadastro de Faturas', async ({ page }) => {
+test('Teste de Cadastro de Compras', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);       
+    await loginCompleto(page);      
+    
+    await page.waitForTimeout(2000);           
+    const salvarCompraPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/py/compra') &&
+    ['POST'].includes(response.request().method()) &&
+    response.status() >= 200 &&
+    response.status() < 300);
     
 
     const comprasBtn = page.getByText(/compras/i).first();
@@ -75,7 +83,6 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await salvar.first().click({ force: true });         
     console.log('CLICOU EM SALVAR ITENS');  
 
-
     await page.waitForTimeout(2000);
     const salvar2 = page
     .locator('button.q-btn')
@@ -101,7 +108,16 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await btnConfirmar2.waitFor({ state: 'visible', timeout: 5000 });    
     await page.waitForTimeout(500);
     await btnConfirmar2.click({ force: true });
-    console.log('CLICOU EM CONFIRMAR FÓRMULA DE PREÇO');    
-    
-    await modal2.waitFor({ state: 'hidden', timeout: 10000 });
+    console.log('CLICOU EM CONFIRMAR FÓRMULA DE PREÇO');       
+
+    const salvarPessoaResponse = await salvarCompraPromise;
+    const dadosSalvos = await salvarPessoaResponse.json();
+    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log(JSON.stringify(dadosSalvos, null, 2));  
+
+    await capturarRequisicoesApi(page); 
+   // await page.waitForTimeout(4000);
+   
+
+   // await modal2.waitFor({ state: 'hidden', timeout: 10000 });  
 });
