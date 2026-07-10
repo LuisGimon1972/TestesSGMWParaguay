@@ -12,8 +12,8 @@ test('Edição de dados subgrupos', async ({ page }) => {
   console.log('CLICOU EM CADASTRO');
 
   await page.locator('a[href*="registros/subgrupos"]').click();
-  console.log('CLICOU EM SUBGRUPOS');
-  
+  console.log('CLICOU EM SUBGRUPOS');  
+ 
   const getSubgrupoPromise = page.waitForResponse((response) =>
     response.url().includes('/api/produto/subgrupo') &&
     response.request().method() === 'GET' &&
@@ -24,23 +24,17 @@ test('Edição de dados subgrupos', async ({ page }) => {
   await page.waitForSelector('table tbody tr');
   await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {});
 
-  const getSubgrupoResponse = await getSubgrupoPromise;
-  const dadosAntes = await getSubgrupoResponse.json();
-  const headersOriginais = getSubgrupoResponse.request().headers();
-
-  console.log('***DADOS ANTES DA ALTERAÇÃO***');
-  console.log(JSON.stringify(dadosAntes, null, 2));
+  const getSubgrupoResponseOriginal = await getSubgrupoPromise;
+  const dadosAntes = await getSubgrupoResponseOriginal.json();
+  const headersOriginais = getSubgrupoResponseOriginal.request().headers(); 
   
   const editIcons = await page.locator('img[src*="edit.svg"]').count();
-  console.log('Quantidade de ícones de edição:', editIcons);
+  console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons.toString().trim());
 
   if (editIcons === 0) {
     console.log('NENHUM ÍCONE DE EDIÇÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
     return;
   }
-
-  await page.locator('img[src*="edit.svg"]').first().click();
-  console.log('CLICOU NO ÍCONE DE EDITAR');
   
   const primeiroRegistro =
     dadosAntes.data?.data?.[0] ??
@@ -58,22 +52,43 @@ test('Edição de dados subgrupos', async ({ page }) => {
 
   if (!subgrupoId) {
     console.log('PRIMEIRO REGISTRO ENCONTRADO:', JSON.stringify(primeiroRegistro, null, 2));
-    throw new Error('Não foi possível obter o ID do grupo editado.');
+    throw new Error('Não foi possível obter o ID do subgrupo para consulta.');
   }
 
-  const baseUrl = new URL(getSubgrupoResponse.url()).origin;
-  const urlRegistroEditado = `${baseUrl}/api/produto/subgrupo/${subgrupoId}`;
-
-  console.log('ID DO REGISTRO EDITADO:', subgrupoId);
-  console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
+  const baseUrl = new URL(getSubgrupoResponseOriginal.url()).origin;
+  const urlRegistroSpecific = `${baseUrl}/api/produto/subgrupo/${subgrupoId}`;
   
-  console.log('DADOS ENVIADOS PRA API');
+  const headersGetRegistro: Record<string, string> = {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    ...(headersOriginais.authorization && { authorization: headersOriginais.authorization }),
+    ...(headersOriginais['x-xsrf-token'] && { 'x-xsrf-token': headersOriginais['x-xsrf-token'] }),
+    ...(headersOriginais['x-tenant'] && { 'x-tenant': headersOriginais['x-tenant'] }),
+    ...(headersOriginais['x-empresa'] && { 'x-empresa': headersOriginais['x-empresa'] }),
+  };
+  
+  console.log(`CONSULTANDO REGISTRO ANTES DA ALTERAÇÃO (ID: ${subgrupoId})...`);
+  const getAntesResponse = await page.request.get(urlRegistroSpecific, { headers: headersGetRegistro });
+  
+  console.log(`STATUS GET REGISTRO ANTES: ${getAntesResponse.status()}`);
+  if (getAntesResponse.ok()) {
+    const dadosRegistroAntes = await getAntesResponse.json();
+    console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+    console.log(JSON.stringify(dadosRegistroAntes, null, 2));
+  } else {
+    console.log(`Não foi possível consultar o registro individual antes. Status: ${getAntesResponse.status()}`);
+  }
+  
+  await page.locator('img[src*="edit.svg"]').first().click();
+  console.log('CLICOU NO ÍCONE DE EDITAR');
+  
+  console.log('*** DADOS ENVIADOS PRA API ***');
   await page.waitForTimeout(2000);    
   const nomesubgrupo = `TEST SUBGRUPO ALTERADO ${Date.now()}`;
   await page.getByLabel(/editar subgrupo/i).fill(nomesubgrupo);
   console.log('NOME DE SUBGRUPO ALTERADO OK:', nomesubgrupo);
   await page.waitForTimeout(2000);    
-  console.log('FIM DE DADOS ENVIADOS');
+  console.log('*** FIM DE DADOS ENVIADOS ***');
   
   const salvarSubgrupoPromise = page.waitForResponse((response) =>
     response.url().includes('/api/produto/subgrupo') &&
@@ -85,29 +100,22 @@ test('Edição de dados subgrupos', async ({ page }) => {
   await page.locator('.q-btn').filter({ hasText: /confirmar|guardar/i }).click({ force: true });
   console.log('CLICOU EM SALVAR SUBGRUPO');
 
-  await salvarSubgrupoPromise;
+  await salvarSubgrupoPromise;  
   
-  const headersGetRegistro: Record<string, string> = {
-    Accept: 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-    authorization: headersOriginais.authorization,
-    'x-xsrf-token': headersOriginais['x-xsrf-token'],
-    'x-tenant': headersOriginais['x-tenant'],
-    'x-empresa': headersOriginais['x-empresa'],
-  };
+  const getDepoisResponse = await page.request.get(urlRegistroSpecific, { headers: headersGetRegistro });
+  console.log(`STATUS GET REGISTRO EDITADO: ${getDepoisResponse.status()}`);
 
-  const getGrupoResponse = await page.request.get(urlRegistroEditado, { headers: headersGetRegistro });
-  console.log(`STATUS GET REGISTRO EDITADO: ${getGrupoResponse.status()}`);
-
-  if (!getGrupoResponse.ok()) {
-    throw new Error(`GET registro editado falhou: ${getGrupoResponse.status()} - ${await getGrupoResponse.text()}`);
+  const textoResposta = await getDepoisResponse.text();
+  if (!getDepoisResponse.ok()) {
+    throw new Error(`GET registro editado falhou: ${getDepoisResponse.status()} - ${textoResposta}`);
   }
 
-  const dadosDepois = await getGrupoResponse.json();
-  console.log('***DADOS APÓS A ALTERAÇÃO***');
+  const dadosDepois = JSON.parse(textoResposta);
+  console.log('*** DADOS APÓS A ALTERAÇÃO (GET DO REGISTRO EDITADO) ***');
   console.log(JSON.stringify(dadosDepois, null, 2));
 
   expect(JSON.stringify(dadosDepois)).toContain(nomesubgrupo);
 
   await capturarRequisicoesApi(page);
+  await page.waitForTimeout(4000);
 });

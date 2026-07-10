@@ -27,23 +27,19 @@ test('Edição de datos espécies', async ({ page }) => {
         response.request().method() === 'GET' &&
         response.status() === 200 &&
         /\/api\/especie\/[^/?]+/.test(response.url()));
-
-        //Captura Dados Antes de Alterar
+        
         const getEspeciePromise = page.waitForResponse((response) =>
         response.url().includes('/api/especie') &&
         response.request().method() === 'GET' &&
         response.status() === 200);
-        //Captura Dados Antes de Alterar
 
         await page.locator('table img[src="/icons/edit.svg"]').first().click();
         console.log('CLICOU NO ÍCONE DE EDITAR');  
-
-        //Mostra Dados Antes de Alterar
+        
         const getEspecieResponsee = await getEspeciePromise;
         const dadosAntes = await getEspecieResponsee.json();
-        console.log('***DADOS ANTES DA ALTERAÇÃO***');
-        console.log(JSON.stringify(dadosAntes, null, 2));
-        //Mostra Dados Antes de Alterar  
+        console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+        console.log(JSON.stringify(dadosAntes, null, 2));        
 
         const getRegistroEditadoResponse = await getRegistroEditadoPromise;
         const urlRegistroEditado = getRegistroEditadoResponse.url();

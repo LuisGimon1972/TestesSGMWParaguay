@@ -45,7 +45,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
   //Mostra Dados Antes de Alterar
   const getPessoaResponsee = await getPessoaPromise;
   const dadosAntes = await getPessoaResponsee.json();
-  console.log('***DADOS ANTES DA ALTERAÇÃO***');
+  console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
   console.log(JSON.stringify(dadosAntes, null, 2));
   //Mostra Dados Antes de Alterar  
 
@@ -81,9 +81,8 @@ test('Edição de datos Pessoas', async ({ page }) => {
   const numero = Math.floor(Math.random() * 4000) + 1;
   const campoNumero = page.locator('.q-field')
     .filter({ hasText: /número/i })
-    .last();
-  await campoNumero.locator('input').fill(numero.toString());
-  console.log('NÚMERO ALTERADO OK:', numero.toFixed(0));
+    .last();  
+  console.log('NÚMERO ALTERADO OK:',numero.toString().trim());
 
   await page.waitForTimeout(1000);
   const telefone = Array.from({ length: 9 }, () =>

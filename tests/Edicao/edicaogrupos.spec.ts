@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Edição de datos grupos', async ({ page }) => {
+test('Edição de dados grupos', async ({ page }) => {
   test.setTimeout(120000);
 
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -15,7 +15,7 @@ test('Edição de datos grupos', async ({ page }) => {
 
   await page.locator('a[href*="registros/grupos"]').click();
   console.log('CLICOU EM GRUPOS');
-
+  
   const getGrupoPromise = page.waitForResponse((response) =>
     response.url().includes('/api/produto/grupo') &&
     response.request().method() === 'GET' &&
@@ -26,24 +26,20 @@ test('Edição de datos grupos', async ({ page }) => {
   await page.waitForSelector('table');
   await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {});
 
-  const getGrupoResponsee = await getGrupoPromise;
-  const dadosAntes = await getGrupoResponsee.json();
-  const headersOriginais = getGrupoResponsee.request().headers();
+  const getGrupoResponseOriginal = await getGrupoPromise;
+  const dadosAntes = await getGrupoResponseOriginal.json();
+  const headersOriginais = getGrupoResponseOriginal.request().headers();
 
-  console.log('***DADOS ANTES DA ALTERAÇÃO***');
-  console.log(JSON.stringify(dadosAntes, null, 2));
+  await page.waitForTimeout(2000);    
 
   const editIcons = await page.locator('table img[src="/icons/edit.svg"]').count();
-  console.log('Quantidade de ícones de edição:', editIcons);
+  console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons.toString().trim());
 
-if (editIcons === 0) {
-  console.log('NENHUM ÍCONE DE EDIÇÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
-  return;
-}
-  await page.waitForTimeout(4000);
-  await page.locator('table img[src="/icons/edit.svg"]').first().click();
-  console.log('CLICOU NO ÍCONE DE EDITAR');
-
+  if (editIcons === 0) {
+    console.log('NENHUM ÍCONE DE EDIÇÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+    return;
+  }  
+  
   const primeiroRegistro =
     dadosAntes.data?.data?.[0] ??
     dadosAntes.data?.[0] ??
@@ -59,24 +55,42 @@ if (editIcons === 0) {
     primeiroRegistro?.controle;
 
   if (!grupoId) {
-    console.log('PRIMEIRO REGISTRO ENCONTRADO:');
-    console.log(JSON.stringify(primeiroRegistro, null, 2));
-    throw new Error('Não foi possível obter o ID do grupo editado.');
+    console.log('PRIMEIRO REGISTRO ENCONTRADO:', JSON.stringify(primeiroRegistro, null, 2));
+    throw new Error('Não foi possível obter o ID do grupo para consulta.');
   }
 
-  const baseUrl = new URL(getGrupoResponsee.url()).origin;
-  const urlRegistroEditado = `${baseUrl}/api/produto/grupo/${grupoId}`;
-
-  console.log('ID DO REGISTRO EDITADO:', grupoId);
-  console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);    
-
+  const baseUrl = new URL(getGrupoResponseOriginal.url()).origin;
+  const urlRegistroSpecific = `${baseUrl}/api/produto/grupo/${grupoId}`;
+  
+  const headersGetRegistro: Record<string, string> = {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    ...(headersOriginais.authorization && { authorization: headersOriginais.authorization }),
+    ...(headersOriginais['x-xsrf-token'] && { 'x-xsrf-token': headersOriginais['x-xsrf-token'] }),
+    ...(headersOriginais['x-tenant'] && { 'x-tenant': headersOriginais['x-tenant'] }),
+    ...(headersOriginais['x-empresa'] && { 'x-empresa': headersOriginais['x-empresa'] }),
+  };
+  
+  console.log(`CONSULTANDO REGISTRO ANTES DA ALTERAÇÃO (ID: ${grupoId})...`);
+  const getAntesResponse = await page.request.get(urlRegistroSpecific, { headers: headersGetRegistro });
+  
+  console.log(`STATUS GET REGISTRO ANTES: ${getAntesResponse.status()}`);
+  if (getAntesResponse.ok()) {
+    const dadosRegistroAntes = await getAntesResponse.json();
+    console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+    console.log(JSON.stringify(dadosRegistroAntes, null, 2));
+  } else {
+    console.log(`Não foi possível consultar o registro individual. Status: ${getAntesResponse.status()}`);
+  }
+  
+  await page.locator('table img[src="/icons/edit.svg"]').first().click();
+  console.log('CLICOU NO ÍCONE DE EDITAR');
   await page.waitForTimeout(2000);
 
-  console.log('***DADOS ENVIADOS PRA API**');
+  console.log('*** DADOS ENVIADOS PRA API ***');
   const nomegrupo = `TEST GRUPO ALTERADO ${Date.now()}`;
   await page.getByLabel(/editar grupo/i).fill(nomegrupo);
   console.log('NOME DE GRUPO ALTERADO OK:', nomegrupo);
-  console.log('***FIM DE DADOS ENVIADOS***');
 
   const salvarGrupoPromise = page.waitForResponse((response) =>
     response.url().includes('/api/produto/grupo') &&
@@ -90,47 +104,20 @@ if (editIcons === 0) {
     .click({ force: true });
 
   console.log('CLICOU EM SALVAR GRUPO');
-
   await salvarGrupoPromise;
+  
+  const getDepoisResponse = await page.request.get(urlRegistroSpecific, { headers: headersGetRegistro });
+  console.log(`STATUS GET REGISTRO EDITADO: ${getDepoisResponse.status()}`);
 
-  const headersGetRegistro: Record<string, string> = {
-    Accept: 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-  };
-
-  if (headersOriginais.authorization) {
-    headersGetRegistro.authorization = headersOriginais.authorization;
-  }
-
-  if (headersOriginais['x-xsrf-token']) {
-    headersGetRegistro['x-xsrf-token'] = headersOriginais['x-xsrf-token'];
-  }
-
-  if (headersOriginais['x-tenant']) {
-    headersGetRegistro['x-tenant'] = headersOriginais['x-tenant'];
-  }
-
-  if (headersOriginais['x-empresa']) {
-    headersGetRegistro['x-empresa'] = headersOriginais['x-empresa'];
-  }
-
-  const getGrupoResponse = await page.request.get(urlRegistroEditado, {
-    headers: headersGetRegistro,
-  });
-
-  console.log(`STATUS GET REGISTRO EDITADO: ${String(getGrupoResponse.status())}`);
-
-  const textoResposta = await getGrupoResponse.text();
-
-  if (!getGrupoResponse.ok()) {
-    throw new Error(`GET registro editado falhou: ${getGrupoResponse.status()} - ${textoResposta}`);
+  const textoResposta = await getDepoisResponse.text();
+  if (!getDepoisResponse.ok()) {
+    throw new Error(`GET registro editado falhou: ${getDepoisResponse.status()} - ${textoResposta}`);
   }
 
   const dadosDepois = JSON.parse(textoResposta);
-
-  console.log('***DADOS APÓS A ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
+  console.log('*** DADOS APÓS A ALTERAÇÃO (GET DO REGISTRO EDITADO) ***');
   console.log(JSON.stringify(dadosDepois, null, 2));
-
+  
   expect(JSON.stringify(dadosDepois)).toContain(nomegrupo);
 
   await capturarRequisicoesApi(page); 

@@ -16,8 +16,8 @@ test('Exclusão de datos grupos', async ({ page }) => {
     console.log('CLICOU EM GRUPOS');
 
     await page.waitForTimeout(2000);
-     const trashIcons = await page.locator('table img[src*="trash"]').count();
-  console.log('Quantidade de ícones de edição:', trashIcons);
+    const trashIcons = await page.locator('table img[src*="trash"]').count();
+    console.log('Quantidade de ícones de edição:', trashIcons);
 
     if (trashIcons === 0) {
        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
@@ -32,45 +32,45 @@ test('Exclusão de datos grupos', async ({ page }) => {
       console.log(`Coluna ${i}: ${valor?.trim()}`);
     }
     
-          await page.waitForSelector('table tr:first-child td', { state: 'visible' });
-      
-      const codigoGrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
-      const codigoLimpo = codigoGrupo?.trim();
+    await page.waitForSelector('table tr:first-child td', { state: 'visible' });
+    
+    const codigoGrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+    const codigoLimpo = codigoGrupo?.trim();
 
-      if (!codigoLimpo) {
-        throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
-      }
-      console.log(`CÓDIGO SELECIONADO: ${codigoLimpo}`);
+    if (!codigoLimpo) {
+      throw new Error('⚠️ Não foi possível capturar o código da pessoa na tabela.');
+    }
+    console.log(`CÓDIGO SELECIONADO: ${codigoLimpo}`);
 
-      await page.waitForTimeout(1000);
-      await page.locator('table img[src*="trash"]').first().click();
-      console.log('CLICOU EM EXCLUIR'); 
-      
-      await page.waitForTimeout(1000);
-      await page.waitForSelector('button:has-text("EXCLUIR")');
-      await page.click('button:has-text("EXCLUIR")');
-      console.log('CLICOU EM EXCLUIR NO DIÁLOGO DE CONFIRMAÇÃO');
+    await page.waitForTimeout(1000);
+    await page.locator('table img[src*="trash"]').first().click();
+    console.log('CLICOU EM EXCLUIR'); 
+    
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('button:has-text("EXCLUIR")');
+    await page.click('button:has-text("EXCLUIR")');
+    console.log('CLICOU EM EXCLUIR NO DIÁLOGO DE CONFIRMAÇÃO');
 
-      const deleteResponse = await page.waitForResponse((response) =>
-      response.url().includes(`/api/produto/grupo/${codigoLimpo}`) &&
-      response.request().method() === 'DELETE');
-      expect([200, 204]).toContain(deleteResponse.status());
+    const deleteResponse = await page.waitForResponse((response) =>
+    response.url().includes(`/api/produto/grupo/${codigoLimpo}`) &&
+    response.request().method() === 'DELETE');
+    expect([200, 204]).toContain(deleteResponse.status());
 
-      const getExcluidoResponse = await page.request.get(`/api/produto/grupo/${codigoLimpo}`);
+    const getExcluidoResponse = await page.request.get(`/api/produto/grupo/${codigoLimpo}`);
 
-      console.log('***RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO***');
-      console.log(`Status: ${getExcluidoResponse.status()}`);
+    console.log('***RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO***');
+    console.log(`Status: ${getExcluidoResponse.status()}`);
 
-      try {
-        const dadosExcluido = await getExcluidoResponse.json();
-        console.log(JSON.stringify(dadosExcluido, null, 2));
-      } catch {
-        console.log('Resposta sem corpo. (Status Code: 404)');
-      }
-      
-      expect([404, 200]).toContain(getExcluidoResponse.status());
+    try {
+      const dadosExcluido = await getExcluidoResponse.json();
+      console.log(JSON.stringify(dadosExcluido, null, 2));
+    } catch {
+      console.log('Resposta sem corpo. (Status Code: 404)');
+    }
+    
+    expect([404, 200]).toContain(getExcluidoResponse.status());
 
-      console.log(`Registro ${codigoLimpo} removido com sucesso.`);           
+    console.log(`Registro ${codigoLimpo} removido com sucesso.`);           
 
     await capturarRequisicoesApi(page);
     await page.waitForTimeout(4000);    

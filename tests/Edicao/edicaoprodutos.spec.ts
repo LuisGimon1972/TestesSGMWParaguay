@@ -46,7 +46,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
              //Mostra Dados Antes de Alterar
             const getProdutoResponsee = await getProdutoPromise;
             const dadosAntes = await getProdutoResponsee.json();
-            console.log('***DADOS ANTES DA ALTERAÇÃO***');
+            console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
             console.log(JSON.stringify(dadosAntes, null, 2));
             //Mostra Dados Antes de Alterar  
 

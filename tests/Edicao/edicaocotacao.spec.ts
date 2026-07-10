@@ -12,68 +12,82 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     console.log('CLICOU EM CADASTRO');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO'); 
+    await page.locator('a[href*="registros/cotizacion-monedas"]').click();
+    console.log('CLICOU EM COTAÇÃO');     
     
     const getCotacaoPromise = page.waitForResponse((response) =>
-    response.url().includes('/api/moeda/cotacao') &&
-    response.request().method() === 'GET' &&
-    response.status() === 200 &&
-    response.url().includes('page=')
-  );
-
+        response.url().includes('/api/moeda/cotacao') &&
+        response.request().method() === 'GET' &&
+        response.status() === 200 &&
+        response.url().includes('page=')
+    );
 
     await page.waitForSelector('table');    
     await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });    
 
-    const getCotacaoResponsee = await getCotacaoPromise;
-    const dadosAntes = await getCotacaoResponsee.json();
-    const headersOriginais = getCotacaoResponsee.request().headers();
-
-    console.log('***DADOS ANTES DA ALTERAÇÃO***');
-    console.log(JSON.stringify(dadosAntes, null, 2));
+    const getCotacaoResponseOriginal = await getCotacaoPromise;
+    const dadosAntes = await getCotacaoResponseOriginal.json();
+    const headersOriginais = getCotacaoResponseOriginal.request().headers();    
 
     await page.waitForTimeout(2000);
 
     const editIcons = await page.locator('table img[src="/icons/edit.svg"]').count();
-    console.log('Quantidade de ícones de edição:', editIcons.toString().trim());
-
-    await page.waitForTimeout(2000);
+    console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons.toString().trim());
 
     if (editIcons === 0) {
-    console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
-    return;
+        console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+        return;
     }
- 
+    
+    const primeiroRegistro =
+        dadosAntes.data?.data?.[0] ??
+        dadosAntes.data?.[0] ??
+        dadosAntes.rows?.[0] ??
+        dadosAntes.items?.[0] ??
+        dadosAntes.result?.[0] ??
+        dadosAntes[0];
+
+    const cotacaoId =
+        primeiroRegistro?.controle ??
+        primeiroRegistro?.id ??
+        primeiroRegistro?.codigo ??
+        primeiroRegistro?.uuid;
+
+    if (!cotacaoId) {
+        console.log('PRIMEIRO REGISTRO ENCONTRADO:', JSON.stringify(primeiroRegistro, null, 2));
+        throw new Error('Não foi possível obter o ID da cotação para consulta.');
+    }
+
+    const baseUrl = new URL(getCotacaoResponseOriginal.url()).origin;
+    const urlRegistroSpecific = `${baseUrl}/api/moeda/cotacao/${cotacaoId}`;
+    
+    const headersGetRegistro: Record<string, string> = {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        ...(headersOriginais.authorization && { authorization: headersOriginais.authorization }),
+        ...(headersOriginais['x-xsrf-token'] && { 'x-xsrf-token': headersOriginais['x-xsrf-token'] }),
+        ...(headersOriginais['x-tenant'] && { 'x-tenant': headersOriginais['x-tenant'] }),
+        ...(headersOriginais['x-empresa'] && { 'x-empresa': headersOriginais['x-empresa'] }),
+    };
+    
+    console.log(`CONSULTANDO REGISTRO ANTES DA ALTERAÇÃO (ID: ${cotacaoId})...`);
+    const getAntesResponse = await page.request.get(urlRegistroSpecific, { headers: headersGetRegistro });
+    
+    console.log(`STATUS GET REGISTRO ANTES: ${getAntesResponse.status()}`);
+    if (getAntesResponse.ok()) {
+        const dadosRegistroAntes = await getAntesResponse.json();
+        console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+        console.log(JSON.stringify(dadosRegistroAntes, null, 2));
+    } else {
+        console.log(`Não foi possível consultar o registro individual antes. Status: ${getAntesResponse.status()}`);
+    }
+    
     await page.waitForTimeout(2000);
     await page.locator('table img[src="/icons/edit.svg"]').first().click();
     console.log('CLICOU NO ÍCONE DE EDITAR');    
 
-    const primeiroRegistro =
-    dadosAntes.data?.data?.[0] ??
-    dadosAntes.data?.[0] ??
-    dadosAntes.rows?.[0] ??
-    dadosAntes.items?.[0] ??
-    dadosAntes.result?.[0] ??
-    dadosAntes[0];
-
-    const cotacaoId =
-    primeiroRegistro?.id ??
-    primeiroRegistro?.codigo ??
-    primeiroRegistro?.uuid ??
-    primeiroRegistro?.controle;
-
-  if (!cotacaoId) {
-    console.log('PRIMEIRO REGISTRO ENCONTRADO:');
-    console.log(JSON.stringify(primeiroRegistro, null, 2));
-    throw new Error('Não foi possível obter o ID do grupo editado.');
-    }
-
-    const baseUrl = new URL(getCotacaoResponsee.url()).origin;
-    const urlRegistroEditado = `${baseUrl}/api/moeda/cotacao/${cotacaoId}`;
-
     console.log('ID DO REGISTRO EDITADO:', cotacaoId);
-    console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);    
+    console.log('URL DO REGISTRO EDITADO:', urlRegistroSpecific);    
 
     await page.waitForTimeout(2000);
 
@@ -87,7 +101,7 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     const moedas = ['usd', 'brl', 'cad', 'eur', 'gbp'];    
     const moedaEscolhida = moedas[Math.floor(Math.random() * moedas.length)];    
     const opcao = menu.locator('.q-item', {
-    hasText: new RegExp(moedaEscolhida, 'i')
+        hasText: new RegExp(moedaEscolhida, 'i')
     }).first();
     await opcao.click();
     console.log('MOEDA DE COTAÇÃO ALTERADA OK:', moedaEscolhida);
@@ -107,10 +121,10 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     const hoje = new Date();
     const datahoje = hoje.toLocaleDateString('pt-BR');
     const inputData = page
-    .locator('.q-field')
-    .filter({ hasText: /vig[eê]ncia/i })
-    .first()
-    .locator('input');
+        .locator('.q-field')
+        .filter({ hasText: /vig[eê]ncia/i })
+        .first()
+        .locator('input');
     await expect(inputData).toBeVisible();
     await inputData.fill(datahoje);
     console.log('INICIO DE VIGÊNCIA ALTERADA OK:', datahoje);
@@ -122,10 +136,10 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     const ano = fimMes.getFullYear();
     const datafin = `${dia}/${mes}/${ano}`;
     const inputDatafin = page
-    .locator('.q-field')
-    .filter({ hasText: /fim|vig[eê]ncia/i })
-    .last()
-    .locator('input');
+        .locator('.q-field')
+        .filter({ hasText: /fim|vig[eê]ncia/i })
+        .last()
+        .locator('input');
     await inputDatafin.scrollIntoViewIfNeeded();
     await expect(inputDatafin).toBeVisible();
     await inputDatafin.fill('');
@@ -134,41 +148,20 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     console.log('***FIM DE DADOS ENVIADOS PRA API**');    
 
     const salvarCotacaoPromise = page.waitForResponse((response) =>
-    response.url().includes('/api/moeda/cotacao') &&
-    ['PUT', 'PATCH', 'POST'].includes(response.request().method()) &&
-    response.status() >= 200 &&
-    response.status() < 300
-  );
+        response.url().includes('/api/moeda/cotacao') &&
+        ['PUT', 'PATCH', 'POST'].includes(response.request().method()) &&
+        response.status() >= 200 &&
+        response.status() < 300
+    );
 
     await page.locator('.q-btn')
-    .filter({ hasText: /salvar|guardar/i })
-    .click({ force: true });
+        .filter({ hasText: /salvar|guardar/i })
+        .click({ force: true });
     console.log('CLICOU EM SALVAR COTAÇÃO');  
 
     await salvarCotacaoPromise;
-
-    const headersGetRegistro: Record<string, string> = {
-        Accept: 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-    };
-
-    if (headersOriginais.authorization) {
-        headersGetRegistro.authorization = headersOriginais.authorization;
-    }
-
-    if (headersOriginais['x-xsrf-token']) {
-        headersGetRegistro['x-xsrf-token'] = headersOriginais['x-xsrf-token'];
-    }
-
-    if (headersOriginais['x-tenant']) {
-        headersGetRegistro['x-tenant'] = headersOriginais['x-tenant'];
-    }
-
-    if (headersOriginais['x-empresa']) {
-        headersGetRegistro['x-empresa'] = headersOriginais['x-empresa'];
-    }
-
-    const getCotacaoResponse = await page.request.get(urlRegistroEditado, {
+    
+    const getCotacaoResponse = await page.request.get(urlRegistroSpecific, {
         headers: headersGetRegistro,
     });
 
@@ -186,14 +179,6 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     console.log(JSON.stringify(dadosDepois, null, 2));
 
     expect(JSON.stringify(dadosDepois)).toContain(cotacaoId.toString().trim());
-
-
-
-
-  
-
-  
-   
     
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
