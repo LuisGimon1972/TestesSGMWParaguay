@@ -2,11 +2,10 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
 test('Teste de Cadastro de Faturas', async ({ page }) => {
-    // Configurações iniciais de ambiente
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);       
     
-    // Navegação
+
     const comprasBtn = page.getByText(/compras/i).first();
     await expect(comprasBtn).toBeVisible({ timeout: 5000 });
     await comprasBtn.click();
@@ -18,8 +17,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar compra/i).first();
     await btnCadastrar.click();
     console.log('CLICOU EM CADASTRAR COMPRA');
-
-    // Ajuste visual para exibição de elementos
+    
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => { document.body.style.zoom = '0.8'; });
    
@@ -45,19 +43,16 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const campoNumero = page.locator('.q-field').filter({ hasText: /n° nota/i }).last();
     await campoNumero.locator('input').fill(numeroNota.toString());
     console.log('NUMERO DE NOTA OK:', numeroNota.toString().trim());
-
-    // Seleção de Fornecedor no componente Quasar
+    
     await page.locator('.q-select').nth(0).click();
     await page.locator('.q-menu .q-item').first().click();
     const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
     console.log('SELECIONOU UM FORNECEDOR OK:', fornecedor);  
-
-    // Abertura da listagem de itens
+    
     const botaoItens = page.locator('button').filter({ has: page.locator('i:text("format_list_bulleted")') }).first();
     await botaoItens.click();
-    console.log('CLICOU EM ITEM DA FATURA OK');  
+    console.log('CLICOU EM ITEM DA FATURA OK');      
     
-    // Seleção de múltiplos produtos
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
     await ativos.nth(0).click();
@@ -70,7 +65,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /adicionar/i })
     .click({ force: true });
-    console.log('CLICOU EM ADICIONAR'); 
+    console.log('CLICOU EM ADICIONAR ITENS'); 
 
    await page.waitForTimeout(2000);
     const salvar = page
@@ -78,7 +73,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     .filter({ hasText: 'SALVAR' });
     await salvar.first().waitFor({ state: 'visible' });
     await salvar.first().click({ force: true });         
-    console.log('CLICOU EM SALVAR');  
+    console.log('CLICOU EM SALVAR ITENS');  
 
 
     await page.waitForTimeout(2000);
@@ -87,45 +82,26 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     .filter({ hasText: 'SALVAR' });
     await salvar2.first().waitFor({ state: 'visible' });
     await salvar2.first().click({ force: true });         
-    console.log('CLICOU EM SALVAR');  
+    console.log('CLICOU EM SALVAR COMPRA');      
 
-
-    
-// === CONTROLE DE MODAIS EM SEQUÊNCIA ===
-    
-    // 1. PRIMEIRO MODAL
     const modal1 = page.locator('.q-dialog:visible').first();
-    await modal1.waitFor({ state: 'visible', timeout: 15000 });
-
-    // Localiza o botão dentro do primeiro modal
-    const btnConfirmar1 = modal1.locator('.q-btn', { hasText: /confirmar|salvar/i }).first();
-    
-    // Garante que o botão está anexado e visível na árvore do DOM antes de agir
-    await btnConfirmar1.waitFor({ state: 'visible', timeout: 5000 });
-    
-    // Pequena pausa para o Quasar processar qualquer validação/fim de animação
-    await page.waitForTimeout(500);
-
-    // Clica forçando a ação para ignorar problemas de coordenadas gráficas
+    await modal1.waitFor({ state: 'visible', timeout: 15000 });    
+    const btnConfirmar1 = modal1.locator('.q-btn', { hasText: /confirmar|salvar/i }).first();   
+    await btnConfirmar1.waitFor({ state: 'visible', timeout: 5000 });   
+    await page.waitForTimeout(500);    
     await btnConfirmar1.click({ force: true });
-    console.log('✅ Primeiro CONFIRMAR clicado');
-
-    // Forçamos o Playwright a esperar que o primeiro modal suma inteiramente
+    console.log('CLICOU EM CONFIRMAR TOTAIS');
+    
     await modal1.waitFor({ state: 'hidden', timeout: 10000 });
-    await page.waitForTimeout(800); // Intervalo essencial para o Vue instanciar o próximo modal
-
-
-    // 2. SEGUNDO MODAL
+    await page.waitForTimeout(800); 
+    
     const modal2 = page.locator('.q-dialog:visible').first();
     await modal2.waitFor({ state: 'visible', timeout: 15000 });
-
     const btnConfirmar2 = modal2.locator('.q-btn', { hasText: /confirmar|salvar/i }).first();
-    await btnConfirmar2.waitFor({ state: 'visible', timeout: 5000 });
-    
+    await btnConfirmar2.waitFor({ state: 'visible', timeout: 5000 });    
     await page.waitForTimeout(500);
     await btnConfirmar2.click({ force: true });
-    console.log('✅ Segundo CONFIRMAR clicado');
+    console.log('CLICOU EM CONFIRMAR FÓRMULA DE PREÇO');    
     
-    // Aguarda o fechamento final
     await modal2.waitFor({ state: 'hidden', timeout: 10000 });
 });
