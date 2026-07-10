@@ -41,7 +41,7 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
     await page.waitForTimeout(2000);
 
     if (editIcons === 0) {
-    console.log('NENHUM ÍCONE DE EDIÇÃO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
+    console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
     return;
     }
  
