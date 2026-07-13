@@ -37,7 +37,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     hasText: new RegExp(davEscolhida, 'i')
     }).first();
     await opcao.click();
-    console.log('DAV SELECIONADA OK:', davEscolhida); 
+    console.log('DAV SELECIONADA OK:', davEscolhida.toUpperCase()); 
 
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
