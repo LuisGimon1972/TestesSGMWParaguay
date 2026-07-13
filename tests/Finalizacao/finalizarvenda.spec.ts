@@ -43,7 +43,8 @@ test('Teste de Finalização de Vendas', async ({ page }) => {
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(5).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();
-    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK');  
+    const remetente = await page.locator('input[aria-label="Destinatário/remetente"]').inputValue();
+    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK:',remetente);  
 
     await page.waitForTimeout(2000);     
     const finalizar = page
@@ -66,16 +67,16 @@ test('Teste de Finalização de Vendas', async ({ page }) => {
         .replace(/\./g, '')
         .replace(',', '.')
     )/100;
-    console.log('TOTAL DE VENDAS:',saldo); 
+    console.log('TOTAL DE VENDAS:',saldo.toString().trim()); 
 
-    const valor = saldo;
-    const valorCorrigido = Math.floor(valor+2);
-    const troco = Math.floor(valor+2) - Math.floor(valor)
+    const valor = saldo;    
+    const valorEfectivo = calcularEfectivo(valor)
+    const troco = valorEfectivo - valor
     const efectivo = page.locator('.payment-specie-row', {
       hasText: 'EFECTIVO'
     });
-    await efectivo.locator('input').fill(valorCorrigido.toString());
-    console.log('DIGITOU VALOR EM EFECTIVO:',valorCorrigido.toString()); 
+    await efectivo.locator('input').fill(valorEfectivo.toString());
+    console.log('DIGITOU VALOR EM EFECTIVO:',valorEfectivo.toString()); 
     console.log('CALCULOU TROCO:',troco.toString()); 
 
     const confirmar = page
@@ -84,4 +85,8 @@ test('Teste de Finalização de Vendas', async ({ page }) => {
     await confirmar.first().waitFor({ state: 'visible' });
     await confirmar.first().click({ force: true });           
     console.log('CLICLOU EM CONFIRMAR VENDA'); 
+
+    function calcularEfectivo(total: number): number {
+    return Math.ceil(total / 10) * 10;
+}
 });
