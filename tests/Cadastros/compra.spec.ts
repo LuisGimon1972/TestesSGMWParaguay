@@ -99,7 +99,7 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     await btnConfirmar1.click({ force: true });
     console.log('CLICOU EM CONFIRMAR TOTAIS');
     
-    //await modal1.waitFor({ state: 'hidden', timeout: 10000 });
+    await modal1.waitFor({ state: 'hidden', timeout: 10000 });
     await page.waitForTimeout(800); 
     
     const modal2 = page.locator('.q-dialog:visible').first();
@@ -115,7 +115,7 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));  
 
-    await capturarRequisicoesApi(page); 
+  //  await capturarRequisicoesApi(page); 
    // await page.waitForTimeout(4000);
    
 
