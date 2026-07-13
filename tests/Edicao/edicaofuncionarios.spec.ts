@@ -14,6 +14,7 @@ test('Edição de datos funcionários', async ({ page }) => {
   await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });
   await page.waitForSelector('table img[src*="edit"], table svg', { timeout: 15000 });
   const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
+  console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons.toString().trim());
 
   if (editIcons > 0) {          
        
@@ -29,7 +30,6 @@ test('Edição de datos funcionários', async ({ page }) => {
       response.request().method() === 'GET' &&
       response.status() === 200
       );
-
 
       await page.locator('table img[src="/icons/edit.svg"]').first().click();
       console.log('CLICOU NO ÍCONE DE EDITAR');    

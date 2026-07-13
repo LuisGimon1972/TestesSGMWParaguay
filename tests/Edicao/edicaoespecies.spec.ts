@@ -19,6 +19,7 @@ test('Edição de datos espécies', async ({ page }) => {
     await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 10000 });  
     await page.waitForTimeout(1000);  
     const trashIcons = await page.locator('table img[src*="trash"]').count();    
+    console.log('QUANTIDADE DE REGISTROS NA GRADE:', trashIcons.toString().trim());
 
     if (trashIcons > 0) {    
         

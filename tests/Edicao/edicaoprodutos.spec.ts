@@ -11,44 +11,39 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU PRODUTOS');      
+      console.log('CLICOU EM PRODUTOS');      
 
       await page.waitForSelector('table');
       await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });           
       const editIcons = await page.locator('table img[src*="edit"], table svg').count();
-      console.log('Quantidade de ícones de edição:', editIcons);
+      console.log('QUANTIDADE DE ÍCONES DE EDIÇÃO:', editIcons.toString().trim());
 
       await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
       document.body.style.zoom = '0.7'; });
       console.log('🔍 Zoom ajustado para 70% via CSS');
 
-      if (editIcons > 0) {   
-            
+      if (editIcons > 0) {               
             const getRegistroEditadoPromise = page.waitForResponse((response) =>
             response.url().includes('/api/py/produto') &&
             response.request().method() === 'GET' &&
             response.status() === 200 &&
             /\/api\/py\/produto\/[^/?]+/.test(response.url())
             );
-
-            //Captura Dados Antes de Alterar
+            
             const getProdutoPromise = page.waitForResponse((response) =>
             response.url().includes('/api/py/produto') &&
             response.request().method() === 'GET' &&
             response.status() === 200
-            );
-            //Captura Dados Antes de Alterar
+            );            
 
             await page.locator('table img[src="/icons/edit.svg"]').first().click();
             console.log('CLICOU NO ÍCONE DE EDITAR');
-
-             //Mostra Dados Antes de Alterar
+             
             const getProdutoResponsee = await getProdutoPromise;
             const dadosAntes = await getProdutoResponsee.json();
             console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
-            console.log(JSON.stringify(dadosAntes, null, 2));
-            //Mostra Dados Antes de Alterar  
+            console.log(JSON.stringify(dadosAntes, null, 2));            
 
             const getRegistroEditadoResponse = await getRegistroEditadoPromise;
             const urlRegistroEditado = getRegistroEditadoResponse.url();
@@ -86,15 +81,18 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       
             const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
             console.log('UNIDADE OK:', unid);
-
             await page.waitForTimeout(1000);
+
             const precusto = Math.floor(Math.random() * 1000) + 1;
             const campoPrecusto = page.locator('.q-field')
             .filter({ hasText: /preço de custo/i })
             .last();
-            await campoPrecusto.locator('input').fill(precusto.toString());
+            const inputPrecusto = campoPrecusto.locator('input');
+            await inputPrecusto.press('Control+A');
+            await inputPrecusto.press('Delete');
+            await inputPrecusto.type(precusto.toString());
             console.log('PREÇO DE CUSTO ALTERADO OK:', precusto.toFixed(0));
-
+            
             const campoLucro = page.locator('.q-field')
             .filter({ hasText: /% lucro/i })
             .last();
@@ -105,7 +103,8 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .filter({ hasText: /preço de venda/i })
             .last();
             const valorPrevenda = await campoPrevenda.locator('input').inputValue();
-            console.log('PREÇO DE VENDA ALTERADO OK:', valorPrevenda);
+            console.log('PREÇO DE VENDA ALTERADO OK:', valorPrevenda);            
+            expect(Number(perLucro)).toBeGreaterThanOrEqual(0);
 
             const cantidad = Math.floor(Math.random() * 1000) + 1;
             const campocantidad = page.locator('.q-field')
@@ -197,14 +196,11 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             }
             const dadosDepois = JSON.parse(textoResposta);
             console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
-            console.log(JSON.stringify(dadosDepois, null, 2));           
-   
+            console.log(JSON.stringify(dadosDepois, null, 2));             
        }
       else  {
             console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
-      }     
-      
+      }           
       await capturarRequisicoesApi(page); 
-      await page.waitForTimeout(4000);          
-      
+      await page.waitForTimeout(4000);                
 });

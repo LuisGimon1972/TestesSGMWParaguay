@@ -10,14 +10,14 @@ test('Edição de datos Pessoas', async ({ page }) => {
 
   await page.waitForTimeout(1000);
   await page.getByText(/pessoas/i).click({ force: true });
-  console.log('CLICOU PESSOAS');
+  console.log('CLICOU EM PESSOAS');
 
   await page.waitForTimeout(2000);
   await page.waitForSelector('table');
   await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });
 
   const editIcons = await page.locator('table img[src="/icons/edit.svg"]').count();
-  console.log('Quantidade de ícones de edição:', editIcons);
+  console.log('Quantidade de ícones de edição:', editIcons.toString().trim());
 
   if (editIcons === 0) {
     console.log('O REGISTRO PADRÃO NÃO PODE SER ALTERADO!');
@@ -31,23 +31,19 @@ test('Edição de datos Pessoas', async ({ page }) => {
     /\/api\/py\/pessoa\/[^/?]+/.test(response.url())
   );
 
-  //Captura Dados Antes de Alterar
   const getPessoaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/pessoa') &&
     response.request().method() === 'GET' &&
     response.status() === 200
-  );
-  //Captura Dados Antes de Alterar
+  );  
 
   await page.locator('table img[src="/icons/edit.svg"]').first().click();
   console.log('CLICOU NO ÍCONE DE EDITAR');
-
-  //Mostra Dados Antes de Alterar
+  
   const getPessoaResponsee = await getPessoaPromise;
   const dadosAntes = await getPessoaResponsee.json();
   console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
-  console.log(JSON.stringify(dadosAntes, null, 2));
-  //Mostra Dados Antes de Alterar  
+  console.log(JSON.stringify(dadosAntes, null, 2));  
 
   const getRegistroEditadoResponse = await getRegistroEditadoPromise;
   const urlRegistroEditado = getRegistroEditadoResponse.url();

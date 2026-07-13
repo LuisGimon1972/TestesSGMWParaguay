@@ -13,7 +13,7 @@ test('Edição de datos cotação de moedas', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.locator('a[href*="registros/cotizacion-monedas"]').click();
-    console.log('CLICOU EM COTAÇÃO');     
+    console.log('CLICOU EM COTAÇÃO DE MOEDAS');     
     
     const getCotacaoPromise = page.waitForResponse((response) =>
         response.url().includes('/api/moeda/cotacao') &&
