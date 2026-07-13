@@ -22,7 +22,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   const btnCadastrar = page.getByText(/cadastrar funcionário/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU CADASTRAR FUNCIONÁRIO');
+  console.log('CLICOU EM CADASTRAR FUNCIONÁRIO');
 
   console.log('***DADOS ENVIADOS PRA API**'); 
   const nomefuncionario = `TEST FUNCIONARIO  ${Date.now()}`;
@@ -58,7 +58,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await expect(campoCI).toBeVisible();
   await campoCI.fill('');
   await campoCI.type(ruc, { delay: 50 });
-  console.log('RUC:', ruc); 
+  console.log('NÚMERO DO RUC:', ruc); 
   console.log('***FIM DADOS ENVIADOS ***');
   
   await page.locator('.q-btn')

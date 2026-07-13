@@ -25,12 +25,12 @@ test('Cadastro de subgrupos', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar subgrupo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR SUBGRUPO');    
+    console.log('CLICOU EM CADASTRAR SUBGRUPO');    
 
     console.log('***DADOS ENVIADOS PRA API***');
     const nomesubgrupo = `TEST SUBGRUPO ${Date.now()}`;
     await page.getByLabel(/cadastrar novo subgrupo/i).fill(nomesubgrupo);
-    console.log('NOME DE SUBGRUPO OK', nomesubgrupo);   
+    console.log('NOME DE SUBGRUPO OK:', nomesubgrupo);   
 
     await page.waitForTimeout(1000);
     
@@ -43,7 +43,7 @@ test('Cadastro de subgrupos', async ({ page }) => {
     .first()
     .click({ force: true });
     const grupoc = await page.locator('input[aria-label="Grupo"]').inputValue();
-    console.log('GRUPO OK:',grupoc);    
+    console.log('GRUPO SELECIONADO OK:',grupoc);    
     console.log('***FIM DADOS ENVIADOS***');
 
     await page.waitForTimeout(1000);

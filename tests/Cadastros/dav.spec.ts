@@ -1,14 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
-test('Teste de Cadastro de DAV', async ({ page }) => {
-    // Aumenta o timeout para lidar com a lentidão da API ao salvar
+test('Teste de Cadastro de DAV', async ({ page }) => {    
     test.setTimeout(60000); 
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);       
+    await loginCompleto(page);           
     
-    // 1. Navegação para Vendas
     const venBtn = page.getByText(/vendas/i).first();
     await expect(venBtn).toBeVisible();
     await venBtn.click();
@@ -36,12 +34,11 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await inputValidade.waitFor({ state: 'visible' });
     await inputValidade.fill(dataISO);
     console.log('DATA DE VALIDADE OK:', dataISO);
-
-    // 4. Seleção de Itens
+    
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
-    console.log('CLICOU EM ITEM DA DAV OK');  
+    console.log('CLICOU EM ITENS DAS DAV OK');  
     
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
@@ -51,22 +48,19 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await ativos.nth(1).click({ force: true });
     await ativos.nth(2).click({ force: true });
     await ativos.nth(3).click({ force: true });
-    console.log('SELECIONOU VÁRIOS ITENS DA DAV OK');  
-
-    // 5. Adicionar Itens selecionados
+    console.log('SELECIONOU VÁRIOS ITENS DAS DAV OK');  
+    
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
     console.log('CLICOU EM ADICIONAR');  
     console.log('***FIM DE DADOS ENVIADOS PRA API***');
-
-    // 6. Localizar botão Salvar e garantir que está pronto
+    
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });
 
     console.log('*** ENVIANDO DADOS E AGUARDANDO RETORNO DA API ***');
-
-    // Escuta a rede aceitando tanto o POST de criação quanto o GET de recarga da grid
+    
     const [respostaSalvar] = await Promise.all([
         page.waitForResponse((response) => {
             const url = response.url();
@@ -77,13 +71,12 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
                    response.status() >= 200 && 
                    response.status() < 300;
         }, { timeout: 30000 }),
-        salvar.click() // Clique natural sem forçar para validar o estado do formulário
+        salvar.click() 
     ]);     
    
     const dadosTratados = await respostaSalvar.json();
-    console.log('*** REQUISIÇÃO CAPTURADA COM SUCESSO ***');
+    console.log('*** REQUISIÇÃO CAPTURADA COM SUCESSO ***');    
     
-    // Extração inteligente do ID (Controle) caso venha como Objeto (POST) ou Array (GET)
     let idPessoa = '';
     if (dadosTratados.venda && dadosTratados.venda.controle) {
         idPessoa = dadosTratados.venda.controle.toString().trim();
@@ -97,9 +90,8 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
     }
 
-    console.log('CONTROLE LOCALIZADO:', idPessoa);    
+    console.log('CONTROLE LOCALIZADO:', idPessoa);        
     
-    // 7. Consulta o registro recém-criado via API para validação
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/venda/${idPessoa}`;    
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {

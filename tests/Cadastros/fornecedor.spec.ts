@@ -17,12 +17,12 @@ test('Cadastro de Fornecedores', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU EM PESSOAS');
       
     const btnCadastrar = page.getByText(/cadastrar pessoas/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR');
+    console.log('CLICOU EM CADASTRAR PESSOA');
 
     console.log('***DADOS ENVIADOS PRA API***');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
@@ -49,7 +49,7 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     await page.waitForTimeout(700);
     const ruc = gerarRUC();
     await page.getByLabel(/número de documento de identificação/i).fill(ruc);
-    console.log('RUC:', ruc);
+    console.log('NÚMERO DO RUC:', ruc);
     
     await page.waitForTimeout(700);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
@@ -130,7 +130,7 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .filter({ hasText: /número/i })
     .last();
     await campoNumero.locator('input').fill(numero.toString());
-    console.log('NUMERO OK:', numero);    
+    console.log('NUMERO OK:', numero.toString().trim());    
 
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
@@ -149,7 +149,7 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     .click({ force: true });
     console.log('CLICOU EM SALVAR');     
 
-        const salvarPessoaResponse = await salvarPessoaPromise;
+    const salvarPessoaResponse = await salvarPessoaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
@@ -183,14 +183,11 @@ test('Cadastro de Fornecedores', async ({ page }) => {
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
 
-    expect([404, 200]).toContain(getCriadoResponse.status());    
-    
-    
-    
+    expect([404, 200]).toContain(getCriadoResponse.status());       
+        
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);
     
-
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
   const pesos = [2,3,4,5,6,7,2];
@@ -202,5 +199,4 @@ function gerarRUC() {
   const dv = resto > 1 ? 11 - resto : 0;
   return `${base}-${dv}`;
 }
-
 });

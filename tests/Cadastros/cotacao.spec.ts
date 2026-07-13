@@ -24,7 +24,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar cotação/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR COTAÇÃO');    
+    console.log('CLICOU EM CADASTRAR COTAÇÃO');    
     
     const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
     await moedaField.scrollIntoViewIfNeeded();
@@ -39,13 +39,13 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     hasText: new RegExp(moedaEscolhida, 'i')
     }).first();
     await opcao.click();
-    console.log('MOEDA DE COTAÇÃO OK:', moedaEscolhida);
+    console.log('MOEDA DE COTAÇÃO SELECIONADA OK:', moedaEscolhida);
 
     const venta = Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
     const inputVenta = page.getByLabel(/valor de venda/i);
     await expect(inputVenta).toBeVisible();
     await inputVenta.fill(String(venta));
-    console.log('VALOR DE VENTA OK', venta.toString().trim());
+    console.log('VALOR DE VENTA OK:', venta.toString().trim());
 
     const compra = Math.floor(Math.random() * (5000 - 4500 + 1)) + 4500;
     const inputCompra = page.getByLabel(/valor de compra/i);
@@ -64,8 +64,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await inputData.fill(datahoje);
     console.log('INICIO DE VIGÊNCIA OK:', datahoje);
 
-    await page.waitForTimeout(2000);    
-    
+    await page.waitForTimeout(2000);        
     const fin = new Date();
     const fimMes = new Date(fin.getFullYear(), hoje.getMonth() + 1, 0);
     const dia = String(fimMes.getDate()).padStart(2, '0');

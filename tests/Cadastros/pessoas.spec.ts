@@ -17,12 +17,12 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
+    console.log('CLICOU EM PESSOAS');
       
     const btnCadastrar = page.getByText(/cadastrar pessoas/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
-      console.log('CLICOU CADASTRAR');
+      console.log('CLICOU EM CADASTRAR PESSOA');
 
     console.log('***DADOS ENVIADOS PRA API***');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
@@ -49,7 +49,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     await page.waitForTimeout(700);
     const ruc = gerarRUC();
     await page.getByLabel(/número de documento de identificação/i).fill(ruc);
-    console.log('RUC:', ruc);
+    console.log('NÚMERO DO RUC:', ruc);
     
     await page.waitForTimeout(700);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
@@ -64,7 +64,7 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     const nome = `TEST CLIENTE ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('NOMBRE DO CLIENTE OK:', nome);
+    console.log('NOME DO CLIENTE OK:', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -74,7 +74,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /cliente/i })
     .click({ force: true });
     const tipocad = await page.locator('input[aria-label="Tipo de cadastro"]').inputValue();      
-    console.log('TIPO DE CADASTRO OK:',tipocad);
+    console.log('TIPO DE CADASTRO SELECIONADO OK:',tipocad);
 
     await page.locator('.q-field')
     .filter({ hasText: /departamento/i })
@@ -130,7 +130,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /número/i })
     .last();
     await campoNumero.locator('input').fill(numero.toString());
-    console.log('NUMERO OK:', numero);
+    console.log('NUMERO OK:', numero.toString().trim());
 
     await page.waitForTimeout(1000);    
 

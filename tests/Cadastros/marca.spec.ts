@@ -74,7 +74,6 @@ test('Cadastro de marcas', async ({ page }) => {
 
     expect([404, 200]).toContain(getCriadoResponse.status());    
 
-
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);      
 });

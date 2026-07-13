@@ -25,7 +25,7 @@ test('Cadastro de espécies', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar espécie/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR');
+    console.log('CLICOU EM CADASTRAR ESPÉCIE');
 
     console.log('***DADOS ENVIADOS PRA API***');
     const descricao = `TEST ESPÉCIE ${Date.now()}`;

@@ -100,6 +100,5 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     .filter({ hasText: 'CONFIRMAR' });
     await confirmar.first().waitFor({ state: 'visible' });
     await confirmar.first().click({ force: true });    
-
        
 });

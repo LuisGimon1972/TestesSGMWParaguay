@@ -19,12 +19,12 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU PRODUTOS');
+      console.log('CLICOU EM PRODUTOS');
 
       const btnCadastrar = page.getByText(/cadastrar produto|serviço/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
-      console.log('CLICOU CADASTRAR');
+      console.log('CLICOU EM CADASTRAR PRODUTO');
 
       await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
@@ -40,7 +40,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const btnGerar = page.getByText(/gerar/i).first();
       await btnGerar.waitFor();
       await btnGerar.click({ force: true });
-      console.log('CLICOU GERAR CÓDIGO DE BARRAS');
+      console.log('CLICOU EM GERAR CÓDIGO DE BARRAS');
 
       await page.waitForTimeout(2000);      
       const codigoBarras = await page.locator('input[aria-label="Código de barras interno"]').inputValue();      
@@ -61,7 +61,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /REGISTRO\s+ESTÁNDAR/i })
       .click();      
       const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
-      console.log('FORNECEDOR OK:', fornecedor);      
+      console.log('NOME DO FORNECEDOR OK:', fornecedor);      
       
       const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
       console.log('TIPO DE USO OK:', uso);
@@ -115,9 +115,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input2 = campoCantidadmax.locator('input');
       await expect(input).toBeVisible();
       await input2.fill(String(cantidadmax));
-      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());      
-
-     
+      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());           
 
       const ivaField = page.locator('[aria-label="IVA"]').first();
       await ivaField.scrollIntoViewIfNeeded();
@@ -131,7 +129,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .first()
       .click();
       const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
-      console.log('IVA OK:',iva);   
+      console.log('IMPOSTO IVA OK:',iva);   
       
       await page.waitForTimeout(2000);
       const obsproduto = `TEST OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
@@ -179,8 +177,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
             console.log('Corpo bruto da resposta:', corpoBruto);
       }
 
-      expect([404, 200]).toContain(getCriadoResponse.status());       
-      
+      expect([404, 200]).toContain(getCriadoResponse.status());             
      // await capturarRequisicoesApi(page); 
      // await page.waitForTimeout(4000);
 });

@@ -2,26 +2,22 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
 test('Teste de Cadastro de Faturas', async ({ page }) => {
-    // Aumenta o timeout para este teste lidar com a lentidão de salvar/consultar
     test.setTimeout(60000); 
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);       
+    await loginCompleto(page);           
     
-    // Navegação para Vendas
     const venBtn = page.getByText(/vendas/i).first();
     await expect(venBtn).toBeVisible();
     await venBtn.click();
-    console.log('CLICOU EM VENDAS');
-  
-    // Aguarda a URL mudar para Faturamento
+    console.log('CLICOU EM VENDAS');  
+    
     await Promise.all([
       page.waitForURL(/facturacion/, { timeout: 15000 }),
       page.locator('a[href*="facturacion"]').first().click()
     ]);
     console.log('CLICOU EM FATURAMENTO');
-
-    // Abre modal/tela de cadastro
+    
     const btnCadastrar = page.getByText(/cadastrar fatura/i).first();
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
@@ -38,12 +34,13 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await primeiraOpcaoMenu.waitFor({ state: 'visible' });
     await primeiraOpcaoMenu.click();
-    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK');  
+    const destino = await page.locator('input[aria-label="Destinatário/remetente"]').inputValue();      
+    console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK:',destino);  
     
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
-    console.log('CLICOU EM ITEM DA FATURA OK');  
+    console.log('CLICOU EM ITENS DA FATURA OK');  
     
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
@@ -58,7 +55,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
-    console.log('CLICOU EM ADICIONAR');  
+    console.log('CLICOU EM ADICIONAR ITENS');  
     console.log('*** FIM DE DADOS ENVIADOS PRA API***');
 
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
@@ -76,7 +73,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
                    response.status() >= 200 && 
                    response.status() < 300;
         }, { timeout: 30000 }),
-        salvar.click() // Clique natural sem forçar
+        salvar.click() 
     ]);     
    
     const dadosTratados = await respostaSalvar.json();

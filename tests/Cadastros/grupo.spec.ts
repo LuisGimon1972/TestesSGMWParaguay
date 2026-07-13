@@ -24,7 +24,7 @@ test('Cadastro de grupos', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar grupo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU CADASTRAR GRUPO');    
+    console.log('CLICOU EM CADASTRAR GRUPO');    
 
     console.log('***DADOS ENVIADOS PRA API***');
     const nomegrupo = `TEST GRUPO ${Date.now()}`;

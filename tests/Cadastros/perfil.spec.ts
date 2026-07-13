@@ -27,7 +27,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   const btnCadastrar = page.getByText(/cadastrar perfil/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU CADASTRAR PERFIL DE ACESSO'); 
+  console.log('CLICOU EM CADASTRAR PERFIL DE ACESSO'); 
     
   console.log('***DADOS ENVIADOS PRA API***');
   const nome = `TEST PERFIL ${Date.now()}`;
