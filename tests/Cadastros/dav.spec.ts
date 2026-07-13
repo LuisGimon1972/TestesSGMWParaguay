@@ -24,17 +24,35 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     console.log('CLICOU EM CADASTRAR DAV');   
 
     console.log('***DADOS ENVIADOS PRA API***');
+   
+    const davField = page.locator('[aria-label="Tipo de DAV"]').first();
+    await davField.scrollIntoViewIfNeeded();
+    await expect(davField).toBeVisible();    
+    await davField.evaluate(el => (el as HTMLElement).click());    
+    const menu = page.locator('.q-menu');
+    await expect(menu).toBeVisible();    
+    const davse = ['pedido de venda', 'orçamento'];    
+    const davEscolhida = davse[Math.floor(Math.random() * davse.length)];    
+    const opcao = menu.locator('.q-item', {
+    hasText: new RegExp(davEscolhida, 'i')
+    }).first();
+    await opcao.click();
+    console.log('DAV SELECIONADA OK:', davEscolhida); 
+
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
     const ano = hoje.getFullYear();
     const dataISO = `${dia}-${mes}-${ano}`;
     
-    const inputValidade = page.getByLabel(/validade do orçamento/i);
+    const inputValidade = page.getByLabel(/validade do orçamento|previsão da entrega/i);
     await inputValidade.waitFor({ state: 'visible' });
     await inputValidade.fill(dataISO);
+    if(davEscolhida=='orçamento')
     console.log('DATA DE VALIDADE OK:', dataISO);
-    
+    else
+    console.log('PREVISÃO DA ENTREGA OK:', dataISO);
+
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
