@@ -23,7 +23,7 @@ test('Cadastro de usuários', async ({ page }) => {
   const listado = page.locator('a[href*="usuario/listado"]');
   await expect(listado).toBeVisible();
   await listado.click();
-  console.log('CLICOU EM LISTAGEM DE USUARIOS');
+  console.log('CLICOU EM LISTAGEM DE USUÁRIOS');
   
   const btnCadastrar = page.getByText(/cadastrar usuário/i).first();
   await expect(btnCadastrar).toBeVisible();
