@@ -24,7 +24,8 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
     console.log('CLICOU EM CADASTRAR DAV');   
-    
+
+    console.log('***DADOS ENVIADOS PRA API***');
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
@@ -57,6 +58,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
     console.log('CLICOU EM ADICIONAR');  
+    console.log('***FIM DE DADOS ENVIADOS PRA API***');
 
     // 6. Localizar botão Salvar e garantir que está pronto
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();

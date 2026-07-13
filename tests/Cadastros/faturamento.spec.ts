@@ -31,9 +31,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await page.evaluate(() => { document.body.style.zoom = '0.8'; });
     console.log('🔍 Zoom ajustado para 80% via CSS');
    
-    console.log('***DADOS ENVIADOS PRA API***');  
-    
-    // Seleciona Destinatário/Remitente
+    console.log('***DADOS ENVIADOS PRA API***');          
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(5).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
@@ -41,8 +39,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await primeiraOpcaoMenu.waitFor({ state: 'visible' });
     await primeiraOpcaoMenu.click();
     console.log('SELECIONOU UM DESTINATÁRIO/REMITENTE OK');  
-
-    // Itens da Fatura
+    
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
@@ -57,20 +54,18 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await ativos.nth(2).click({ force: true });
     await ativos.nth(3).click({ force: true });
     console.log('SELECIONOU VÁRIOS ITENS DA FATURA OK');  
-
-    // Adicionar Itens
+    
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
     console.log('CLICOU EM ADICIONAR');  
+    console.log('*** FIM DE DADOS ENVIADOS PRA API***');
 
-    // Localizar botão Salvar e garantir prontidão
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });
 
     console.log('*** ENVIANDO DADOS E AGUARDANDO API ***');
-
-    // CORREÇÃO CRÍTICA: Escuta a rede aceitando POST (Criação) ou GET (Recarga) em paralelo ao clique
+    
     const [respostaSalvar] = await Promise.all([
         page.waitForResponse((response) => {
             const url = response.url();
@@ -85,9 +80,8 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     ]);     
    
     const dadosTratados = await respostaSalvar.json();
-    console.log('*** REQUISIÇÃO CAPTURADA COM SUCESSO ***');
+    console.log('*** REQUISIÇÃO CAPTURADA COM SUCESSO ***');    
     
-    // Extração dinâmica do controle independente do formato do JSON de resposta (Objeto ou Array)
     let idPessoa = '';
     if (dadosTratados.venda && dadosTratados.venda.controle) {
         idPessoa = dadosTratados.venda.controle.toString().trim();
@@ -101,9 +95,8 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
     }
 
-    console.log('CONTROLE LOCALIZADO:', idPessoa);    
+    console.log('CONTROLE LOCALIZADO:', idPessoa);        
     
-    // Consulta o registro criado usando os headers capturados
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/venda/${idPessoa}`;    
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {
