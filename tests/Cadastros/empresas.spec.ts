@@ -8,10 +8,10 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
   
   await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
-      document.body.style.zoom = '0.6';
+      document.body.style.zoom = '0.5';
     });
-    console.log('🔍 Zoom ajustado para 60% via CSS');
- /* console.log('INICIO');
+    console.log('🔍 Zoom ajustado para 50% via CSS');
+/*  console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
   console.log('ABRIU SITE');
   await page.getByText(/entrar/i).click();
@@ -47,9 +47,12 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     
   await page.waitForTimeout(4000);
 
+  const razaoSocial = await page.getByLabel('Razão social').inputValue();
+  console.log('Razão social:', razaoSocial);
+
   const codigoEstabelecimento = Math.floor(Math.random() * 1000) + 100;
   await page.getByLabel(/código do estabelecimento/i).fill(codigoEstabelecimento.toString());
-  console.log('CÓDIGO DO ESTABELECIMENTO:', codigoEstabelecimento);
+  console.log('CÓDIGO DO ESTABELECIMENTO:', codigoEstabelecimento); 
 
   const telefone = Array.from({ length: 9 }, () =>
   Math.floor(Math.random() * 10)
@@ -71,7 +74,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
   await campoEmail.scrollIntoViewIfNeeded();
   await expect(campoEmail).toBeVisible();
   await campoEmail.fill(email);
-  console.log('EMAIL OK:', email);
+  console.log('EMAIL OK:', email);  
 
   await page.waitForSelector('#submit-company', { state: 'visible', timeout: 10000 });
   await page.locator('#submit-company').click();
@@ -105,6 +108,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
   console.log('CLICOU NO BOTÃO AVANÇAR!');  
   //await fecharPopupAtualizacao(page)   */
 
+
   console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
   console.log('ABRIU SITE');
@@ -127,11 +131,11 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
   console.log('CHEGOU EM EMPRESAS'); 
   
   const campoPesquisa = page.getByPlaceholder('PESQUISAR EMPRESAS');
-  await campoPesquisa.fill('INTELFLY');
+  await campoPesquisa.fill('CASA');
   await page.keyboard.press('Enter');
   console.log('PESQUISOU EMPRESA');
   
-  const botao = page.locator('button:has-text("ENTRAR")').nth(3);  
+  const botao = page.locator('button:has-text("ENTRAR")').nth(1);  
   await botao.highlight();
   await botao.evaluate((el: any) => {
     el.style.border = '5px solid red';
@@ -205,6 +209,20 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await campoNumero.locator('input').fill(numero.toString());
     console.log('NUMERO OK:', numero.toString().trim());
 
+    const campoWrapper = page.locator('.q-select:has([aria-label="Código de atividade econômica"])');
+    await campoWrapper.waitFor({ state: 'visible' });    
+    await campoWrapper.scrollIntoViewIfNeeded();    
+    await campoWrapper.click({ force: true });
+    const menu = page.locator('.q-menu');
+    await menu.waitFor({ state: 'visible' });    
+    await menu.locator('.q-item').first().click();    
+    const valorSelecionado = await page.locator('input[aria-label="Código de atividade econômica"]').inputValue();
+    console.log('Código selecionado:', valorSelecionado);
+
+     await page.locator('.q-btn')
+    .filter({ hasText: /salvar|guardar/i })
+    .click({ force: true });
+  console.log('CLICOU EM SALVAR USUARIO');
 
   console.log('URL:', await page.url()); 
 
