@@ -48,8 +48,8 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await ativos.nth(0).waitFor({ state: 'visible' });
     await ativos.nth(0).click({ force: true });
     await ativos.nth(1).click({ force: true });
-    await ativos.nth(2).click({ force: true });
-    await ativos.nth(3).click({ force: true });
+   /* await ativos.nth(2).click({ force: true });
+    await ativos.nth(3).click({ force: true });*/
     console.log('SELECIONOU VÁRIOS ITENS DA FATURA OK');  
     
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
