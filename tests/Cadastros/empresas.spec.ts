@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { fecharPopupAtualizacao } from '../../utils/novidade';
 import { empresasParaguai} from '../../utils/rucs-paraguai';
 
 test('Teste de Cadastro de Empresas', async ({ page }) => {    
@@ -250,9 +249,6 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   });
 
   console.log('MODAL + OVERLAY REMOVIDOS');
-
-
-
 
   function gerarRUC(): string {
   const empresaAleatoria = empresasParaguai[Math.floor(Math.random() * empresasParaguai.length)];
