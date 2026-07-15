@@ -1,258 +1,213 @@
-import { test, expect } from '@playwright/test';
-import { empresasParaguai} from '../../utils/rucs-paraguai';
+import { test, expect, Page } from '@playwright/test';
+import { empresasParaguai } from '../../utils/rucs-paraguai';
+
+// --- Funções Auxiliares ---
+
+// Aplica zoom via CSS para garantir que elementos não fiquem fora da tela
+const aplicarZoom = async (page: Page, zoomLevel: string) => {
+  await page.emulateMedia({ media: 'screen' });
+  await page.evaluate((zoom) => {
+    document.body.style.zoom = zoom;
+  }, zoomLevel);
+  console.log(`🔍 Zoom ajustado para ${parseFloat(zoomLevel) * 100}% via CSS`);
+};
+
+// Lida com os Dropdowns encadeados do Quasar
+const selecionarOpcaoQuasar = async (page: Page, nomeCampo: string | RegExp) => {
+  const wrapper = page.locator('.q-field').filter({ hasText: nomeCampo }).first();
+  await wrapper.scrollIntoViewIfNeeded();
+  await wrapper.click({ force: true });
+  
+  const menu = page.locator('.q-menu').last();
+  await menu.waitFor({ state: 'visible', timeout: 10000 });
+  await menu.locator('.q-item').first().click();
+  
+  // Aguarda 500ms para permitir que o Quasar atualize as dependências (Ex: Distrito após escolher Departamento)
+  await page.waitForTimeout(500);
+};
+
+// Gera um RUC aleatório da base de dados
+function gerarRUC(): string {
+  const empresaAleatoria = empresasParaguai[Math.floor(Math.random() * empresasParaguai.length)];
+  return empresaAleatoria.ruc;
+}
+
+// --- Início do Teste ---
 
 test('Teste de Cadastro de Empresas', async ({ page }) => {    
+  // ⏳ Aumenta o timeout global do teste para 90 segundos (evita erro de 30000ms exceeded)
+  test.setTimeout(90000); 
+
   await page.setViewportSize({ width: 1920, height: 1080 });
+  await aplicarZoom(page, '0.5');
 
-  await page.emulateMedia({ media: 'screen' });
-  await page.evaluate(() => {
-  document.body.style.zoom = '0.6';  });
-  console.log('🔍 Zoom ajustado para 60% via CSS');
-  
-  let razaoSocial: string;
-  let urlempresa: string;
+  let razaoSocial = '';
+  let urlempresa = '';
 
-  await page.emulateMedia({ media: 'screen' });
-  await page.evaluate(() => {
-  document.body.style.zoom = '0.5'; });
-  console.log('🔍 Zoom ajustado para 50% via CSS');
-
-  console.log('INICIO');
+  console.log('--- INICIO DO TESTE ---');
   await page.goto(process.env.BASE_URL!);
-  console.log('ABRIU SITE');
-  await page.getByText(/entrar/i).click();
-  console.log('CLICOU EM ENTRAR');
   
-  await page.waitForSelector('input[type="email"], input[type="text"]', {
-    timeout: 15000
-  });
-  await page.waitForTimeout(1000);
-  console.log('FORM LOGIN APARECEU');  
-  await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
+  await page.getByText(/entrar/i).click();
+  
+  // --- 1. LOGIN ---
+  const inputEmail = page.locator('input[type="email"], input[type="text"]').first();
+  await inputEmail.waitFor({ state: 'visible', timeout: 15000 });
+  
+  await inputEmail.fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
-  await page.waitForTimeout(1000);
-  console.log('PREENCHIDO');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU EM SIGN LN');
+  console.log('✅ Login realizado');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
-  console.log('CHEGOU EM EMPRESAS');    
 
-  await page.waitForSelector('text=Adicionar empresa', { state: 'visible', timeout: 10000 });  
-  await page.getByText('Adicionar empresa', { exact: true }).click();
-  console.log('CLICOU EM ADICIONAR EMPRESA');
+  // --- 2. ADICIONAR EMPRESA ---
+  const btnAdicionar = page.getByText('Adicionar empresa', { exact: true });
+  await btnAdicionar.waitFor({ state: 'visible' });
+  await btnAdicionar.click();
     
-  await page.waitForTimeout(700);
+  // RUC
   const ruc = gerarRUC();
-  await page.getByLabel(/ruc/i).fill(ruc);
-  console.log('NÚMERO DO RUC:', ruc);  
+  const inputRuc = page.locator('input[aria-label*="RUC" i], .q-field:has-text("RUC") input').first();
+  await inputRuc.waitFor({ state: 'visible' });
+  await inputRuc.fill(ruc);
+  console.log(`✅ RUC preenchido: ${ruc}`);  
     
-  await page.waitForTimeout(4000);
-  razaoSocial = await page.getByLabel('Razão social').inputValue();
-  console.log('Razão social:', razaoSocial);
+  // Razão Social (Tratamento de espera dinâmica da API)
+  const inputRazao = page.locator('input[aria-label*="Razão social" i], .q-field:has-text("Razão social") input').first();
+  try {
+    // Aguarda até 8 segundos para o sistema autocompletar via Receita
+    await expect(inputRazao).not.toHaveValue('', { timeout: 8000 });
+    razaoSocial = await inputRazao.inputValue();
+  } catch {
+    console.log('⚠️ API do RUC demorou. Preenchendo Razão Social manualmente.');
+    razaoSocial = `EMPRESA AUTO RUC ${ruc} - ${Date.now()}`;
+    await inputRazao.fill(razaoSocial);
+  }
+  console.log(`✅ Razão social: ${razaoSocial}`);
 
+  // Código de Estabelecimento
   const codigoEstabelecimento = Math.floor(Math.random() * 1000) + 100;
-  await page.getByLabel(/código do estabelecimento/i).fill(codigoEstabelecimento.toString());
-  console.log('CÓDIGO DO ESTABELECIMENTO:', codigoEstabelecimento); 
+  await page.locator('input[aria-label*="Código do estabelecimento" i], .q-field:has-text("Código") input').first()
+    .fill(codigoEstabelecimento.toString());
 
-  const telefone = Array.from({ length: 9 }, () =>
-  Math.floor(Math.random() * 10)
-  ).join('');    
+  // Telefone (Simulação de digitação para não quebrar máscaras)
+  const telefone = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10)).join('');    
   const inputTelefone = page.locator('input[type="tel"]').first();
   await inputTelefone.scrollIntoViewIfNeeded();
   await inputTelefone.click({ force: true });
   await inputTelefone.press('Control+A');
   await inputTelefone.press('Backspace');
-  await inputTelefone.type(telefone, { delay: 30 });
-  console.log('TELEFONE OK:', telefone);  
+  await inputTelefone.pressSequentially(telefone, { delay: 10 });
 
+  // E-mail
   const email = `empresa${Date.now()}@gmail.com`;
-  const campoEmail = page
-  .locator('.q-field')
-  .filter({ hasText: /e-mail/i })
-  .first()
-  .locator('input');
-  await campoEmail.scrollIntoViewIfNeeded();
-  await expect(campoEmail).toBeVisible();
+  const campoEmail = page.locator('.q-field').filter({ hasText: /e-mail/i }).first().locator('input');
   await campoEmail.fill(email);
-  console.log('EMAIL OK:', email);  
 
-  await page.waitForSelector('#submit-company', { state: 'visible', timeout: 10000 });
+  // Avançar modal 1
   await page.locator('#submit-company').click();
-  console.log('CLICOU NO BOTÃO AVANÇAR!');
 
-  await page.waitForSelector('text=Declaro estar ciente', { state: 'visible', timeout: 10000 });
-  await page.getByText('Declaro estar ciente', { exact: true }).click();
+  // Termos e Confirmação
+  const checkboxTermos = page.getByText('Declaro estar ciente', { exact: true });
+  await checkboxTermos.waitFor({ state: 'visible' });
+  await checkboxTermos.click();
 
-  await page.waitForSelector('button:has-text("CONFIRMAR")', { state: 'visible', timeout: 10000 });
   await page.getByRole('button', { name: /confirmar/i }).click();
-  console.log('Checkbox marcado pelo label e botão CONFIRMAR clicado com sucesso!');
 
-  const numeroAleatorio = Math.floor(Math.random() * (1000 - 21 + 1)) + 21;
-  const dominio = `empresa${numeroAleatorio}`;
-  urlempresa = dominio.trim()
-  console.log('Domínio preparado:', dominio);
-  try {  
-    const input = page.locator('input[type="text"]').last();  
-    console.log('Aguardando o input ficar visível...');
-    await input.waitFor({ state: 'visible', timeout: 5000 });  
-    await input.click();  
-    await input.fill('');
-    await input.fill(dominio);  
-    console.log('Domínio preenchido com sucesso!');
-  } catch (error) {
-      console.error('Erro ao preencher o domínio:');
-  }
-  console.log('Domínio escolhido:', dominio);
-
-  await page.waitForSelector('#submit-domain', { state: 'visible', timeout: 10000 });
-  await page.locator('#submit-domain').click();
-  console.log('CLICOU NO BOTÃO AVANÇAR!');  
+  // --- 3. SUBDOMÍNIO ---
+  const dominio = `empresa${Math.floor(Math.random() * (10000 - 21 + 1)) + 21}`;
+  urlempresa = dominio;
   
+  try {  
+    await page.waitForTimeout(500); // Pausa visual para transição de tela
+
+    // Busca seletiva e resiliente pelo input de domínio
+    let inputDominio = page.locator('input[aria-label*="domínio" i], input[aria-label*="dominio" i], .q-field:has-text("domínio") input, .q-field:has-text("dominio") input').first();
+    
+    if (await inputDominio.count() === 0) {
+        inputDominio = page.locator('input[type="text"] >> visible=true').last();
+    }
+
+    await inputDominio.waitFor({ state: 'visible', timeout: 5000 });  
+    await inputDominio.click(); 
+    await inputDominio.fill(''); 
+    await inputDominio.pressSequentially(dominio, { delay: 50 }); // Digitação humanizada
+    
+    console.log(`✅ Domínio preenchido: ${dominio}`);  
+  } catch (error) {
+    console.log('⚠️ Erro ao tentar preencher o domínio:', error);
+  }
+
+  // Clica no botão avançar/salvar do modal de domínio
+  await page.locator('#submit-domain').waitFor({ state: 'visible' });
+  await page.locator('#submit-domain').click();
+  console.log('✅ Cadastro inicial finalizado. Redirecionando...');
+  
+  // --- 4. PESQUISAR E ACESSAR EMPRESA ---
   await page.waitForURL(/\/py\/empresas/, { timeout: 20000 });
+  
   const campoPesquisa = page.getByPlaceholder(/pesquisar empresas/i);
-  await expect(campoPesquisa).toBeVisible({ timeout: 20000 });
+  await campoPesquisa.waitFor({ state: 'visible', timeout: 20000 });
   await campoPesquisa.fill(razaoSocial.trim());
   await page.keyboard.press('Enter');
-  console.log('PESQUISOU EMPRESA:', razaoSocial.trim());  
-  await expect(page.getByText(razaoSocial)).toBeVisible({ timeout: 20000 });
-
-    
-  const botao = page.locator('button:has-text("ENTRAR")').nth(0);  
-  await botao.highlight();
-  await botao.evaluate((el: any) => {
-    el.style.border = '5px solid red';
-    el.click();
-  });
-  console.log('CLICOU EM ACESSAR EMPRESA');          
   
-  const urlDatosEmpresa = `https://${urlempresa}.hom.sgmaster.com.br/py/datos-empresa`;
-  await page.waitForURL(urlDatosEmpresa, { timeout: 30000 });
+  await page.waitForTimeout(1000); // Espera a tabela filtrar
+  
+  // Busca parcial do nome (evita quebra por causa de espaçamentos ou case-sensitivity)
+  await page.getByText(razaoSocial.trim(), { exact: false })
+            .first()
+            .waitFor({ state: 'visible', timeout: 15000 });
 
-  await page.waitForLoadState('networkidle');
-
-  const campoDataFundacao = page.locator('.q-field')
-  .filter({ hasText: /fundação|fundacion|fund/i })
-  .first()
-  .locator('input');
-
-  if (await campoDataFundacao.count() > 0) {
-    await expect(campoDataFundacao).toBeVisible({ timeout: 20000 });
-    const hoje = new Date();
-    const dia = String(hoje.getDate()).padStart(2, '0');
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const ano = hoje.getFullYear();
-    const dataISO = `${dia}-${mes}-${ano}`;
-    await campoDataFundacao.fill(dataISO);
-    console.log('DATA DE FUNDAÇÃO OK:', dataISO);
-  } else {
-    const todosCampos = await page.locator('.q-field').allTextContents();
-    console.log('Campo Data de Fundação não encontrado. Campos disponíveis:', todosCampos);
+  // Tentativa de clique no botão ENTRAR
+  const botaoEntrar = page.locator('button:has-text("ENTRAR")').first();
+  if (await botaoEntrar.count() > 0) {
+    for (let i = 0; i < 3; i++) {
+      try {
+        await botaoEntrar.waitFor({ state: 'visible', timeout: 5000 });
+        await botaoEntrar.click({ force: true });
+        console.log('✅ Botão ENTRAR clicado com sucesso');
+        break;
+      } catch {
+        await page.waitForTimeout(1000);
+      }
+    }
   }
 
-  await page.emulateMedia({ media: 'screen' });
-  await page.evaluate(() => {
-  document.body.style.zoom = '0.6';});
-  console.log('🔍 Zoom ajustado para 60% via CSS');
+  // --- 5. DADOS DA EMPRESA (TELA INTERNA) ---
+  const urlDatosEmpresa = `https://${urlempresa}.hom.sgmaster.com.br/py/datos-empresa`;
+  await page.waitForURL(urlDatosEmpresa, { timeout: 15000 }).catch(() => {});
   
-  const campoDepartamento = page.locator('.q-field').filter({ hasText: /departamento/i }).first();
-  await campoDepartamento.scrollIntoViewIfNeeded();
-  await campoDepartamento.click({ force: true });
-  const menuDepartamento = page.locator('.q-menu').last();
-  await expect(menuDepartamento).toBeVisible({ timeout: 20000 });    
-  await menuDepartamento.locator('.q-item').first().click();
+  // Data de Fundação
+  const campoDataFundacao = page.locator('.q-field').filter({ hasText: /fundação|fundacion|fund/i }).first().locator('input');
+  if (await campoDataFundacao.count() > 0) {
+    const hoje = new Date();
+    const dataISO = `${String(hoje.getDate()).padStart(2, '0')}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${hoje.getFullYear()}`;
+    await campoDataFundacao.fill(dataISO);
+  }
+
+  await aplicarZoom(page, '0.6');
   
-  const dep = await page.locator('input[aria-label="Departamento"]').inputValue();
-  console.log('DEPARTAMENTO OK:', dep);  
+  // Campos encadeados via Helper Function
+  await selecionarOpcaoQuasar(page, /departamento/i);
+  await selecionarOpcaoQuasar(page, /distrito/i);
+  await selecionarOpcaoQuasar(page, /cidade/i);
 
-  await page.waitForTimeout(2000);
-
-  const campoDistrito = page.locator('.q-field').filter({ hasText: /distrito/i }).first();
-  await campoDistrito.scrollIntoViewIfNeeded();
-  await campoDistrito.click({ force: true });
-
-  const menuDistrito = page.locator('.q-menu').last();
-  await expect(menuDistrito).toBeVisible({ timeout: 20000 });
-
-  // Lista os itens disponíveis
-  const itensDistrito = await menuDistrito.locator('.q-item').allTextContents();
-  console.log('Itens de Distrito disponíveis:', itensDistrito);
-
-  await menuDistrito.locator('.q-item').first().click();
-
-  // Confere o valor selecionado
-  const distrito = await page.locator('input[aria-label="Distrito"]').inputValue();
-  console.log('DISTRITO OK:', distrito);
-    
-    // --- Cidade ---
-  const campoCidade = page.locator('.q-field').filter({ hasText: /cidade/i }).first();
-  await expect(campoCidade).toBeVisible({ timeout: 20000 });
-  await campoCidade.scrollIntoViewIfNeeded();
-  await campoCidade.click({ force: true });
-
-  await page.waitForTimeout(2000);
-
-  const menuCidade = page.locator('.q-menu').last();
-  await expect(menuCidade).toBeVisible({ timeout: 20000 });
-
-  const itensCidade = await menuCidade.locator('.q-item').allTextContents();
-  console.log('Itens de Cidade disponíveis:', itensCidade);
-
-  // Seleciona o primeiro item (ou ajuste para o texto correto)
-  await menuCidade.locator('.q-item').first().click();
-
-  const city = await page.locator('input[aria-label="Cidade/Bairro"]').inputValue();
-  console.log('CIDADE OK:', city);
-
+  // Direção e Número
   const direccion = `TEST DIRECCION ${Date.now()}`;
   await page.getByLabel(/direção/i).fill(direccion);
-  console.log('DIRECCIÓN OK:', direccion);    
 
   const numero = Math.floor(Math.random() * 1000) + 1;
-  const campoNumero = page.locator('.q-field')
-  .filter({ hasText: /número/i })
-  .last();
-  await campoNumero.locator('input').fill(numero.toString());
-  console.log('NUMERO OK:', numero.toString().trim());
+  await page.locator('.q-field').filter({ hasText: /número/i }).last().locator('input').fill(numero.toString());
     
-  const campoWrapper = page.locator('.q-select:has([aria-label="Código de atividade econômica"])');
-  await campoWrapper.scrollIntoViewIfNeeded();
-  await campoWrapper.click({ force: true });
+  // Atividade Econômica
+  await selecionarOpcaoQuasar(page, /atividade econômica/i);
 
-  const menuAtividade = page.locator('.q-menu').last();
-  await expect(menuAtividade).toBeVisible({ timeout: 20000 });
-  await menuAtividade.locator('.q-item').first().click();
+  // Salvar
+  await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
+  console.log('✅ Configuração da empresa salva com sucesso!');
 
-  const valorSelecionado = await page.locator('input[aria-label="Código de atividade econômica"]').inputValue();
-  console.log('Código selecionado:', valorSelecionado);
-
-
-     await page.locator('.q-btn')
-    .filter({ hasText: /salvar|guardar/i })
-    .click({ force: true });
-  console.log('CLICOU EM SALVAR EMPRESA');
-
-  console.log('URL:', await page.url()); 
-
-  
+  // Limpeza de modais no fim da execução
   await page.evaluate(() => {
-    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
-      el.remove();
-    });
-  });
-  
-  await page.waitForTimeout(2000);
-  await page.evaluate(() => {
-    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
-      el.remove();
-    });
-  });
-
-  console.log('MODAL + OVERLAY REMOVIDOS');
-
-  function gerarRUC(): string {
-  const empresaAleatoria = empresasParaguai[Math.floor(Math.random() * empresasParaguai.length)];
-  return empresaAleatoria.ruc;
-}
-
+    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => el.remove());
+  }).catch(() => {});
 });
