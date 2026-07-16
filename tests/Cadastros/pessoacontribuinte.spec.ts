@@ -63,7 +63,7 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
     .filter({ hasText: /B2B/i })
     .click({ force: true }); 
     const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();      
-    console.log('✅ Tipo de Operação:', tipoop.toUpperCase() );
+    console.log('✅ Tipo de Operação:', tipoop.toUpperCase() );    
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -132,6 +132,12 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
 
     await page.waitForTimeout(1000);    
 
+    const razao = await page.locator('input[aria-label="Razão social"]').inputValue();
+    console.log('✅ Razão Social:', razao); 
+
+    const fantasia = await page.locator('input[aria-label="Nome de fantasia"]').inputValue();
+    console.log('✅ Fantasia:', fantasia);
+
     const telefone = Array.from({ length: 9 }, () =>
       Math.floor(Math.random() * 10)
     ).join('');    
@@ -149,14 +155,18 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
     .click({ force: true });
     console.log('✅ Clicou em Salvar');            
 
+    const salvarUrlResponse = await salvarPessoaPromise;     
+    const urlCompletaPost = salvarUrlResponse.url();
+    console.log('✅ A URL capturada do POST é:', urlCompletaPost);
+
     const salvarPessoaResponse = await salvarPessoaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();
+    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();    
     
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/pessoa/${idPessoa}`;    
+    const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idPessoa}`);
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',

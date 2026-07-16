@@ -151,15 +151,19 @@ test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('✅ Clicou em Salvar');            
+    console.log('✅ Clicou em Salvar');      
+    
+    const salvarUrlResponse = await salvarPessoaPromise;     
+    const urlCompletaPost = salvarUrlResponse.url();
+    console.log('✅ A URL capturada do POST é:', urlCompletaPost);
 
     const salvarPessoaResponse = await salvarPessoaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/pessoa/${idPessoa}`;    
+    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();        
+    const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idPessoa}`);
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',

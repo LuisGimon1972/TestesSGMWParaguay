@@ -13,7 +13,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       response.url().includes('/api/py/produto') &&
       ['POST'].includes(response.request().method()) &&
       response.status() >= 200 &&
-      response.status() < 300);
+      response.status() < 300);                     
 
       await page.waitForTimeout(1000);
       await Promise.all([
@@ -145,13 +145,18 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .click({ force: true });
       console.log('✅ Clicou em Salvar');  
 
+      const salvarUrlResponse = await salvarProdutoPromise;     
+      const urlCompletaPost = salvarUrlResponse.url();
+      console.log('✅ A URL capturada do POST é:', urlCompletaPost);
+
       const salvarPessoaResponse = await salvarProdutoPromise;
       const dadosSalvos = await salvarPessoaResponse.json();
       console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
       console.log(JSON.stringify(dadosSalvos, null, 2));
       
       const idProduto = dadosSalvos.produto.controle.toString().trim();      
-      const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/produto/${idProduto}`;    
+      //const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/produto/${idProduto}`;    
+      const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idProduto}`);
       const headersOriginais = salvarPessoaResponse.request().headers();
       const headersGetRegistro: Record<string, string> = {
             Accept: 'application/json',
