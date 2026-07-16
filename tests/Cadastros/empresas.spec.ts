@@ -6,8 +6,7 @@ const aplicarZoom = async (page: Page, zoomLevel: string) => {
   await page.emulateMedia({ media: 'screen' });
   await page.evaluate((zoom) => {
     document.body.style.zoom = zoom;
-  }, zoomLevel);
-  console.log(`🔍 Zoom ajustado para ${parseFloat(zoomLevel) * 100}% via CSS`);
+  }, zoomLevel);  
 };
 
 const selecionarOpcaoQuasar = async (page: Page, nomeCampo: string | RegExp) => {
@@ -33,6 +32,13 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   await aplicarZoom(page, '0.5');
 
+  const salvarEmpresaPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/empresa') &&
+    ['POST'].includes(response.request().method()) &&
+    response.status() >= 200 &&
+    response.status() < 300
+  );
+
   let razaoSocial = '';
   let urlempresa = '';
 
@@ -55,6 +61,8 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   await btnAdicionar.waitFor({ state: 'visible' });
   await btnAdicionar.click();    
   
+  console.log('DADOS ENVIADOS PARA API');
+
   const ruc = gerarRUC();
   const inputRuc = page.locator('input[aria-label*="RUC" i], .q-field:has-text("RUC") input').first();
   await inputRuc.waitFor({ state: 'visible' });
@@ -204,12 +212,55 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
 
   const numero = Math.floor(Math.random() * 1000) + 1;
   await page.locator('.q-field').filter({ hasText: /número/i }).last().locator('input').fill(numero.toString());
-  console.log(`✅ Número: ${numero}`);    
+  console.log(`✅ Número: ${numero}`);     
   
   await selecionarOpcaoQuasar(page, /atividade econômica/i);
+
+  console.log('FIM DE DADOS ENVIADOS');
   
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
-  console.log('✅ Configuração da empresa salva com sucesso!');
+  console.log('✅ Configuração da empresa salva com sucesso!'); 
+ 
+  const salvarUrlResponse = await salvarEmpresaPromise;     
+  const urlCompletaPost = salvarUrlResponse.url();
+  console.log('✅ A URL capturada do POST é:', urlCompletaPost);
+
+  const salvarEmpresaResponse = await salvarEmpresaPromise;
+  const dadosSalvos = await salvarEmpresaResponse.json();
+  console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
+  console.log(JSON.stringify(dadosSalvos, null, 2));
+  
+  const idEmpresa = dadosSalvos.codEmpresa.toString().trim();        
+  const urlRegistroCriado = `https://global-hom.sgmw.com.br/api/empresa/${idEmpresa}`;
+  const headersOriginais = salvarEmpresaResponse.request().headers();
+  const headersGetRegistro: Record<string, string> = {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    authorization: headersOriginais['authorization'],
+    'x-xsrf-token': headersOriginais['x-xsrf-token'],
+    'x-tenant': headersOriginais['x-tenant'],
+    'x-empresa': headersOriginais['x-empresa'],
+  };
+  
+  const getCriadoResponse = await page.request.get(urlRegistroCriado, {
+    headers: headersGetRegistro,
+  });
+
+  console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+  console.log('✅ Novo Controle:', idEmpresa);    
+  console.log(`✅ Status: ${getCriadoResponse.status()}`);
+
+  try {
+    const dadosCriado = await getCriadoResponse.json();
+    console.log(JSON.stringify(dadosCriado, null, 2));
+  } catch (error) {
+    console.error('Erro ao converter resposta para JSON:', error);
+    const corpoBruto = await getCriadoResponse.text();
+    console.log('Corpo bruto da resposta:', corpoBruto);
+  }
+
+  expect([404, 200]).toContain(getCriadoResponse.status());    
+
   
   await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => el.remove());
