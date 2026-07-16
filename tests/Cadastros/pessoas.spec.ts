@@ -3,6 +3,18 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 import { obterNomePessoaAleatorio } from '../../utils/nomescompletos';
 
+function gerarRUC() {
+  const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
+  const pesos = [2,3,4,5,6,7,2];
+  let soma = 0;
+  for (let i = 0; i < base.length; i++) {
+    soma += parseInt(base[i]) * pesos[i];
+  }
+  const resto = soma % 11;
+  const dv = resto > 1 ? 11 - resto : 0;
+  return `${base}-${dv}`;
+}
+
 test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
@@ -67,7 +79,7 @@ test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
 
     const nome = obterNomePessoaAleatorio();
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('✅ Nome do Cliente', nome);
+    console.log('✅ Nome do Cliente:', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -196,17 +208,4 @@ test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
-
-function gerarRUC() {
-  const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos
-  const pesos = [2,3,4,5,6,7,2];
-  let soma = 0;
-  for (let i = 0; i < base.length; i++) {
-    soma += parseInt(base[i]) * pesos[i];
-  }
-  const resto = soma % 11;
-  const dv = resto > 1 ? 11 - resto : 0;
-  return `${base}-${dv}`;
-}
-
 });

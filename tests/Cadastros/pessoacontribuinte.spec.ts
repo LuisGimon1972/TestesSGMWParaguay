@@ -3,6 +3,11 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 import { empresasParaguai } from '../../utils/rucs-paraguai';
 
+function gerarRUC(): string {
+  const empresaAleatoria = empresasParaguai[Math.floor(Math.random() * empresasParaguai.length)];
+  return empresaAleatoria.ruc;
+}
+
 test('Cadastro de Clientes Contribuintes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
@@ -25,7 +30,7 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });      
       console.log(`✅ Clicou em Cadastrar Pessoas`);  
-      console.log(`✅ Abriu Form de Pessoas`);  
+      console.log(`✅ Abriu Form de Cadastro de Pessoas`);  
 
     console.log('DADOS ENVIADOS PRA API');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
@@ -199,10 +204,4 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);    
-
-function gerarRUC(): string {
-  const empresaAleatoria = empresasParaguai[Math.floor(Math.random() * empresasParaguai.length)];
-  return empresaAleatoria.ruc;
-}
-
 });
