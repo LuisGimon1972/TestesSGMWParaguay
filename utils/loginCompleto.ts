@@ -6,24 +6,24 @@ export async function loginCompleto(page: Page) {
 
   console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
-  console.log('ABRIU SITE');
+  console.log('✅ Abriu Site');
   await page.getByText(/entrar/i).click();
-  console.log('CLICOU EM ENTRAR');
+  console.log('✅ Clicou em Entrar');
   
   await page.waitForSelector('input[type="email"], input[type="text"]', {
     timeout: 15000
   });
   await page.waitForTimeout(1000);
-  console.log('FORM LOGIN APARECEU');  
+  console.log('✅ Apareceu Form Login');  
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
   await page.waitForTimeout(1000);
-  console.log('PREENCHIDO');  
+  console.log('✅ Login Preenchido');  
   await page.getByRole('button', { name: /sign in|entrar/i }).click();
-  console.log('CLICOU EM SIGN LN');
+  console.log('✅ Clicou em SIGN LN');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
-  console.log('CHEGOU EM EMPRESAS');  
+  console.log('✅ Chegou em Empresa');  
   
   const botao = page.locator('button:has-text("ENTRAR")').nth(0);
   //const botao = page.locator('button:has-text("ENTRAR")').first();
@@ -32,10 +32,10 @@ export async function loginCompleto(page: Page) {
     el.style.border = '5px solid red';
     el.click();
   });
-  console.log('CLICOU EM ACESSAR EMPRESA');
+  console.log('✅ Clicou em Acessar Empresa');
 
   await page.waitForTimeout(3000);
-  console.log('URL:', await page.url()); 
+  console.log('✅ URL:', await page.url()); 
 
   
   await page.evaluate(() => {
@@ -51,7 +51,7 @@ export async function loginCompleto(page: Page) {
     });
   });
 
-  console.log('MODAL + OVERLAY REMOVIDOS');
+  console.log('✅ Modal + Overlay Removidos');
 
   const botaoFecharPopup = page.locator('button:has-text("×"), svg[aria-label="Close"], .modal-close');
 

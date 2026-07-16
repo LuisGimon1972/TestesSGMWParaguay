@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { obterNomePessoaAleatorio } from '../../utils/nomescompletos';
 
-test('Cadastro de Clientes', async ({ page }) => {
+test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
@@ -17,13 +18,14 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log(`✅ Clicou em pessoas`);  
-    console.log('CLICOU EM PESSOAS');    
+    console.log(`✅ Clicou em Pessoas`);          
+    console.log(`✅ Apareceu Grade de Pessoas`);      
       
     const btnCadastrar = page.getByText(/cadastrar pessoas/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });      
       console.log(`✅ Clicou em Cadastrar Pessoas`);  
+      console.log(`✅ Abriu Form de Pessoas`);      
 
     console.log('DADOS ENVIADOS PRA API');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
@@ -35,7 +37,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .first()
     .click({ force: true });    
     const natureza = await page.locator('input[aria-label="Natureza"]').inputValue();      
-    console.log('✅ Natureza:',natureza);
+    console.log('✅ Natureza:',natureza.toUpperCase());
 
     await page.locator('[aria-label="Tipo do documento de identificação"]').click({ force: true });
     const menuDoc = page.locator('.q-menu').last();
@@ -45,7 +47,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /carteira de identidade paraguaia/i })
     .click({ force: true });
     const tipodoc = await page.locator('input[aria-label="Tipo do documento de identificação"]').inputValue();      
-    console.log('✅ Tipo de Documento:',tipodoc);
+    console.log('✅ Tipo de Documento:',tipodoc.toUpperCase());
     
     await page.waitForTimeout(700);
     const ruc = gerarRUC();
@@ -61,9 +63,9 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /B2C/i })
     .click({ force: true }); 
     const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();      
-    console.log('✅ Tipo de Operação:', tipoop );
+    console.log('✅ Tipo de Operação:', tipoop.toUpperCase());
 
-    const nome = `TEST CLIENTE ${Date.now()}`;
+    const nome = obterNomePessoaAleatorio();
     await page.getByLabel(/nome completo/i).fill(nome);
     console.log('✅ Nome do Cliente', nome);
 
@@ -75,7 +77,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /cliente/i })
     .click({ force: true });
     const tipocad = await page.locator('input[aria-label="Tipo de cadastro"]').inputValue();      
-    console.log('✅ Tipo de cadastro selecionado:',tipocad);
+    console.log('✅ Tipo de cadastro selecionado:',tipocad.toUpperCase());
 
     await page.locator('.q-field')
     .filter({ hasText: /departamento/i })
@@ -116,15 +118,14 @@ test('Cadastro de Clientes', async ({ page }) => {
     const city = await page.locator('input[aria-label="Cidade/Bairro"]').inputValue();      
     console.log('✅ Cidade:',city);
 
-    const direccion = `TEST DIRECCION ${Date.now()}`;
+    const direccion = `RUA ANTONIO ADILIO HILÁRIO MUTZEMBERT ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
     console.log('✅ Endereço:', direccion);
 
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
       document.body.style.zoom = '0.9';
-    });
-    console.log('🔍 Zoom ajustado para 90% via CSS');
+    });    
 
     const numero = Math.floor(Math.random() * 1000) + 1;
     const campoNumero = page.locator('.q-field')
@@ -157,8 +158,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();
-    console.log('✅ CONTROLE:', idPessoa);    
+    const idPessoa = dadosSalvos.pessoa.controle.toString().trim();    
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/pessoa/${idPessoa}`;    
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
@@ -175,7 +175,8 @@ test('Cadastro de Clientes', async ({ page }) => {
     });
 
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('✅ Novo Controle:', idPessoa);    
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();

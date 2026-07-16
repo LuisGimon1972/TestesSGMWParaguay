@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
+import { obterProdutoAleatorio } from '../../utils/listaprodutos';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
@@ -19,40 +20,41 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU EM PRODUTOS');
+      console.log('✅ Clicou em Produtos');
+      console.log('✅ Apareceu Grade de Produtos');
 
       const btnCadastrar = page.getByText(/cadastrar produto|serviço/i).first();
       await btnCadastrar.waitFor();
       await btnCadastrar.click({ force: true });
-      console.log('CLICOU EM CADASTRAR PRODUTO');
+      console.log('✅ Clicou em Cadastrar Produto');
+      console.log(`✅ Abriu Form de Produtos`);      
 
       await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
-      document.body.style.zoom = '0.7'; });
-      console.log('🔍 Zoom ajustado para 70% via CSS');
+      document.body.style.zoom = '0.7'; });      
 
-      console.log('***DADOS ENVIADOS PRA API***');
+      console.log('DADOS ENVIADOS PRA API');
       
-      const nomeproduto = `TEST PRODUTO ${Date.now()}`;
-      await page.getByLabel(/nome/i).fill(nomeproduto);
-      console.log('NOME DE PRODUTO OK:', nomeproduto);
+      const nomeproduto = obterProdutoAleatorio();
+      await page.getByLabel(/nome/i).fill(nomeproduto.nome);
+      console.log('✅ Nome de Produto:', nomeproduto.nome.toUpperCase());
 
       const btnGerar = page.getByText(/gerar/i).first();
       await btnGerar.waitFor();
       await btnGerar.click({ force: true });
-      console.log('CLICOU EM GERAR CÓDIGO DE BARRAS');
+      console.log('✅ Clicou em Gerar Código de Barras');
 
       await page.waitForTimeout(2000);      
       const codigoBarras = await page.locator('input[aria-label="Código de barras interno"]').inputValue();      
       console.log(`✅ Código de barras interno gerado: ${codigoBarras}`);
 
-      const localestoque = `TEST LOCAL ESTOQUE ${Date.now()}`;
-      await page.getByLabel(/localização/i).fill(localestoque);
-      console.log('LOCALIZAÇÃO DE ESTOQUE OK', localestoque);
+      const localestoque = obterProdutoAleatorio();
+      await page.getByLabel(/localização/i).fill(localestoque.categoria);
+      console.log('✅ Localização de Estoque:', localestoque.categoria.toUpperCase());
 
-      const refestoque = `TEST REFERÊNCIA ESTOQUE ${Date.now()}`;
-      await page.getByLabel(/referência/i).fill(refestoque);
-      console.log('REFERÊNCIA ESTOQUE ESTOQUE OK', refestoque);      
+      const refestoque = obterProdutoAleatorio()
+      await page.getByLabel(/referência/i).fill(refestoque.id);
+      console.log('✅ Referência de Estoque:', refestoque.id);      
 
       await page.locator('input[aria-label="Fornecedor"]').focus();      
       await page.keyboard.press('ArrowDown');      
@@ -61,13 +63,13 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /REGISTRO\s+ESTÁNDAR/i })
       .click();      
       const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
-      console.log('NOME DO FORNECEDOR OK:', fornecedor);      
+      console.log('✅ Nome do Fornecedor:', fornecedor);      
       
       const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
-      console.log('TIPO DE USO OK:', uso);
+      console.log('✅ Tipo de Uso:', uso);
       
       const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
-      console.log('UNIDADE OK:', unid);
+      console.log('✅ Unidades:', unid);
 
       await page.waitForTimeout(2000);
 
@@ -76,26 +78,26 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .filter({ hasText: /preço de custo/i })
       .last();
       await campoPrecusto.locator('input').fill(precusto.toString());
-      console.log('PREÇO DE CUSTO OK:', precusto.toFixed(0));
+      console.log('✅ Preço de Custo:', precusto.toFixed(0));
 
       const campoLucro = page.locator('.q-field')
       .filter({ hasText: /% lucro/i })
       .last();
       const perLucro = await campoLucro.locator('input').inputValue();
-      console.log('% DE LUCRO OK:', perLucro);
+      console.log('✅ % de Lucro:', perLucro);
       
       const campoPrevenda = page.locator('.q-field')
       .filter({ hasText: /preço de venda/i })
       .last();
       const valorPrevenda = await campoPrevenda.locator('input').inputValue();
-      console.log('PREÇO DE VENDA OK:', valorPrevenda);
+      console.log('✅ Preço de Venda:', valorPrevenda);
 
       const cantidad = Math.floor(Math.random() * 1000) + 1;
       const campocantidad = page.locator('.q-field')
       .filter({ hasText: /quantidade/i })
       .first();
       await campocantidad.locator('input').fill(cantidad.toString());
-      console.log('QUANTIDADE OK:', cantidad.toString());
+      console.log('✅ Quantidade:', cantidad.toString());
 
       const cantidadmin = Math.floor(Math.random() * 100) + 1;
       const campoCantidadMin = page
@@ -105,7 +107,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input = campoCantidadMin.locator('input');
       await expect(input).toBeVisible();
       await input.fill(String(cantidadmin));
-      console.log('QUANTIDADE MÍNIMA OK:', cantidadmin.toString());
+      console.log('✅ Quantidade Mínima:', cantidadmin.toString());
 
       const cantidadmax = Math.floor(Math.random() * 1000) + 1;
       const campoCantidadmax = page
@@ -115,7 +117,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const input2 = campoCantidadmax.locator('input');
       await expect(input).toBeVisible();
       await input2.fill(String(cantidadmax));
-      console.log('QUANTIDADE MÁXIMA OK:', cantidadmax.toString());           
+      console.log('✅Quantidade Máxima:', cantidadmax.toString());           
 
       const ivaField = page.locator('[aria-label="IVA"]').first();
       await ivaField.scrollIntoViewIfNeeded();
@@ -129,27 +131,26 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .first()
       .click();
       const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
-      console.log('IMPOSTO IVA OK:',iva);   
+      console.log('✅ IVA:',iva);   
       
       await page.waitForTimeout(2000);
       const obsproduto = `TEST OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
       await page.locator('textarea.q-field__native').fill(obsproduto);
-      console.log('OBSERVAÇÕES OK:', obsproduto);
+      console.log('✅ Observações:', obsproduto);
       await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);
-      console.log('***FIM DE DADOS ENVIADOS***');
+      console.log('FIM DE DADOS ENVIADOS');
 
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })
       .click({ force: true });
-      console.log('CLICOU EM SALVAR');  
+      console.log('✅ Clicou em Salvar');  
 
       const salvarPessoaResponse = await salvarProdutoPromise;
       const dadosSalvos = await salvarPessoaResponse.json();
-      console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+      console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
       console.log(JSON.stringify(dadosSalvos, null, 2));
       
-      const idProduto = dadosSalvos.produto.controle.toString().trim();
-      console.log('CONTROLE:', idProduto);    
+      const idProduto = dadosSalvos.produto.controle.toString().trim();      
       const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/produto/${idProduto}`;    
       const headersOriginais = salvarPessoaResponse.request().headers();
       const headersGetRegistro: Record<string, string> = {
@@ -165,8 +166,9 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
             headers: headersGetRegistro,
       });
 
-      console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-      console.log(`Status: ${getCriadoResponse.status()}`);
+      console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+      console.log('✅ Novo Controle:', idProduto);    
+      console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
       try {
             const dadosCriado = await getCriadoResponse.json();
