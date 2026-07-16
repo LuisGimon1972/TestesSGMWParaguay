@@ -17,14 +17,15 @@ test('Cadastro de Clientes', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU EM PESSOAS');
+    console.log(`✅ Clicou em pessoas`);  
+    console.log('CLICOU EM PESSOAS');    
       
     const btnCadastrar = page.getByText(/cadastrar pessoas/i).first();
       await btnCadastrar.waitFor();
-      await btnCadastrar.click({ force: true });
-      console.log('CLICOU EM CADASTRAR PESSOA');
+      await btnCadastrar.click({ force: true });      
+      console.log(`✅ Clicou em Cadastrar Pessoas`);  
 
-    console.log('***DADOS ENVIADOS PRA API***');
+    console.log('DADOS ENVIADOS PRA API');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
     await menu.waitFor();
@@ -34,7 +35,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .first()
     .click({ force: true });    
     const natureza = await page.locator('input[aria-label="Natureza"]').inputValue();      
-    console.log('NATURALEZA OK:',natureza);
+    console.log('✅ Natureza:',natureza);
 
     await page.locator('[aria-label="Tipo do documento de identificação"]').click({ force: true });
     const menuDoc = page.locator('.q-menu').last();
@@ -44,12 +45,12 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /carteira de identidade paraguaia/i })
     .click({ force: true });
     const tipodoc = await page.locator('input[aria-label="Tipo do documento de identificação"]').inputValue();      
-    console.log('TIPO DE DOCUMENTO OK:',tipodoc);
+    console.log('✅ Tipo de Documento:',tipodoc);
     
     await page.waitForTimeout(700);
     const ruc = gerarRUC();
     await page.getByLabel(/número de documento de identificação/i).fill(ruc);
-    console.log('NÚMERO DO RUC:', ruc);
+    console.log('✅ Número de idenficação RUC:', ruc);
     
     await page.waitForTimeout(700);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
@@ -60,11 +61,11 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /B2C/i })
     .click({ force: true }); 
     const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();      
-    console.log('TIPO DE OPERAÇÃO OK:', tipoop );
+    console.log('✅ Tipo de Operação:', tipoop );
 
     const nome = `TEST CLIENTE ${Date.now()}`;
     await page.getByLabel(/nome completo/i).fill(nome);
-    console.log('NOME DO CLIENTE OK:', nome);
+    console.log('✅ Nome do Cliente', nome);
 
     await page.locator('[aria-label="Tipo de cadastro"]').click({ force: true });
     const menuDoc2 = page.locator('.q-menu').last();
@@ -74,7 +75,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /cliente/i })
     .click({ force: true });
     const tipocad = await page.locator('input[aria-label="Tipo de cadastro"]').inputValue();      
-    console.log('TIPO DE CADASTRO SELECIONADO OK:',tipocad);
+    console.log('✅ Tipo de cadastro selecionado:',tipocad);
 
     await page.locator('.q-field')
     .filter({ hasText: /departamento/i })
@@ -87,7 +88,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /alto paraná|alto parana/i })
     .click({ force: true });
     const dep = await page.locator('input[aria-label="Departamento"]').inputValue();      
-    console.log('DEPARTAMENTO OK:',dep);
+    console.log('✅ Departamento:',dep);
 
     await page.locator('.q-field')
     .filter({ hasText: /distrito/i })
@@ -100,7 +101,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /ciudad/i })
     .click({ force: true });
     const distrito = await page.locator('input[aria-label="Distrito"]').inputValue();      
-    console.log('DISTRITO OK:',distrito);
+    console.log('✅ Distrito:',distrito);
 
     await page.locator('.q-field')
     .filter({ hasText: /cidade/i })
@@ -113,11 +114,11 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /2A/i })
     .click({ force: true });
     const city = await page.locator('input[aria-label="Cidade/Bairro"]').inputValue();      
-    console.log('CIUDAD OK:',city);
+    console.log('✅ Cidade:',city);
 
     const direccion = `TEST DIRECCION ${Date.now()}`;
     await page.getByLabel(/direção/i).fill(direccion);
-    console.log('DIRECCIÓN OK:', direccion);
+    console.log('✅ Endereço:', direccion);
 
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => {
@@ -130,7 +131,7 @@ test('Cadastro de Clientes', async ({ page }) => {
     .filter({ hasText: /número/i })
     .last();
     await campoNumero.locator('input').fill(numero.toString());
-    console.log('NUMERO OK:', numero.toString().trim());
+    console.log('✅ Número:', numero.toString().trim());
 
     await page.waitForTimeout(1000);    
 
@@ -143,21 +144,21 @@ test('Cadastro de Clientes', async ({ page }) => {
     await inputTelefone.press('Control+A');
     await inputTelefone.press('Backspace');
     await inputTelefone.type(telefone, { delay: 30 });
-    console.log('TELEFONE OK:', telefone);    
-    console.log('***FIM DE DADOS ENVIADOS***');           
+    console.log('✅ Telefone/Contato:', telefone);    
+    console.log('FIM DE DADOS ENVIADOS');           
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');            
+    console.log('✅ Clicou em Salvar');            
 
     const salvarPessoaResponse = await salvarPessoaPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
     const idPessoa = dadosSalvos.pessoa.controle.toString().trim();
-    console.log('CONTROLE:', idPessoa);    
+    console.log('✅ CONTROLE:', idPessoa);    
     const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/pessoa/${idPessoa}`;    
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
@@ -173,7 +174,7 @@ test('Cadastro de Clientes', async ({ page }) => {
       headers: headersGetRegistro,
     });
 
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
     console.log(`Status: ${getCriadoResponse.status()}`);
 
     try {

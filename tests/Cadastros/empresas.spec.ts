@@ -152,11 +152,25 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
       }
     }
   }
+
+  await page.waitForTimeout(2000);
+  await page.evaluate(() => {
+    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
+      el.remove();
+    });
+  });
   
   const urlDatosEmpresa = `https://${urlempresa}.hom.sgmaster.com.br/py/datos-empresa`;
   await page.waitForURL(urlDatosEmpresa, { timeout: 15000 }).catch(() => {});    
 
     await page.evaluate(() => {
+    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
+      el.remove();
+    });
+  });
+
+  await page.waitForTimeout(2000);
+  await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
       el.remove();
     });
