@@ -131,9 +131,8 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   
   await page.locator('#submit-domain').waitFor({ state: 'visible' });
   await page.locator('#submit-domain').click();
-  console.log('✅ Cadastro inicial finalizado. Redirecionando...');
+  console.log('✅ Cadastro inicial finalizado. Redirecionando...');  
   
-  // --- 4. PESQUISAR E ACESSAR EMPRESA ---
   await page.waitForURL(/\/py\/empresas/, { timeout: 20000 });
   
   const campoPesquisa = page.getByPlaceholder(/pesquisar empresas/i);
@@ -141,8 +140,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   await campoPesquisa.fill(razaoSocial.trim());
   await page.keyboard.press('Enter');
   
-  await page.waitForTimeout(1000); // Espera a tabela filtrar  
-  
+  await page.waitForTimeout(1000); // Espera a tabela filtrar    
   await page.getByText(razaoSocial.trim(), { exact: false })
             .first()
             .waitFor({ state: 'visible', timeout: 15000 });
@@ -258,9 +256,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
     const corpoBruto = await getCriadoResponse.text();
     console.log('Corpo bruto da resposta:', corpoBruto);
   }
-
   expect([404, 200]).toContain(getCriadoResponse.status());    
-
   
   await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => el.remove());
