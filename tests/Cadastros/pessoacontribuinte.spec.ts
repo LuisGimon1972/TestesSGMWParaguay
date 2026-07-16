@@ -185,7 +185,7 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
+    console.log('🌐 URL do registro criado:', urlRegistroCriado);
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
     console.log('✅ Novo Controle:', idPessoa);    
     console.log(`✅ Status: ${getCriadoResponse.status()}`);

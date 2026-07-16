@@ -229,7 +229,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   console.log(JSON.stringify(dadosSalvos, null, 2));
   
   const idEmpresa = dadosSalvos.codEmpresa.toString().trim();        
-  const urlRegistroCriado = `https://global-hom.sgmw.com.br/api/empresa/${idEmpresa}`;
+  const urlRegistroCriado = `https://global-hom.sgmw.com.br/api/empresa/${idEmpresa}`;  
   const headersOriginais = salvarEmpresaResponse.request().headers();
   const headersGetRegistro: Record<string, string> = {
     Accept: 'application/json',
@@ -243,7 +243,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   const getCriadoResponse = await page.request.get(urlRegistroCriado, {
     headers: headersGetRegistro,
   });
-
+  console.log('🌐 URL do registro criado:', urlRegistroCriado);
   console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
   console.log('✅ Novo Controle:', idEmpresa);    
   console.log(`✅ Status: ${getCriadoResponse.status()}`);
