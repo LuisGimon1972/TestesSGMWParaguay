@@ -59,8 +59,8 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
     await ativos.nth(0).click();
-    await ativos.nth(1).click();
-    await ativos.nth(2).click();    
+ //   await ativos.nth(1).click();
+  //  await ativos.nth(2).click();    
     console.log('✅ Selecionou vários itens da compra');  
 
     await page.waitForTimeout(3000);
@@ -96,7 +96,17 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     await modal2.waitFor({ state: 'visible', timeout: 15000 });
     const btnConfirmar2 = modal2.locator('.q-btn', { hasText: /confirmar|salvar/i }).first();
     await btnConfirmar2.waitFor({ state: 'visible', timeout: 5000 });    
-    await page.waitForTimeout(500);
+    await btnConfirmar2.click({ force: true });
+    console.log('✅ Clicou em Confirmar fórmula de preço');       
+    await page.waitForTimeout(800); 
+
+    const modal3 = page.locator('.q-dialog:visible').first();
+    await modal3.waitFor({ state: 'visible', timeout: 15000 });    
+    const btnConfirmar3 = modal3.locator('.q-btn', { hasText: /confirmar|salvar/i }).first();   
+    await btnConfirmar3.waitFor({ state: 'visible', timeout: 5000 });   
+    await page.waitForTimeout(500);    
+    await btnConfirmar3.click({ force: true });    
+    console.log('✅ Clicou em Confirmar finalizar');       
 
     console.log('✅ ENVIANDO COMPRA E AGUARDANDO RETORNO DA API');    
     
@@ -111,11 +121,11 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
                    response.status() < 300;
         }, { timeout: 30000 }),
         btnConfirmar2.click({ force: true })
-    ]);
-    console.log('✅ Clicou em Confirmar fórmula de preço');       
+    ]);    
     
     const dadosTratados = await respostaSalvar.json();
-    console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');       
+    console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');          
+    
 
     const salvarUrlResponse = await salvarCompraPromise;     
     const urlCompletaPost = salvarUrlResponse.url();
