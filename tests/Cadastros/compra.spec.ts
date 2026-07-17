@@ -106,7 +106,7 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     await btnConfirmar3.waitFor({ state: 'visible', timeout: 5000 });   
     await page.waitForTimeout(500);    
     await btnConfirmar3.click({ force: true });    
-    console.log('✅ Clicou em Confirmar finalizar');       
+    console.log('✅ Clicou em Confirmar Factura de Compra');       
 
     console.log('✅ ENVIANDO COMPRA E AGUARDANDO RETORNO DA API');    
     
