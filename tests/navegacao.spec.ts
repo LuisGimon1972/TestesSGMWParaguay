@@ -5,104 +5,72 @@ import { capturarRequisicoesApi } from '../utils/capturaApi';
 test('Navegação de menus', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
+    
+    const clicarMenu = async (textoOuSeletor: RegExp | string) => {
+        const item = typeof textoOuSeletor === 'string' ? page.locator(textoOuSeletor) : page.getByText(textoOuSeletor);
+        await expect(item.first()).toBeVisible();
+        await item.first().click({ force: true });
+    };
+    
+    await clicarMenu(/dashboard/i);
+    console.log('✅ Clicou em Dashboard');              
+    
+    await clicarMenu(/pessoas/i);
+    console.log('✅ Clicou em Pessoas');
+    
+    await clicarMenu(/financeiro/i);
+    console.log('✅ Clicou em Financeiro');
+    
+    await page.locator('a[href*="producto"]').first().click();
+    await page.waitForURL(/producto/, { waitUntil: 'commit', timeout: 10000 });
+    console.log('✅ Clicou em Produtos');    
+    
+    await clicarMenu(/vendas/i);
+    console.log('✅ Clicou em Vendas');
+    
+    await page.locator('a[href*="facturacion"]').first().click();
+    await page.waitForURL(/facturacion/, { waitUntil: 'commit', timeout: 10000 });
+    console.log('✅ Clicou em Faturamento');
+    
+    await page.locator('a[href*="dav"]').first().click();
+    await page.waitForURL(/dav/, { waitUntil: 'commit', timeout: 10000 });
+    console.log('✅ Clicou em DAV');
+    
+    await clicarMenu(/sifen/i); 
+    console.log('✅ Clicou em SIFEN');
+    
+    await clicarMenu(/usu[aá]rios/i);
+    console.log('✅ Clicou em Usuários');
 
-    const dashboardBtn = page.getByText(/dashboard/i).first();
-    await expect(dashboardBtn).toBeVisible({ timeout: 5000 });
-    await dashboardBtn.click();
-    console.log('CLICOU EM DASKBOARD');      
-        
-    await page.waitForTimeout(1000);
-    await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU PESSOAS');
+    await clicarMenu('a[href*="usuario/listado"]');
+    console.log('✅ Clicou em Listagem de Usuários');
 
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/producto/, { timeout: 15000 }),
-      page.locator('a[href*="producto"]').first().click()
-    ]);
-    console.log('CLICOU PRODUTOS');
+    await clicarMenu('a[href*="usuario/perfil"]');
+    console.log('✅ Clicou em Perfil de Acesso');
+    
+    await clicarMenu(/compras/i);
+    console.log('✅ Clicou em Compras');    
+    
+    await clicarMenu(/cadastros/i); 
+    console.log('✅ Clicou em Cadastros');
 
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/producto/, { timeout: 15000 }),
-      page.locator('a[href*="producto"]').first().click()
-    ]);
-    console.log('CLICOU PRODUTOS');
+    await clicarMenu('a[href*="registros/metodos-pagos"]');
+    console.log('✅ Clicou em Cadastro de Espécies'); 
 
-    await page.waitForTimeout(1000);
-    await page.getByText(/vendas/i).click({ force: true });
-    console.log('CLICOU EM VENDAS');
+    await clicarMenu('a[href*="registros/cotizacion-monedas"]');
+    console.log('✅ Clicou em Cadastro de Cotação');
 
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/facturacion/, { timeout: 15000 }),
-      page.locator('a[href*="facturacion"]').first().click()
-    ]);
-    console.log('CLICOU EM FATURAMENTO');
+    await clicarMenu('a[href*="registros/grupos"]');
+    console.log('✅ Clicou em Cadastro de Grupos');
 
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/dav/, { timeout: 15000 }),
-      page.locator('a[href*="dav"]').first().click()
-    ]);
-    console.log('CLICOU EM DAV');
+    await clicarMenu('a[href*="registros/subgrupos"]');
+    console.log('✅ Clicou em Cadastro de Subgrupos');
 
-  /*  await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/lotes/, { timeout: 15000 }),
-      page.locator('a[href*="lotes"]').first().click()
-    ]);
-    console.log('CLICOU EM LOTES'); */
-
-    const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
-    await expect(usuariosBtn).toBeVisible({ timeout: 5000 });
-    await usuariosBtn.click();
-    console.log('CLICOU EM USUÁRIOS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="usuario/listado"]').click()
-    console.log('CLICOU EM LISTAGEM DE USUARIOS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="usuario/perfil"]').click()
-    console.log('CLICOU EM PERFIL DE ACESSO');
-
-    const comprasBtn = page.getByText(/compras/i).first();
-    await expect(comprasBtn).toBeVisible({ timeout: 5000 });
-    await comprasBtn.click();
-    console.log('CLICOU EM COMPRAS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="compras/listagem"]').click()
-    console.log('CLICOU EM LISTAGEM DE COMPRAS'); 
-
-    await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/metodos-pagos"]').click()
-    console.log('CLICOU EM ESPÉCIES'); 
-
-    /*await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');*/
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/grupos"]').click()
-    console.log('CLICOU EM GRUPOS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/marcas"]').click()
-    console.log('CLICOU EM MARCAS'); 
-
-    await page.waitForTimeout(1000);
-    await page.getByText(/funcionários/i).click({ force: true });
-    console.log('CLICOU EM FUNCIONÁRIOS'); 
-
+    await clicarMenu('a[href*="registros/marcas"]');
+    console.log('✅ Clicou em Cadastro de Marcas'); 
+    
+    await clicarMenu(/funcionários/i);
+    console.log('✅ Clicou em Funcionários'); 
+    
     await capturarRequisicoesApi(page);            
 });
