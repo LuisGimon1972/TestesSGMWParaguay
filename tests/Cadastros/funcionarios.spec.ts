@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { obterNomePessoaAleatorio } from '../../utils/nomescompletos';
 
 test('Cadastro de funcionários', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -9,7 +10,7 @@ test('Cadastro de funcionários', async ({ page }) => {
 
    await page.waitForTimeout(2000);       
     
-    const salvarPessoaPromise = page.waitForResponse((response) =>
+    const salvarFuncionarioPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/funcionario') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
@@ -17,15 +18,15 @@ test('Cadastro de funcionários', async ({ page }) => {
   );
   
   await page.getByText(/funcionários/i).click({ force: true });
-  console.log('CLICOU EM FUNCIONÁRIOS');  
+  console.log('✅ Clicou em Funcionários');  
   
   const btnCadastrar = page.getByText(/cadastrar funcionário/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU EM CADASTRAR FUNCIONÁRIO');
+  console.log('✅ Clicou em Cadastrar Funcionário');
 
-  console.log('***DADOS ENVIADOS PRA API**'); 
-  const nomefuncionario = `TEST FUNCIONARIO  ${Date.now()}`;
+  console.log('DADOS ENVIADOS PRA API'); 
+  const nomefuncionario = obterNomePessoaAleatorio();
   const camponomefuncionario = page
   .locator('.q-field')
   .filter({ hasText: /funcionário/i })
@@ -33,9 +34,9 @@ test('Cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(camponomefuncionario).toBeVisible();
   await camponomefuncionario.fill(nomefuncionario);
-  console.log('NOME FUNCIONÁRIO OK:', nomefuncionario);
+  console.log('✅ Nome do Funcionário:', nomefuncionario.toUpperCase());
 
-  const cargofuncionario = `TEST CARGO ${Date.now()}`;
+  const cargofuncionario = `OPERADOR DO CAIXA ${Date.now()}`;
   const campocargofuncionario = page
   .locator('.q-field')
   .filter({ hasText: /cargo/i })
@@ -43,10 +44,10 @@ test('Cadastro de funcionários', async ({ page }) => {
   .locator('input');
   await expect(campocargofuncionario).toBeVisible();
   await campocargofuncionario.fill(cargofuncionario);
-  console.log('CARGO FUNCIONÁRIO OK:', cargofuncionario);
+  console.log('✅ Cargo do Funcionário:', cargofuncionario);
 
   const tipdoc = await page.locator('input[aria-label="Tipo de documento"]').inputValue();      
-  console.log('TIPO DE DOCUMENTO OK:', tipdoc); 
+  console.log('✅ Tipo de Documento:', tipdoc.toUpperCase()); 
   
   const ruc = gerarRUC();
   const campoCI = page
@@ -58,23 +59,25 @@ test('Cadastro de funcionários', async ({ page }) => {
   await expect(campoCI).toBeVisible();
   await campoCI.fill('');
   await campoCI.type(ruc, { delay: 50 });
-  console.log('NÚMERO DO RUC:', ruc); 
+  console.log('✅ Número do RUC:', ruc); 
   console.log('***FIM DADOS ENVIADOS ***');
   
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR FUNCIONÁRIO');  
+  console.log('✅ Clicou em Salvar Funcionário'); 
+  
+    const salvarUrlResponse = await salvarFuncionarioPromise;     
+    const urlCompletaPost = salvarUrlResponse.url();  
 
-    const salvarPessoaResponse = await salvarPessoaPromise;
-    const dadosSalvos = await salvarPessoaResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    const salvarFuncionarioResponse = await salvarFuncionarioPromise;
+    const dadosSalvos = await salvarFuncionarioResponse.json();
+    console.log('✅DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idPessoa = dadosSalvos.funcionario.controle.toString().trim();
-    console.log('CONTROLE:', idPessoa);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/funcionario/${idPessoa}`;    
-    const headersOriginais = salvarPessoaResponse.request().headers();
+    const idFuncionario = dadosSalvos.funcionario.controle.toString().trim();    
+    const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idFuncionario}`);    
+    const headersOriginais = salvarFuncionarioResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
@@ -87,9 +90,10 @@ test('Cadastro de funcionários', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 URL do registro criado:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+    console.log('✅ Novo Controle Funcionário:', idFuncionario);        
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();

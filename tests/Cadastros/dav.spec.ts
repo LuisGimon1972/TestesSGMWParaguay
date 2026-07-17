@@ -31,7 +31,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await davField.evaluate(el => (el as HTMLElement).click());    
     const menu = page.locator('.q-menu');
     await expect(menu).toBeVisible();    
-    const davse = ['pedido de venda', 'orçamento'];    
+    const davse = ['pedido de venda', 'orçamento', 'ordem de venda'];    
     const davEscolhida = davse[Math.floor(Math.random() * davse.length)];    
     const opcao = menu.locator('.q-item', {
     hasText: new RegExp(davEscolhida, 'i')

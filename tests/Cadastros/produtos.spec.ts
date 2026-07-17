@@ -147,7 +147,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
 
       const salvarUrlResponse = await salvarProdutoPromise;     
       const urlCompletaPost = salvarUrlResponse.url();
-      console.log('✅ A URL capturada do POST é:', urlCompletaPost);
+      console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
       const salvarPessoaResponse = await salvarProdutoPromise;
       const dadosSalvos = await salvarPessoaResponse.json();
@@ -170,7 +170,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const getCriadoResponse = await page.request.get(urlRegistroCriado, {
             headers: headersGetRegistro,
       });
-
+      console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
       console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
       console.log('✅ Novo Controle:', idProduto);    
       console.log(`✅ Status: ${getCriadoResponse.status()}`);
