@@ -16,24 +16,23 @@ test('Cadastro de subgrupos', async ({ page }) => {
     const cadBtn = page.getByText(/cadastros/i).first();
     await expect(cadBtn).toBeVisible();
     await cadBtn.click();
-    console.log('CLICOU EM CADASTRO');
+    console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');
+    console.log('✅ Clicou em Subgrupos');
 
     const btnCadastrar = page.getByText(/cadastrar subgrupo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR SUBGRUPO');    
+    console.log('✅ Clicou em Cadastrar Subgrupo');    
 
-    console.log('***DADOS ENVIADOS PRA API***');
+    console.log('DADOS ENVIADOS PRA API');
     const nomesubgrupo = `TEST SUBGRUPO ${Date.now()}`;
     await page.getByLabel(/cadastrar novo subgrupo/i).fill(nomesubgrupo);
-    console.log('NOME DE SUBGRUPO OK:', nomesubgrupo);   
+    console.log('✅ Nome do Subgrupo:', nomesubgrupo.toUpperCase());   
 
-    await page.waitForTimeout(1000);
-    
+    await page.waitForTimeout(1000);    
     await page.locator('[aria-label="Grupo"]').click({ force: true });
     const grupo = page.locator('.q-menu:visible');
     await grupo.waitFor();
@@ -43,24 +42,27 @@ test('Cadastro de subgrupos', async ({ page }) => {
     .first()
     .click({ force: true });
     const grupoc = await page.locator('input[aria-label="Grupo"]').inputValue();
-    console.log('GRUPO SELECIONADO OK:',grupoc);    
-    console.log('***FIM DADOS ENVIADOS***');
+    console.log('✅ Grupo selecionado:',grupoc);    
+    console.log('FIM DADOS ENVIADOS');
 
     await page.waitForTimeout(1000);
 
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR SUBGRUPO');  
+    console.log('✅ Clicou em Salvar Subgrupo');  
+
+    const salvarUrlResponse = await salvarSubgrupoPromise;     
+    const urlCompletaPost = salvarUrlResponse.url();
+    console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
     const salvarPessoaResponse = await salvarSubgrupoPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idSubgrupo = dadosSalvos.controle.toString().trim();
-    console.log('CONTROLE:', idSubgrupo);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/produto/subgrupo/${idSubgrupo}`;    
+    const idSubgrupo = dadosSalvos.controle.toString().trim();    
+    const urlRegistroCriado = `${urlCompletaPost}/${idSubgrupo}`;                
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -74,9 +76,10 @@ test('Cadastro de subgrupos', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
+    console.log('✅ Novo Controle:', idSubgrupo);    
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();
