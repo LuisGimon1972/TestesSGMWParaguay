@@ -27,7 +27,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   const btnCadastrar = page.getByText(/cadastrar perfil/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('✅ Clicou em Cadastrar Pperil de Acesso'); 
+  console.log('✅ Clicou em Cadastrar Peril de Acesso'); 
     
   console.log('DADOS ENVIADOS PRA API');
   const nome = `PERFIL ADMINISTRADOR ${Date.now()}`;
