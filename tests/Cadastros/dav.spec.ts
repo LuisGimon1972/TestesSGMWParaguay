@@ -5,7 +5,14 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     test.setTimeout(60000); 
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await loginCompleto(page);           
+    await loginCompleto(page);       
+    
+    const salvarDavPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/py/venda') &&
+    ['POST'].includes(response.request().method()) &&
+    response.status() >= 200 &&
+    response.status() < 300
+  );
     
     const venBtn = page.getByText(/vendas/i).first();
     await expect(venBtn).toBeVisible();
@@ -16,14 +23,14 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
       page.waitForURL(/dav/, { timeout: 15000 }),
       page.locator('a[href*="dav"]').first().click()
     ]);
-    console.log('CLICOU EM DAV');
+    console.log('✅ Clicou em DAV');
     
     const btnCadastrar = page.getByText(/cadastrar dav/i).first();
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR DAV');   
+    console.log('✅ Clicou em Cadastrar DAV');   
 
-    console.log('***DADOS ENVIADOS PRA API***');
+    console.log('DADOS ENVIADOS PRA API');
    
     const davField = page.locator('[aria-label="Tipo de DAV"]').first();
     await davField.scrollIntoViewIfNeeded();
@@ -37,7 +44,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     hasText: new RegExp(davEscolhida, 'i')
     }).first();
     await opcao.click();
-    console.log('DAV SELECIONADA OK:', davEscolhida.toUpperCase()); 
+    console.log('✅ DAV Selecionada:', davEscolhida.toUpperCase()); 
 
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
@@ -49,14 +56,14 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await inputValidade.waitFor({ state: 'visible' });
     await inputValidade.fill(dataISO);
     if(davEscolhida=='orçamento')
-    console.log('DATA DE VALIDADE OK:', dataISO);
+    console.log('✅ Data de Validade:', dataISO);
     else
-    console.log('PREVISÃO DA ENTREGA OK:', dataISO);
+    console.log('✅ Previssão da Entrega:', dataISO);
 
     const botaoItens = page.locator('xpath=//button[.//i[normalize-space(.)="format_list_bulleted"]]').first();
     await botaoItens.waitFor({ state: 'visible' });
     await botaoItens.click({ force: true });
-    console.log('CLICOU EM ITENS DAS DAV OK');  
+    console.log('✅ Clicou em Itens da DAV');  
     
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
@@ -66,18 +73,19 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await ativos.nth(1).click({ force: true });
     await ativos.nth(2).click({ force: true });
     await ativos.nth(3).click({ force: true });
-    console.log('SELECIONOU VÁRIOS ITENS DAS DAV OK');  
+    console.log('✅ Selecionou vários itens das DAV');  
     
     const btnAdicionar = page.locator('.q-btn').filter({ hasText: /adicionar/i });
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
-    console.log('CLICOU EM ADICIONAR');  
-    console.log('***FIM DE DADOS ENVIADOS PRA API***');
+    console.log('✅ Clicou em Adicionar');  
+    console.log('FIM DE DADOS ENVIADOS PRA API');
     
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });
+    console.log('✅ Clicou em Salvar');
 
-    console.log('*** ENVIANDO DADOS E AGUARDANDO RETORNO DA API ***');
+    console.log('✅ ENVIANDO DADOS E AGUARDANDO RETORNO DA API');
     
     const [respostaSalvar] = await Promise.all([
         page.waitForResponse((response) => {
@@ -90,27 +98,33 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
                    response.status() < 300;
         }, { timeout: 30000 }),
         salvar.click() 
-    ]);     
+    ]);   
+    
+    const urlCompletaPost = respostaSalvar.url();
+    console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
+
+    const salvarDavResponse = await salvarDavPromise;
+    const dadosSalvos = await salvarDavResponse.json();
+    console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
+    console.log(JSON.stringify(dadosSalvos, null, 2));
    
     const dadosTratados = await respostaSalvar.json();
-    console.log('*** REQUISIÇÃO CAPTURADA COM SUCESSO ***');    
+    console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');    
     
-    let idPessoa = '';
+    let idDav = '';
     if (dadosTratados.venda && dadosTratados.venda.controle) {
-        idPessoa = dadosTratados.venda.controle.toString().trim();
+        idDav = dadosTratados.venda.controle.toString().trim();
     } else if (dadosTratados.data && dadosTratados.data[0] && dadosTratados.data[0].controle) {
-        idPessoa = dadosTratados.data[0].controle.toString().trim();
+        idDav = dadosTratados.data[0].controle.toString().trim();
     } else if (dadosTratados[0] && dadosTratados[0].controle) {
-        idPessoa = dadosTratados[0].controle.toString().trim();
+        idDav = dadosTratados[0].controle.toString().trim();
     }
 
-    if (!idPessoa) {
+    if (!idDav) {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
-    }
-
-    console.log('CONTROLE LOCALIZADO:', idPessoa);        
+    }    
     
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/py/venda/${idPessoa}`;    
+    const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idDav}`);
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -124,9 +138,10 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('*** RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO ***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+    console.log('✅ Novo Controle:', idDav);        
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();
