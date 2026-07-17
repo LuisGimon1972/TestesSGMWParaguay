@@ -59,8 +59,8 @@ test('Teste de Cadastro de Compras', async ({ page }) => {
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
     await ativos.nth(0).click();
- //   await ativos.nth(1).click();
-  //  await ativos.nth(2).click();    
+    await ativos.nth(1).click();
+    await ativos.nth(2).click();    
     console.log('✅ Selecionou vários itens da compra');  
 
     await page.waitForTimeout(3000);
