@@ -7,7 +7,7 @@ export async function loginCompleto(page: Page) {
   console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
   console.log('✅ Abriu Site');
-  await page.getByText(/entrar/i).click();
+  await page.getByText(/log in|entrar/i).click();
   console.log('✅ Clicou em Entrar');
   
   await page.waitForSelector('input[type="email"], input[type="text"]', {
@@ -35,7 +35,7 @@ export async function loginCompleto(page: Page) {
   console.log('✅ Clicou em Acessar Empresa');
 
   await page.waitForTimeout(3000);
-  console.log('✅ URL:', await page.url()); 
+  console.log('🌐 URL:', await page.url()); 
 
   
   await page.evaluate(() => {
