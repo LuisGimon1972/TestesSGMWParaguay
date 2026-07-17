@@ -18,19 +18,19 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
   await expect(usuariosBtn).toBeVisible();
   await usuariosBtn.click();
-  console.log('CLICOU EM USUÁRIOS');
+  console.log('✅ Clicou em Usuários');
 
   await page.waitForTimeout(1000);
   page.locator('a[href*="usuario/perfil"]').click()
-  console.log('CLICOU EM PERFIL DE ACESSO');
+  console.log('✅ Clicou em Perfil de Acesso');
   
   const btnCadastrar = page.getByText(/cadastrar perfil/i).first();
   await expect(btnCadastrar).toBeVisible();
   await btnCadastrar.click();
-  console.log('CLICOU EM CADASTRAR PERFIL DE ACESSO'); 
+  console.log('✅ Clicou em Cadastrar Pperil de Acesso'); 
     
-  console.log('***DADOS ENVIADOS PRA API***');
-  const nome = `TEST PERFIL ${Date.now()}`;
+  console.log('DADOS ENVIADOS PRA API');
+  const nome = `PERFIL ADMINISTRADOR ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
   .filter({ hasText: /nome/i })
@@ -38,25 +38,27 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .locator('input');
   await expect(campoNome).toBeVisible();
   await campoNome.fill(nome);
-  console.log('NOME OK:', nome);
+  console.log('✅ Nome do Perfil:', nome);
 
   await page.locator('[aria-label="Selecionar todos"]').click({ force: true });
-  console.log('CLICLOU EM SELECIONAR TODOS OK');
+  console.log('✅ Checkou em selecionar todos');
 
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
-  console.log('CLICOU EM SALVAR PERFIL DE ACCESO');
-  console.log('***FIM DE DADOS ENVIADOS***');  
+  console.log('✅ Clicou em EM Salvar Perfil de Acesso');
+  console.log('FIM DE DADOS ENVIADOS');  
+
+    const salvarUrlResponse = await salvarPerfilPromise;     
+    const urlCompletaPost = salvarUrlResponse.url(); 
 
     const salvarPerfilResponse = await salvarPerfilPromise;
     const dadosSalvos = await salvarPerfilResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idPerfil = dadosSalvos.pessoa.controle.toString().trim();
-    console.log('CONTROLE:', idPerfil);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/perfil/${idPerfil}`;    
+    const idPerfil = dadosSalvos.controle.toString().trim();    
+    const urlRegistroCriado = `${urlCompletaPost}/${idPerfil}`;    
     const headersOriginais = salvarPerfilResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -70,9 +72,10 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 URL do registro criado:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+    console.log('✅ Novo Controle:', idPerfil);    
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();
