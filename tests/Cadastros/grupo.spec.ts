@@ -15,36 +15,39 @@ test('Cadastro de grupos', async ({ page }) => {
     const cadBtn = page.getByText(/cadastros/i).first();
     await expect(cadBtn).toBeVisible();
     await cadBtn.click();
-    console.log('CLICOU EM CADASTRO');
+    console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
-    console.log('CLICOU EM GRUPOS');
+    console.log('✅ Clicou em Grupos');
 
     const btnCadastrar = page.getByText(/cadastrar grupo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR GRUPO');    
+    console.log('✅ Clicou em Cadastrar Grupo');    
 
-    console.log('***DADOS ENVIADOS PRA API***');
-    const nomegrupo = `TEST GRUPO ${Date.now()}`;
+    console.log('DADOS ENVIADOS PRA API');
+    const nomegrupo = `GRUPO BEBIDAS ${Date.now()}`;
     await page.getByLabel(/cadastrar novo grupo/i).fill(nomegrupo);
-    console.log('NOME DE GRUPO OK:', nomegrupo); 
-    console.log('***FIM DE DADOS ENVIADOS***');    
+    console.log('✅ Nome do Grupo:', nomegrupo.toUpperCase()); 
+    console.log('FIM DE DADOS ENVIADOS');    
     
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR GRUPO');  
+    console.log('✅ Clicou em Salvar Grupo');  
+
+    const salvarUrlResponse = await salvarGrupoPromise;     
+    const urlCompletaPost = salvarUrlResponse.url();
+    console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
     const salvarPessoaResponse = await salvarGrupoPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log('✅ DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idGrupo = dadosSalvos.controle.toString().trim();
-    console.log('CONTROLE:', idGrupo);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/produto/grupo/${idGrupo}`;    
+    const idGrupo = dadosSalvos.controle.toString().trim();    
+    const urlRegistroCriado = `${urlCompletaPost}/${idGrupo}`;                
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -58,9 +61,10 @@ test('Cadastro de grupos', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
+    console.log('✅ Novo Controle:', idGrupo); 
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();

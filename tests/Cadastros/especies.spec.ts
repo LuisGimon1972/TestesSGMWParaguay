@@ -16,21 +16,21 @@ test('Cadastro de espécies', async ({ page }) => {
  
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
+    console.log('✅ Clicou em Cadastro');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/metodos-pagos"]').click()
-    console.log('CLICOU EM ESPÉCIES'); 
+    console.log('✅ Clicou em Espécies'); 
 
     const btnCadastrar = page.getByText(/cadastrar espécie/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('CLICOU EM CADASTRAR ESPÉCIE');
+    console.log('✅ Clicou em Cadastrar Espécie');
 
-    console.log('***DADOS ENVIADOS PRA API***');
-    const descricao = `TEST ESPÉCIE ${Date.now()}`;
+    console.log('DADOS ENVIADOS PRA API');
+    const descricao = `ESPÉCIE EFECTIVO ${Date.now()}`;
     await page.getByLabel(/descrição/i).fill(descricao);
-    console.log('DESCRIÇÃO DE ESPÉCIE OK:', descricao);
+    console.log('✅ Descrição da Espécie:', descricao.toUpperCase());
 
     await page.locator('[aria-label="Tipo do cartão"]').click({ force: true });
     const cartao = page.locator('.q-menu:visible');
@@ -41,7 +41,7 @@ test('Cadastro de espécies', async ({ page }) => {
     .first()
     .click({ force: true });
     const tipocar = await page.locator('input[aria-label="Tipo do cartão"]').inputValue();      
-    console.log('TIPO DO CARTÃO OK:',tipocar);
+    console.log('✅ Tipo do Cartão:',tipocar.toUpperCase());
 
     await page.waitForTimeout(1000);
     const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
@@ -57,7 +57,7 @@ test('Cadastro de espécies', async ({ page }) => {
     }).first();
     await opcao.click();
     const tipomoe = await page.locator('input[aria-label="Moeda de cotação (diferente da sua empresa)"]').inputValue();      
-    console.log('MOEDA DE COTAÇÃO OK:', tipomoe);
+    console.log('✅ Moeda de Cotação:', tipomoe.toUpperCase());
 
     await page.waitForTimeout(1000);
     await page.locator('[aria-label="Tipo da espécie"]').click({ force: true });
@@ -69,22 +69,26 @@ test('Cadastro de espécies', async ({ page }) => {
     .first()
     .click({ force: true });
     const tipoesp = await page.locator('input[aria-label="Tipo da espécie"]').inputValue();      
-    console.log('TIPO DA ESPÉCIE OK:',tipoesp);
-    console.log('***FIM DE DADOS ENVIADOS***');    
+    console.log('✅ Tipo da Espécie:',tipoesp.toUpperCase());
+    console.log('FIM DE DADOS ENVIADOS***');    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR');  
+    console.log('✅ Clicou em Salvar');  
+
+    const salvarUrlResponse = await salvarEspeciePromise;     
+    const urlCompletaPost = salvarUrlResponse.url();
+    console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
     const salvarPessoaResponse = await salvarEspeciePromise;
     const dadosSalvos = await salvarPessoaResponse.json();
-    console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
+    console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
     const idEspecie = dadosSalvos.controle.toString().trim();
-    console.log('CONTROLE:', idEspecie);    
-    const urlRegistroCriado = `https://testepyeduardo.global-hom.sgmw.com.br/api/especie/${idEspecie}`;    
+    console.log('CONTROLE:', idEspecie);      
+    const urlRegistroCriado = `${urlCompletaPost}/${idEspecie}`;     
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -98,9 +102,10 @@ test('Cadastro de espécies', async ({ page }) => {
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
-
-    console.log('***RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO***');
-    console.log(`Status: ${getCriadoResponse.status()}`);
+    console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
+    console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
+    console.log('✅ Novo Controle:', idEspecie);      
+    console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
       const dadosCriado = await getCriadoResponse.json();
