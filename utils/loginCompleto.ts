@@ -6,7 +6,7 @@ export async function loginCompleto(page: Page) {
 
   console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
-  console.log('✅ Abriu Site');
+  console.log('✅ Abriu Site:', process.env.BASE_URL);
   await page.getByText(/log in|entrar/i).click();
   console.log('✅ Clicou em Entrar');
   
@@ -18,9 +18,10 @@ export async function loginCompleto(page: Page) {
   await page.locator('input[type="email"], input[type="text"]').first().fill(process.env.USER!);
   await page.locator('input[type="password"]').first().fill(process.env.PASS!);
   await page.waitForTimeout(1000);
-  console.log('✅ Login Preenchido');  
-  await page.getByRole('button', { name: /sign in|entrar/i }).click();
+  console.log('📝 Login e senha preenchidos.');
+  await page.getByRole('button', { name: /sign in|entrar/i }).click();  
   console.log('✅ Clicou em SIGN LN');
+  console.log('✅ Credenciais validadas com sucesso.');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
   console.log('✅ Chegou em Empresa');  
