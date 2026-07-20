@@ -9,7 +9,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
 
   await page.waitForTimeout(1000);
   await page.getByText(/pessoas/i).click({ force: true });
-  console.log('✅ Clicou em Passoas');
+  console.log('✅ Clicou em Pessoas');
 
   await page.waitForTimeout(2000);
   await page.waitForSelector('table');

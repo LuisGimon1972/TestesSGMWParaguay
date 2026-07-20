@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { obterProdutoAleatorio } from '../../utils/listaprodutos';
 
 test('Edição de datos produtos/serviços', async ({ page }) => {
       await loginCompleto(page);          
@@ -10,17 +11,17 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU EM PRODUTOS');      
+      console.log('✅ Clicou em Produtos');      
 
       await page.waitForSelector('table');
       await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });           
       const editIcons = await page.locator('table img[src*="edit"], table svg').count();
-      console.log('QUANTIDADE DE ÍCONES DE EDIÇÃO:', editIcons.toString().trim());
+      console.log('✅ Quantidade de icones de editar na grade:', editIcons.toString().trim());
 
       await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
       document.body.style.zoom = '0.7'; });
-      console.log('🔍 Zoom ajustado para 70% via CSS');
+      //console.log('🔍 Zoom ajustado para 70% via CSS');
 
       if (editIcons > 0) {               
             const getRegistroEditadoPromise = page.waitForResponse((response) =>
@@ -37,34 +38,34 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             );            
 
             await page.locator('table img[src="/icons/edit.svg"]').first().click();
-            console.log('CLICOU NO ÍCONE DE EDITAR');
+            console.log('✅ Clicou no ícone Editar');
              
             const getProdutoResponsee = await getProdutoPromise;
             const dadosAntes = await getProdutoResponsee.json();
-            console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+            console.log('✅ DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
             console.log(JSON.stringify(dadosAntes, null, 2));            
 
             const getRegistroEditadoResponse = await getRegistroEditadoPromise;
             const urlRegistroEditado = getRegistroEditadoResponse.url();
             const headersOriginais = getRegistroEditadoResponse.request().headers();
 
-            console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
+            console.log('🌐 URL do Registro Editado:', urlRegistroEditado);
 
-            console.log('***DADOS ENVIADOS PRA API***');            
+            console.log('DADOS ENVIADOS PRA API');            
 
-            const nomeproduto = `TEST PRODUTO ALTERADO ${Date.now()}`;
-            await page.getByLabel(/nome/i).fill(nomeproduto);
-            console.log('NOME DE PRODUTO ALTERADO OK:', nomeproduto);      
-
-            await page.waitForTimeout(1000);
-            const localestoque = `TEST LOCAL ESTOQUE ALTERADO ${Date.now()}`;
-            await page.getByLabel(/localização/i).fill(localestoque);
-            console.log('LOCALIZAÇÃO ALTERADA DE ESTOQUE OK:', localestoque);
+            const nomeproduto = obterProdutoAleatorio();
+            await page.getByLabel(/nome/i).fill(nomeproduto.nome);
+            console.log('✅ Nome de Produto:', nomeproduto.nome.toUpperCase());
 
             await page.waitForTimeout(1000);
-            const refestoque = `TEST REFERÊNCIA ESTOQUE ALTERADA ${Date.now()}`;
-            await page.getByLabel(/referência/i).fill(refestoque);
-            console.log('REFERÊNCIA ALTERADA ESTOQUE ESTOQUE OK:', refestoque);
+            const localestoque = obterProdutoAleatorio();
+            await page.getByLabel(/localização/i).fill(localestoque.categoria);
+            console.log('✅ Localização de Estoque:', localestoque.categoria.toUpperCase());
+
+            await page.waitForTimeout(1000);
+            const refestoque = obterProdutoAleatorio()
+            await page.getByLabel(/referência/i).fill(refestoque.id);
+            console.log('✅ Referência de Estoque:', refestoque.id);      
 
             await page.locator('input[aria-label="Fornecedor"]').focus();      
             await page.keyboard.press('ArrowDown');      
@@ -73,13 +74,13 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .filter({ hasText: /REGISTRO\s+ESTÁNDAR/i })
             .click();      
             const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
-            console.log('FORNECEDOR OK:', fornecedor); 
+            console.log('✅ Fornecedor:', fornecedor); 
 
             const uso = await page.locator('input[aria-label="Tipo de uso"]').inputValue();      
-            console.log('TIPO DE USO OK:', uso);
+            console.log('✅ Tipo de Uso:', uso);
       
             const unid = await page.locator('input[aria-label="Unidade de medida"]').inputValue();      
-            console.log('UNIDADE OK:', unid);
+            console.log('✅ Unidade:', unid);
             await page.waitForTimeout(1000);
 
             const precusto = Math.floor(Math.random() * 1000) + 1;
@@ -90,19 +91,19 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await inputPrecusto.press('Control+A');
             await inputPrecusto.press('Delete');
             await inputPrecusto.type(precusto.toString());
-            console.log('PREÇO DE CUSTO ALTERADO OK:', precusto.toFixed(0));
+            console.log('✅ Preço de custo Alterado:', precusto.toFixed(0));
             
             const campoLucro = page.locator('.q-field')
             .filter({ hasText: /% lucro/i })
             .last();
             const perLucro = await campoLucro.locator('input').inputValue();
-            console.log('% DE LUCRO OK:', perLucro);
+            console.log('✅ % de Lucro:', perLucro);
             
             const campoPrevenda = page.locator('.q-field')
             .filter({ hasText: /preço de venda/i })
             .last();
             const valorPrevenda = await campoPrevenda.locator('input').inputValue();
-            console.log('PREÇO DE VENDA ALTERADO OK:', valorPrevenda);            
+            console.log('✅ Preço de Venda Alterado:', valorPrevenda);            
             expect(Number(perLucro)).toBeGreaterThanOrEqual(0);
 
             const cantidad = Math.floor(Math.random() * 1000) + 1;
@@ -110,7 +111,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .filter({ hasText: /quantidade/i })
             .first();
             await campocantidad.locator('input').fill(cantidad.toString());
-            console.log('QUANTIDADE ALTERADA OK:', cantidad.toString());
+            console.log('✅ Quantidade Alterada:', cantidad.toString());
 
             const cantidadmin = Math.floor(Math.random() * 100) + 1;
             const campoCantidadMin = page
@@ -120,7 +121,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             const input = campoCantidadMin.locator('input');
             await expect(input).toBeVisible();
             await input.fill(String(cantidadmin));
-            console.log('QUANTIDADE MÍNIMA ALTERADA OK:', cantidadmin.toString());
+            console.log('✅ Quantidade mínina Alterada:', cantidadmin.toString());
 
             const cantidadmax = Math.floor(Math.random() * 1000) + 1;
             const campoCantidadmax = page
@@ -130,7 +131,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             const input2 = campoCantidadmax.locator('input');
             await expect(input).toBeVisible();
             await input2.fill(String(cantidadmax));
-            console.log('QUANTIDADE MÁXIMA ALTERARA OK:', cantidadmax.toString());
+            console.log('✅ Quantidade máxima Alterada:', cantidadmax.toString());
 
             await page.waitForTimeout(1000);
             const ivaField = page.locator('[aria-label="IVA"]').first();
@@ -145,15 +146,15 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             .first()
             .click();
             const iva = await page.locator('input[aria-label="IVA"]').inputValue();      
-            console.log('IVA ALTERADO OK:',iva);    
+            console.log('✅ IVA:',iva);    
 
             await page.waitForTimeout(1000); 
-            const obsproduto = `TEST ALTERAÇÃO DE OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
+            const obsproduto = `ALTERAÇÃO DE OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
             await page.locator('textarea.q-field__native').fill(obsproduto);
-            console.log('OBSERVAÇÕES OK:', obsproduto);
+            console.log('✅ Observações Alteradas:', obsproduto);
             await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);            
             
-            console.log('***FIM DE DADOS ENVIADOS***');  
+            console.log('FIM DE DADOS ENVIADOS***');  
             
             const salvarProdutoPromise = page.waitForResponse((response) =>
             response.url().includes('/api/py/produto') &&
@@ -165,7 +166,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await page.locator('.q-btn')
             .filter({ hasText: /salvar|guardar/i })
             .click({ force: true });
-            console.log('CLICOU EM SALVAR');            
+            console.log('✅ Clicou em Salvar');            
 
             await salvarProdutoPromise;
 
@@ -194,7 +195,8 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             throw new Error(`GET registro editado falhou: ${getProdutoResponse.status()} - ${textoResposta}`);
             }
             const dadosDepois = JSON.parse(textoResposta);
-            console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
+            console.log('✅ DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)');
+            console.log(`✅ Status do Registro Editado: ${String(getProdutoResponse.status())}`);
             console.log(JSON.stringify(dadosDepois, null, 2));             
        }
       else  {
