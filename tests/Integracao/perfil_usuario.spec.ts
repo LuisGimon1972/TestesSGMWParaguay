@@ -2,9 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-
+test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => { 
   await loginCompleto(page);
   
   const usuariosBtn = page.getByText(/usu[aá]rios/i).first();

@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../utils/loginCompleto';
 
-test('Integridade do Sistema', async ({ request, page }) => {
-  // 1. Login
-  await page.setViewportSize({ width: 1920, height: 1080 });
+test('Integridade do Sistema', async ({ request, page }) => {   
+
   await loginCompleto(page);
   console.log('✅ Login realizado com sucesso');
 

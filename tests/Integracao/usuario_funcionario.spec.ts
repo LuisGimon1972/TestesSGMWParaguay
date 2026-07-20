@@ -3,8 +3,6 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Usuário e Funcionário', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-
   await loginCompleto(page);
   
   const usuariosBtn = page.getByText(/usu[aá]rios/i).first();

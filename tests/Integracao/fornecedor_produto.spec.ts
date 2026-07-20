@@ -2,8 +2,7 @@ import { test } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
+test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {    
     await loginCompleto(page);    
 
     await page.waitForTimeout(1000);

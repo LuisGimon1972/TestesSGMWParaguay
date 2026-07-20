@@ -4,7 +4,6 @@ import { Page } from '@playwright/test';
 
 test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });   
-
     await loginCompletomobile(page);    
     
     menumobile(); 
