@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { obterNomePessoaAleatorio } from '../../utils/nomescompletos';
 
 test('Edição de datos Pessoas', async ({ page }) => {
   test.setTimeout(120000);  
@@ -8,17 +9,17 @@ test('Edição de datos Pessoas', async ({ page }) => {
 
   await page.waitForTimeout(1000);
   await page.getByText(/pessoas/i).click({ force: true });
-  console.log('CLICOU EM PESSOAS');
+  console.log('✅ Clicou em Passoas');
 
   await page.waitForTimeout(2000);
   await page.waitForSelector('table');
   await page.locator('.q-skeleton').first().waitFor({ state: 'detached', timeout: 15000 });
 
   const editIcons = await page.locator('table img[src="/icons/edit.svg"]').count();
-  console.log('Quantidade de ícones de edição:', editIcons.toString().trim());
+  console.log('✅ Quantidade de ícones de edição:', editIcons.toString().trim());
 
   if (editIcons === 0) {
-    console.log('O REGISTRO PADRÃO NÃO PODE SER ALTERADO!');
+    console.log('✅ O REGISTRO PADRÃO NÃO PODE SER ALTERADO!');
     return;
   }
 
@@ -36,20 +37,20 @@ test('Edição de datos Pessoas', async ({ page }) => {
   );  
 
   await page.locator('table img[src="/icons/edit.svg"]').first().click();
-  console.log('CLICOU NO ÍCONE DE EDITAR');
+  console.log('✅ Clicou no icone Editar');
   
   const getPessoaResponsee = await getPessoaPromise;
   const dadosAntes = await getPessoaResponsee.json();
-  console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
+  console.log('✅ DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
   console.log(JSON.stringify(dadosAntes, null, 2));  
 
   const getRegistroEditadoResponse = await getRegistroEditadoPromise;
   const urlRegistroEditado = getRegistroEditadoResponse.url();
   const headersOriginais = getRegistroEditadoResponse.request().headers();
 
-  console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
+  console.log('🌐 URL DO REGISTRO EDITADO:', urlRegistroEditado);
 
-  console.log('***DADOS ENVIADOS PRA API**');
+  console.log('DADOS ENVIADOS PRA API');
   await page.waitForTimeout(1000);
   await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
   const menuDoc1 = page.locator('.q-menu').last();
@@ -59,37 +60,34 @@ test('Edição de datos Pessoas', async ({ page }) => {
     .filter({ hasText: /B2F/i })
     .click({ force: true });
   const tipoop = await page.locator('input[aria-label="Tipo de operação"]').inputValue();
-  console.log('TIPO DE OPERAÇÃO OK:', tipoop);
+  console.log('✅ Tipo de Operação:', tipoop.toUpperCase());
 
   await page.waitForTimeout(1000);
-  const nome = `TEST CLIENTE ALTERADO ${Date.now()}`;
+  const nome = obterNomePessoaAleatorio();
   await page.getByLabel(/nome completo/i).fill(nome);
-  console.log('NOMBRE DO CLIENTE ALTERADO OK:', nome);
+  console.log('✅ Nome do clienye alterado:', nome);
 
   await page.waitForTimeout(1000);
-  const direccion = `TEST DIRECCION ALTERADA ${Date.now()}`;
+  const direccion = `RUA ARISTIDES GOMES FERNÁNDEZ ${Date.now()}`;
   await page.getByLabel(/direção/i).fill(direccion);
-  console.log('ENDEREÇO ALTERADO OK:', direccion);
+  console.log('✅Endereço Alterado:', direccion);
 
   await page.waitForTimeout(1000);
   const numero = Math.floor(Math.random() * 4000) + 1;
   const campoNumero = page.locator('.q-field')
     .filter({ hasText: /número/i })
     .last();  
-  console.log('NÚMERO ALTERADO OK:',numero.toString().trim());
+  console.log('✅ Número Alterado:',numero.toString().trim());
 
   await page.waitForTimeout(1000);
   const telefone = Array.from({ length: 9 }, () =>
     Math.floor(Math.random() * 10)
   ).join('');
-  const inputTelefone = page.locator('input[type="tel"]').first();
+  const inputTelefone = page.locator('input[type="tel"]:visible').first();
   await inputTelefone.scrollIntoViewIfNeeded();
-  await inputTelefone.click({ force: true });
-  await inputTelefone.press('Control+A');
-  await inputTelefone.press('Backspace');
-  await inputTelefone.type(telefone, { delay: 30 });
-  console.log('TELEFONE ALTERADO OK:', telefone);
-  console.log('***FIM DE DADOS ENVIADOS**');
+  await inputTelefone.fill(telefone);
+  console.log('✅ Telefone Alterado:', telefone);
+  console.log('FIM DE DADOS ENVIADOS**');
 
   const salvarPessoaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/pessoa') &&
@@ -123,14 +121,14 @@ test('Edição de datos Pessoas', async ({ page }) => {
   }
   const getPessoaResponse = await page.request.get(urlRegistroEditado, {
     headers: headersGetRegistro,
-  });
-  console.log(`STATUS GET REGISTRO EDITADO: ${String(getPessoaResponse.status())}`);
+  });  
   const textoResposta = await getPessoaResponse.text();
   if (!getPessoaResponse.ok()) {
     throw new Error(`GET registro editado falhou: ${getPessoaResponse.status()} - ${textoResposta}`);
   }
   const dadosDepois = JSON.parse(textoResposta);
-  console.log('***DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)***');
+  console.log('✅ DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)');
+  console.log(`✅ Status do Registro Editado: ${String(getPessoaResponse.status())}`);
   console.log(JSON.stringify(dadosDepois, null, 2));
 
   await capturarRequisicoesApi(page); 
