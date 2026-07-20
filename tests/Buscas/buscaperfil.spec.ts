@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
-test('Teste de busca crítico em Perfil de Acesso', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-
-  await loginCompleto(page);
+test('Teste de busca crítico em Perfil de Acesso', async ({ page }) => {   
+    await loginCompleto(page);
   
     const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
     await expect(usuariosBtn).toBeVisible({ timeout: 5000 });

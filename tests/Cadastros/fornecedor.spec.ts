@@ -12,11 +12,8 @@ function empresaRUC(): string {
   return empresaAleatoria.razao;
 }
 
-test('Cadastro de Fornecedores', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    
+test('Cadastro de Fornecedores', async ({ page }) => {    
     await loginCompleto(page);      
-
     await page.waitForTimeout(2000);       
     
     const salvarPessoaPromise = page.waitForResponse((response) =>

@@ -9,7 +9,6 @@ function gerarRUC(): string {
 }
 
 test('Cadastro de Clientes Contribuintes', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
     await loginCompleto(page);    
 
     await page.waitForTimeout(2000);       

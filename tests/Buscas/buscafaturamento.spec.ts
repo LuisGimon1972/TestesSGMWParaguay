@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
-test('Teste de busca crítico em Faturamento', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-
+test('Teste de busca crítico em Faturamento', async ({ page }) => {  
   await loginCompleto(page); 
 
   const venBtn = page.getByText(/vendas/i).first();

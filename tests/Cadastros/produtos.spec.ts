@@ -4,7 +4,6 @@ import { obterProdutoAleatorio } from '../../utils/listaprodutos';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Cadastro de produtos/serviços', async ({ page }) => {
-      await page.setViewportSize({ width: 1920, height: 1080 });
       await loginCompleto(page);      
       
       await page.waitForTimeout(2000);       

@@ -3,7 +3,6 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Cadastro de espécies', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });    
     await loginCompleto(page);    
 
     await page.waitForTimeout(2000);       

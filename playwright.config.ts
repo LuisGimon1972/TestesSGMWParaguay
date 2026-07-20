@@ -7,7 +7,11 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL,
     locale: 'pt-BR',
-    trace: 'on'
-    // ❌ NÃO coloque storageState aqui ainda
+    trace: 'on',
+    headless: false,
+    viewport: null,
+    launchOptions: {
+      args: ['--start-maximized'],
+    },
   },
 });

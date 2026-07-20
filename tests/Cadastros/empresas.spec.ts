@@ -28,8 +28,6 @@ function gerarRUC(): string {
 
 test('Teste de Cadastro de Empresas', async ({ page }) => {     
   test.setTimeout(90000); 
-
-  await page.setViewportSize({ width: 1920, height: 1080 });
   await aplicarZoom(page, '0.5');
 
   const salvarEmpresaPromise = page.waitForResponse((response) =>

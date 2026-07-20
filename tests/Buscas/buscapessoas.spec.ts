@@ -2,10 +2,8 @@ import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
 test('Teste de busca crítico em Pessoas', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
   await loginCompleto(page);
-
-  // Navega até Pessoas
+  
   await page.waitForTimeout(1000);
   await page.getByText(/pessoas/i).click({ force: true }); 
   console.log('CLICOU PESSOAS');

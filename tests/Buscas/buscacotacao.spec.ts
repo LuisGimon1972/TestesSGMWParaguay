@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
 
-test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 });
-
-  await loginCompleto(page);
+test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {  
+    await loginCompleto(page);
   
     await page.waitForTimeout(1000);
     const cadBtn = page.getByText(/cadastros/i).first();
