@@ -21,7 +21,7 @@ export async function loginCompleto(page: Page) {
   console.log('📝 Login e senha preenchidos.');
   await page.getByRole('button', { name: /sign in|entrar/i }).click();  
   console.log('✅ Clicou em SIGN LN');
-  console.log('✅ Credenciais validadas com sucesso.');
+  console.log('✅ Credenciais validadas com sucesso!');
   
   await page.waitForURL(/empresas/, { timeout: 20000 });
   console.log('✅ Chegou em Empresa');  
