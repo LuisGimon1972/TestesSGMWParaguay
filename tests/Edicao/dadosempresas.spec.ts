@@ -1,8 +1,6 @@
 import { test } from '@playwright/test';
 
-test('Teste de Dados Cadastro de DAV', async ({ page }) => {    
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  
+test('Teste de Dados Cadastro de DAV', async ({ page }) => {      
   await page.emulateMedia({ media: 'screen' });
   await page.evaluate(() => {
   document.body.style.zoom = '0.5';});

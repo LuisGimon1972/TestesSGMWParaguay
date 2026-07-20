@@ -3,9 +3,7 @@ import { loginCompleto } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Edição de datos Pessoas', async ({ page }) => {
-  test.setTimeout(120000);
-
-  await page.setViewportSize({ width: 1920, height: 1080 });
+  test.setTimeout(120000);  
   await loginCompleto(page);
 
   await page.waitForTimeout(1000);

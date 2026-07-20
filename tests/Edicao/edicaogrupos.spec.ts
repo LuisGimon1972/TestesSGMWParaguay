@@ -4,8 +4,6 @@ import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Edição de dados grupos', async ({ page }) => {
   test.setTimeout(120000);
-
-  await page.setViewportSize({ width: 1920, height: 1080 });
   await loginCompleto(page);
 
   const cadBtn = page.getByText(/cadastros/i).first();
