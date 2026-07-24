@@ -26,7 +26,7 @@ export async function loginCompleto(page: Page) {
   await page.waitForURL(/empresas/, { timeout: 20000 });
   console.log('✅ Chegou em Empresa');  
   
-  const botao = page.locator('button:has-text("ENTRAR")').nth(7);
+  const botao = page.locator('button:has-text("ENTRAR")').nth(0);
   //const botao = page.locator('button:has-text("ENTRAR")').first();
   await botao.highlight();
   await botao.evaluate((el: any) => {
