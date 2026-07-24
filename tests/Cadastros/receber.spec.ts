@@ -6,7 +6,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     test.setTimeout(60000); 
     await loginCompleto(page);       
     
-    const salvarPagarPromise = page.waitForResponse((response) =>
+    const salvarReceberPromise = page.waitForResponse((response) =>
     response.url().includes('/api/financeiro') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
@@ -112,7 +112,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     const urlCompletaPost = respostaSalvar.url();
     console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
 
-    const salvarPagarResponse = await salvarPagarPromise;
+    const salvarPagarResponse = await salvarReceberPromise;
     const dadosSalvos = await salvarPagarResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
@@ -120,20 +120,20 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     const dadosTratados = await respostaSalvar.json();
     console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');    
     
-    let idPagar = '';
+    let idReceber = '';
     if (dadosTratados.venda && dadosTratados.controle) {
-        idPagar = dadosTratados.controle.toString().trim();
+        idReceber = dadosTratados.controle.toString().trim();
     } else if (dadosTratados.data && dadosTratados.data[0] && dadosTratados.data[0].controle) {
-        idPagar = dadosTratados.controle.toString().trim();
+        idReceber = dadosTratados.controle.toString().trim();
     } else if (dadosTratados[0] && dadosTratados[0].controle) {
-        idPagar = dadosTratados[0].controle.toString().trim();
+        idReceber = dadosTratados[0].controle.toString().trim();
     }
 
-    if (!idPagar) {
+    if (!idReceber) {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
     }        
     
-    const urlRegistroCriado = `${urlCompletaPost}/${idPagar}`;                
+    const urlRegistroCriado = `${urlCompletaPost}/${idReceber}`;                
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -149,7 +149,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     });
     console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
-    console.log('✅ Novo Controle:', idPagar);        
+    console.log('✅ Novo Controle:', idReceber);        
     console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
