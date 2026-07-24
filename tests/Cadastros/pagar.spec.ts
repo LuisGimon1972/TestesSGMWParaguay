@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto } from '../../utils/loginCompleto';
+import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Cadastro Pagamento', async ({ page }) => {    
     test.setTimeout(60000); 
     await loginCompleto(page);       
     
-    const salvarDavPromise = page.waitForResponse((response) =>
+    const salvarPagarPromise = page.waitForResponse((response) =>
     response.url().includes('/api/financeiro') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
@@ -26,7 +27,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Pagamento');   
 
-    console.log('DADOS ENVIADOS PRA API');   
+    console.log('📝 DADOS ENVIADOS PRA API');   
     
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(1).click();
@@ -34,8 +35,8 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await primeiraOpcaoMenu.waitFor({ state: 'visible' });
     await primeiraOpcaoMenu.click();
-    //const destino = await page.locator('input[aria-label="Tipo de Pessoa"]').inputValue();      
-    //console.log('✅ Selecionou um Destinatário/Remitente',destino.toUpperCase());
+    const tipoper = await page.locator('input[aria-label="Tipo de pessoa"]').inputValue();      
+    console.log('✅ Selecionou um Tipo de Pessoa:',tipoper.toUpperCase());
 
     await page.waitForTimeout(2000);
     
@@ -45,7 +46,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await segundoOpcaoMenu.waitFor({ state: 'visible' });
     await segundoOpcaoMenu.click();
     const cliente = await page.locator('input[aria-label="Cliente"]').inputValue();      
-    console.log('✅ Selecionou um Cliente',cliente.toUpperCase());
+    console.log('✅ Selecionou um Cliente:',cliente.toUpperCase());
 
     await page.waitForTimeout(2000);
     
@@ -55,19 +56,19 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await tercerOpcaoMenu.waitFor({ state: 'visible' });
     await tercerOpcaoMenu.click();
     const plano = await page.locator('input[aria-label="Cliente"]').inputValue();      
-    console.log('✅ Selecionou um Plano de Contas',plano.toUpperCase());
+    console.log('✅ Selecionou um Plano de Contas:',plano.toUpperCase());
 
     const descricao = `ESPÉCIE EFECTIVO ${Date.now()}`;
     await page.getByLabel(/descrição/i).fill(descricao);
     console.log('✅ Descrição da Espécie:', descricao.toUpperCase());
 
-        await page.locator('.q-select').nth(4).click();
+    await page.locator('.q-select').nth(4).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
     const quaOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await quaOpcaoMenu.waitFor({ state: 'visible' });
     await quaOpcaoMenu.click();
     const especie = await page.locator('input[aria-label="Cliente"]').inputValue();      
-    console.log('✅ Selecionou um Plano de Contas',plano.toUpperCase());
+    console.log('✅ Selecionou uma Espécie:',plano.toUpperCase());
 
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
@@ -84,13 +85,13 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     .filter({ hasText: /valor original/i })
     .last();
     await campoOrig.locator('input').fill(valorOrig.toString());
-    console.log('✅ Preço de Custo:', valorOrig.toFixed(0));        
+    console.log('✅ Valor Original:', valorOrig.toFixed(0));        
     
     const btnSalvar = page.locator('.q-btn').filter({ hasText: /salvar/i });
     await btnSalvar.waitFor({ state: 'visible' });
     await btnSalvar.click({ force: true });
     console.log('✅ Clicou em Salvar');  
-    console.log('FIM DE DADOS ENVIADOS PRA API');   
+    console.log('📝 FIM DE DADOS ENVIADOS PRA API');   
     
 
     console.log('✅ ENVIANDO DADOS E AGUARDANDO RETORNO DA API');
@@ -111,28 +112,28 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     const urlCompletaPost = respostaSalvar.url();
     console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
 
-    const salvarDavResponse = await salvarDavPromise;
-    const dadosSalvos = await salvarDavResponse.json();
+    const salvarPagarResponse = await salvarPagarPromise;
+    const dadosSalvos = await salvarPagarResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
    
     const dadosTratados = await respostaSalvar.json();
     console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');    
     
-    let idDav = '';
-    if (dadosTratados.venda && dadosTratados.venda.controle) {
-        idDav = dadosTratados.venda.controle.toString().trim();
+    let idPagar = '';
+    if (dadosTratados.venda && dadosTratados.controle) {
+        idPagar = dadosTratados.controle.toString().trim();
     } else if (dadosTratados.data && dadosTratados.data[0] && dadosTratados.data[0].controle) {
-        idDav = dadosTratados.data[0].controle.toString().trim();
+        idPagar = dadosTratados.controle.toString().trim();
     } else if (dadosTratados[0] && dadosTratados[0].controle) {
-        idDav = dadosTratados[0].controle.toString().trim();
+        idPagar = dadosTratados[0].controle.toString().trim();
     }
 
-    if (!idDav) {
+    if (!idPagar) {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
-    }    
+    }        
     
-    const urlRegistroCriado = urlCompletaPost.replace('/geral', `/${idDav}`);
+    const urlRegistroCriado = `${urlCompletaPost}/${idPagar}`;                
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -148,7 +149,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     });
     console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
-    console.log('✅ Novo Controle:', idDav);        
+    console.log('✅ Novo Controle:', idPagar);        
     console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
@@ -160,4 +161,5 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
       const corpoBruto = await getCriadoResponse.text();
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
+    await capturarRequisicoesApi(page);     
 });
