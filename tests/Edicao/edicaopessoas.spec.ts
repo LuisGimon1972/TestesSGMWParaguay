@@ -41,8 +41,8 @@ test('Edição de datos Pessoas', async ({ page }) => {
   
   const getPessoaResponsee = await getPessoaPromise;
   const dadosAntes = await getPessoaResponsee.json();
-  console.log('✅ DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
-  console.log(JSON.stringify(dadosAntes, null, 2));  
+  console.log('✅ REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
+  console.log('📦 JSON do Registro Editado:'+JSON.stringify(dadosAntes, null, 2));  
 
   const getRegistroEditadoResponse = await getRegistroEditadoPromise;
   const urlRegistroEditado = getRegistroEditadoResponse.url();
@@ -50,7 +50,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
 
   console.log('🌐 URL DO REGISTRO EDITADO:', urlRegistroEditado);
 
-  console.log('DADOS ENVIADOS PRA API');
+  console.log('📝 DADOS ENVIADOS PRA API');
   await page.waitForTimeout(1000);
   await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
   const menuDoc1 = page.locator('.q-menu').last();
@@ -87,7 +87,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
   await inputTelefone.scrollIntoViewIfNeeded();
   await inputTelefone.fill(telefone);
   console.log('✅ Telefone Alterado:', telefone);
-  console.log('FIM DE DADOS ENVIADOS**');
+  console.log('📝 FIM DE DADOS ENVIADOS**');
 
   const salvarPessoaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/pessoa') &&
@@ -99,7 +99,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
   await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
     .click({ force: true });
-  console.log('CLICOU EM SALVAR');
+  console.log('✅ Clicou em Salvar');
 
   await salvarPessoaPromise;
 
@@ -129,7 +129,7 @@ test('Edição de datos Pessoas', async ({ page }) => {
   const dadosDepois = JSON.parse(textoResposta);
   console.log('✅ DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)');
   console.log(`✅ Status do Registro Editado: ${String(getPessoaResponse.status())}`);
-  console.log(JSON.stringify(dadosDepois, null, 2));
+  console.log('📦 JSON do Registro Consultado:'+ JSON.stringify(dadosDepois, null, 2));
 
   await capturarRequisicoesApi(page); 
   await page.waitForTimeout(4000);      

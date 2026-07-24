@@ -21,7 +21,6 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
       await page.emulateMedia({ media: 'screen' });
       await page.evaluate(() => {
       document.body.style.zoom = '0.7'; });
-      //console.log('🔍 Zoom ajustado para 70% via CSS');
 
       if (editIcons > 0) {               
             const getRegistroEditadoPromise = page.waitForResponse((response) =>
@@ -42,8 +41,8 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
              
             const getProdutoResponsee = await getProdutoPromise;
             const dadosAntes = await getProdutoResponsee.json();
-            console.log('✅ DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
-            console.log(JSON.stringify(dadosAntes, null, 2));            
+            console.log('✅ REGISTRO NO BANCO (ANTES DA ALTERAÇÃO)');
+            console.log('📦 JSON do Registro Editado:'+JSON.stringify(dadosAntes, null, 2));            
 
             const getRegistroEditadoResponse = await getRegistroEditadoPromise;
             const urlRegistroEditado = getRegistroEditadoResponse.url();
@@ -51,7 +50,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
 
             console.log('🌐 URL do Registro Editado:', urlRegistroEditado);
 
-            console.log('DADOS ENVIADOS PRA API');            
+            console.log('📝 DADOS ENVIADOS PRA API');            
 
             const nomeproduto = obterProdutoAleatorio();
             await page.getByLabel(/nome/i).fill(nomeproduto.nome);
@@ -154,7 +153,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             console.log('✅ Observações Alteradas:', obsproduto);
             await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);            
             
-            console.log('FIM DE DADOS ENVIADOS***');  
+            console.log('📝 FIM DE DADOS ENVIADOS***');  
             
             const salvarProdutoPromise = page.waitForResponse((response) =>
             response.url().includes('/api/py/produto') &&
@@ -197,7 +196,7 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             const dadosDepois = JSON.parse(textoResposta);
             console.log('✅ DADOS APÓS DA ALTERAÇÃO (GET DO REGISTRO EDITADO)');
             console.log(`✅ Status do Registro Editado: ${String(getProdutoResponse.status())}`);
-            console.log(JSON.stringify(dadosDepois, null, 2));             
+            console.log('📦 JSON do Registro Consultado:'+JSON.stringify(dadosDepois, null, 2));             
        }
       else  {
             console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');  
