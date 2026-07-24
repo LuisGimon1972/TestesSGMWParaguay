@@ -20,12 +20,12 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="financeiro/receber"]').click()
-    console.log('✅ Clicou em Finaceiro Pagar');            
+    console.log('✅ Clicou em Finaceiro Receber');            
     
     const btnCadastrar = page.getByText(/cadastrar recebimento/i).first();
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
-    console.log('✅ Clicou em Cadastrar Pagamento');   
+    console.log('✅ Clicou em Cadastrar Recebimento');   
 
     console.log('📝 DADOS ENVIADOS PRA API');   
     
