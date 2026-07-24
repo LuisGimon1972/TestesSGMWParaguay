@@ -41,7 +41,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     await page.waitForTimeout(2000);
     
     await page.locator('.q-select').nth(2).click();
-    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[4]').click();       
+    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[3]').click();       
     const segundoOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await segundoOpcaoMenu.waitFor({ state: 'visible' });
     await segundoOpcaoMenu.click();
