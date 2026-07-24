@@ -48,8 +48,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     const dia = String(hoje.getDate()).padStart(2, '0');
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
     const ano = hoje.getFullYear();
-    const dataISO = `${dia}-${mes}-${ano}`;
-    
+    const dataISO = `${dia}-${mes}-${ano}`;    
     const inputValidade = page.getByLabel(/validade do orçamento|previsão da entrega/i);
     await inputValidade.waitFor({ state: 'visible' });
     await inputValidade.fill(dataISO);
