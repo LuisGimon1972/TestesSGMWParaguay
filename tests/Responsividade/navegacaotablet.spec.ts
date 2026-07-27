@@ -5,6 +5,7 @@ import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
+    console.log(`🕒 Inicio do teste: ${formatarDataHora(new Date())}`);   
     await loginCompletomobile(page);      
     
     const dashboardBtn = page.getByText(/dashboard/i).first();
