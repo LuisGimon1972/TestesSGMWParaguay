@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Produto e Dav', async ({ page }) => {
@@ -145,4 +145,5 @@ test('Teste de Integração Produto e Dav', async ({ page }) => {
     } else {
     console.log(`⚠️ Produto não integrado com DAV — grade vazia`);
     }     
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => { 
@@ -62,5 +62,5 @@ test('Teste de Integração Perfil de acesso e Usuários', async ({ page }) => {
     else{
         console.log(`✅ Perfil de acesso não integrado com Usuários`);
     }      
-
+  console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

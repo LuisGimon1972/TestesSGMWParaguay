@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {    
@@ -154,6 +154,7 @@ test('Teste de Integração Fornecedor e Produtos', async ({ page }) => {
     else{
             console.log(`✅ Fornecedor não integrado com Produtos`);  
     }         
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
         
 
 function gerarRUC() {

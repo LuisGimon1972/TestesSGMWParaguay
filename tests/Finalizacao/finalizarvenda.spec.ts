@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Teste de Faturamento de Vendas', async ({ page }) => {
     await loginCompleto(page);          
@@ -148,4 +148,5 @@ test('Teste de Faturamento de Vendas', async ({ page }) => {
     function calcularEfectivo(total: number): number {
     return Math.ceil(total / 10) * 10;
 }
+console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

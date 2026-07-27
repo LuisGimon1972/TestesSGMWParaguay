@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Cliente e Faturamento', async ({ page }) => {    
@@ -148,7 +148,7 @@ test('Teste de Integração Cliente e Faturamento', async ({ page }) => {
     }       
 
     await page.waitForTimeout(2000);
-    
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);    
 
 function gerarRUC() {
   const base = Math.floor(1000000 + Math.random() * 9000000).toString(); // 7 dígitos

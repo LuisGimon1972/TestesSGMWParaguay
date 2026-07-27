@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Integração Usuário e Funcionário', async ({ page }) => {
@@ -124,9 +124,7 @@ test('Teste de Integração Usuário e Funcionário', async ({ page }) => {
     else{
         console.log(`✅ Usuário não integrado com Funcionário`);
     }      
-
-
-
+  console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });
 
 function gerarRUC() {
