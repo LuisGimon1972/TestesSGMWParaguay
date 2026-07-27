@@ -1,6 +1,6 @@
 import { test, devices } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
- import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test.describe('Navegação de Menus - Mobile', () => {
   test('Deve navegar por todos os menus principais no modo mobile', async ({ page }) => {
@@ -92,7 +92,6 @@ test.describe('Navegação de Menus - Mobile', () => {
       { principal: 'Usuários' , sub: 'Perfil de acesso' }
     ];
 
-    // Faz a iteração passando o nome do menu principal e do submenu (se houver)
     for (const item of fluxoNavegacao) {
       await navegarPara(item.principal, item.sub);
     }    
