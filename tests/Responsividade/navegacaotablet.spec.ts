@@ -100,5 +100,6 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
     await capturarRequisicoesApi(page);                
+    await page.waitForTimeout(3000);
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

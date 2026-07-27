@@ -45,11 +45,28 @@ export async function loginCompletomobile(page: Page) {
   console.log('CLICOU EM ACESSAR EMPRESA');
 
   // 🔥 remover modais
+await page.evaluate(() => {
+    document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
+      el.remove();
+    });
+  });
+  
+  await page.waitForTimeout(2000);
   await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => {
       el.remove();
     });
   });
+
+  console.log('✅ Modal + Overlay Removidos');
+
+  const botaoFecharPopup = page.locator('button:has-text("×"), svg[aria-label="Close"], .modal-close');
+
+  if (await botaoFecharPopup.isVisible()) {
+    console.log('Popup de atualização detectado, fechando...');
+    await botaoFecharPopup.click().catch(() => {});
+    console.log('Popup fechado com sucesso.');
+  }
 
   console.log('MODAL + OVERLAY REMOVIDOS');
 

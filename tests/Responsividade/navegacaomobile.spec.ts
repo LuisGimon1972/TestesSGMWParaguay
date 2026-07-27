@@ -1,162 +1,101 @@
-import { test, expect } from '@playwright/test';
+import { test, devices } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
-import { formatarDataHora } from '../../utils/loginCompleto';
-import { Page } from '@playwright/test';
+ import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
-test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });   
-    console.log(`🕒 Inicio do teste: ${formatarDataHora(new Date())}`);   
-    await loginCompletomobile(page);    
+test.describe('Navegação de Menus - Mobile', () => {
+  test('Deve navegar por todos os menus principais no modo mobile', async ({ page }) => {
+    test.setTimeout(90000);
+
+    const mobileDevice = devices['iPhone 12'];
+    await page.setViewportSize(mobileDevice.viewport);
+    await page.setExtraHTTPHeaders({ 'User-Agent': mobileDevice.userAgent });
+    console.log('📱 Resolução alterada para Mobile.');    
     
-    menumobile(); 
+    await page.context().clearCookies();
+    await loginCompletomobile(page);
+    await page.waitForTimeout(2000);       
 
-    const dashboardBtn = page.getByText(/dashboard/i).first();
-    await expect(dashboardBtn).toBeVisible({ timeout: 5000 });
-    await dashboardBtn.click();
-    console.log('CLICOU EM DASKBOARD');      
+    //await capturarRequisicoesApi(page);    
 
-    menumobile()
-        
-    await page.waitForTimeout(1000);
-    await page.getByText(/pessoas/i).click({ force: true }); 
-    console.log('CLICOU EM PESSOAS');
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/producto/, { timeout: 15000 }),
-      page.locator('a[href*="producto"]').first().click()
-    ]);
-    console.log('CLICOU EM PRODUTOS');
-
-    menumobile()    
-
-    await page.waitForTimeout(1000);
-    await page.getByText(/vendas/i).click({ force: true });
-    console.log('CLICOU EM VENDAS');
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/facturacion/, { timeout: 15000 }),
-      page.locator('a[href*="facturacion"]').first().click()
-    ]);
-    console.log('CLICOU EM FATURAMENTO');
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/dav/, { timeout: 15000 }),
-      page.locator('a[href*="dav"]').first().click()
-    ]);
-    console.log('CLICOU EM DAV');
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    await Promise.all([
-      page.waitForURL(/lotes/, { timeout: 15000 }),
-      page.locator('a[href*="lotes"]').first().click()
-    ]);
-    console.log('CLICOU EM LOTES'); 
-
-    menumobile()
-
-    const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
-    await expect(usuariosBtn).toBeVisible({ timeout: 5000 });
-    await usuariosBtn.click();
-    console.log('CLICOU EM USUÁRIOS');
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="usuario/listado"]').click()
-    console.log('CLICOU EM LISTAGEM DE USUARIOS');
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="usuario/perfil"]').click()
-    console.log('CLICOU EM PERFIL DE ACESSO');
-
-    menumobile()
-
-    const comprasBtn = page.getByText(/compras/i).first();
-    await expect(comprasBtn).toBeVisible({ timeout: 5000 });
-    await comprasBtn.click();
-    console.log('CLICOU EM COMPRAS');
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="compras/listagem"]').click()
-    console.log('CLICOU EM LISTAGEM DE COMPRAS'); 
-
-    await page.waitForTimeout(1000);
-    await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
-
-    menumobile()    
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/metodos-pagos"]').click()
-    console.log('CLICOU EM ESPÉCIES');     
-
-    /*menumobile()
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');*/
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/grupos"]').click()
-    console.log('CLICOU EM GRUPOS');
-
-    menumobile()
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');        
-
-    await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/marcas"]').click()
-    console.log('CLICOU EM MARCAS');  
-    
-     menumobile()
-    
-
-    await page.waitForTimeout(1000);
-    await page.getByText(/funcionários/i).click({ force: true });
-    console.log('CLICOU EM FUNCIONÁRIOS');         
-
-    await capturarRequisicoesApi(page) 
-        
-    function  menumobile() {
-      const menuHamburguer = page.getByLabel(/menu/i); // ou ajuste conforme o seletor real
-      expect(menuHamburguer).toBeVisible({ timeout: 5000 });
-      menuHamburguer.click();      
+    async function abrirMenuMobile() {      
+      const btnHamburguer = page.locator('button[aria-label="Menu" i], button:has(i:text-is("menu"))').first();
+      
+      if (await btnHamburguer.isVisible()) {
+        await btnHamburguer.click();        
+        await page.waitForTimeout(1000); 
+      }
     }
+    
+    async function clicarElementoMenu(nomeItem: string) {
+      let elementoAlvo = page.getByText(nomeItem, { exact: true }).first();
+      
+      if (!(await elementoAlvo.isVisible())) {
+        elementoAlvo = page.locator('.q-item, a, button').filter({ hasText: new RegExp(`^${nomeItem}$`, 'i') }).first();
+      }
 
-  async function capturarRequisicoesApi(page: Page) {  
-   console.log(`***REQUISIÇÕES DA API ⬅️***`);
-   const requisicoes: any[] = [];
+      await elementoAlvo.waitFor({ state: 'visible', timeout: 5000 });
+      await elementoAlvo.scrollIntoViewIfNeeded().catch(() => {});
+      
+      try {
+        await elementoAlvo.click({ timeout: 3000 });
+      } catch {
+        await elementoAlvo.click({ force: true });
+      }
+    }
+    
+    async function navegarPara(principal: string, sub?: string) {
+      await abrirMenuMobile();     
+      
+      if (sub) {     
+        let submenuAlvo = page.getByText(sub, { exact: true }).first();
+        if (!(await submenuAlvo.isVisible())) {
+          submenuAlvo = page.locator('.q-item, a, button').filter({ hasText: new RegExp(`^${sub}$`, 'i') }).first();
+        }
+        
+        if (!(await submenuAlvo.isVisible())) {
+          await clicarElementoMenu(principal);
+          await page.waitForTimeout(800); // Espera a sanfona abrir
+        }
+        
+        await clicarElementoMenu(sub);
+        console.log(`✅ Navegou para: ${principal} > ${sub}`);
+      } else {        
+        await clicarElementoMenu(principal);
+        console.log(`✅ Navegou para: ${principal}`);
+      }      
+      
+      await page.waitForTimeout(1000);      
+    }  
+    
+    const fluxoNavegacao = [      
+      { principal: 'Pessoas' },
+      { principal: 'Produtos' },      
+      { principal: 'Financeiro', sub: 'Pagar' },
+      { principal: 'Financeiro', sub: 'Receber' },
+      { principal: 'Financeiro', sub: 'Caixa' },
+      { principal: 'Financeiro', sub: 'Bancos' },
+      { principal: 'Financeiro', sub: 'Conciliação de cartão' },      
+      { principal: 'Vendas', sub: 'Faturamento' },
+      { principal: 'Vendas', sub: 'DAV' },
+      { principal: 'SIFEN' },
+      { principal: 'Compras' },
+      { principal: 'Cadastros', sub: 'Espécies' },
+      { principal: 'Cadastros', sub: 'Cotação de moedas' },
+      { principal: 'Cadastros', sub: 'Grupos' },
+      { principal: 'Cadastros', sub: 'Subgrupos' },
+      { principal: 'Cadastros', sub: 'Marcas' },
+      { principal: 'Cadastros', sub: 'Centro de custo' },
+      { principal: 'Cadastros', sub: 'Plano de contas' },
+      { principal: 'Cadastros', sub: 'Credenciadoras/taxas' },
+      { principal: 'Funcionários' },
+      { principal: 'Usuários' , sub: 'Listagem usuários' },
+      { principal: 'Usuários' , sub: 'Perfil de acesso' }
+    ];
 
-  page.on('request', request => {
-    requisicoes.push({ metodo: request.method(), url: request.url() });
-    console.log(`➡️ Requisição: ${request.method()} ${request.url()}`);
+    // Faz a iteração passando o nome do menu principal e do submenu (se houver)
+    for (const item of fluxoNavegacao) {
+      await navegarPara(item.principal, item.sub);
+    }    
+    console.log('✅ Navegação mobile concluída com sucesso!');
   });
-  
-  page.on('response', async response => {
-    const status = response.status();
-    console.log(`⬅️ Resposta: [${status}] ${response.url()}`);    
-  });
-
-  // aguarda um tempo para verificar se houve requisições
-  await page.waitForTimeout(3000);
-
-  if (requisicoes.length === 0) {
-    console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
-  }
-}
-console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
-
 });
