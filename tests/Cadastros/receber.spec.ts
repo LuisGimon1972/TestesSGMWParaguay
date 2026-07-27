@@ -37,8 +37,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     await primeiraOpcaoMenu.click();
     const tipoper = await page.locator('input[aria-label="Tipo de pessoa"]').inputValue();      
     console.log('✅ Selecionou um Tipo de Pessoa:',tipoper.toUpperCase());
-
-    await page.waitForTimeout(2000);
+    
     
     await page.locator('.q-select').nth(2).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[3]').click();       

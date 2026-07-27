@@ -144,5 +144,6 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
     await capturarRequisicoesApi(page);     
+    await page.waitForTimeout(4000);    
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });
