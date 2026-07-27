@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { obterProdutoAleatorio } from '../../utils/listaprodutos';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
@@ -183,7 +183,6 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
             console.log('Corpo bruto da resposta:', corpoBruto);
       }
 
-      expect([404, 200]).toContain(getCriadoResponse.status());             
-     // await capturarRequisicoesApi(page); 
-     // await page.waitForTimeout(4000);
+      expect([404, 200]).toContain(getCriadoResponse.status());                  
+     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

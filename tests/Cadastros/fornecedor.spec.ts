@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 import { empresasParaguai } from '../../utils/rucs-paraguai';
 
@@ -198,5 +198,6 @@ test('Cadastro de Fornecedores', async ({ page }) => {
     expect([404, 200]).toContain(getCriadoResponse.status());       
         
     await capturarRequisicoesApi(page); 
-    await page.waitForTimeout(4000);   
+    await page.waitForTimeout(4000); 
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);     
 });

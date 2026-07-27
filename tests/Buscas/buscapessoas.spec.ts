@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { test } from '@playwright/test';
+import { loginCompleto, formatarDataHora   } from '../../utils/loginCompleto';
 
 test('Teste de busca crítico em Pessoas', async ({ page }) => {
   await loginCompleto(page);
@@ -23,4 +23,5 @@ await page.waitForTimeout(1000);
 await page.keyboard.press('Enter');
 await page.waitForTimeout(2000);
 console.log('BUSCA PESSOA INEXISTENTE OK:', nomeInexistente);
+console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

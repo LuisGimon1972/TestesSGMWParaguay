@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Teste de busca crítico em DAV', async ({ page }) => {
   await loginCompleto(page); 
@@ -33,4 +33,5 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
     console.log('BUSCA DAV INEXISTENTE OK:', davInexistente);
     
     await page.waitForTimeout(4000);  
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);        
 });

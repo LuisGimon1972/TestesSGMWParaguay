@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { fecharPopupAtualizacao } from '../../utils/novidade';
 import { empresasParaguai } from '../../utils/rucs-paraguai';
+import { formatarDataHora } from '../../utils/loginCompleto';
 
 const aplicarZoom = async (page: Page, zoomLevel: string) => {
   await page.emulateMedia({ media: 'screen' });
@@ -259,4 +260,5 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   await page.evaluate(() => {
     document.querySelectorAll('.q-dialog, .q-dialog__backdrop, .q-overlay').forEach((el: any) => el.remove());
   }).catch(() => {});
+  console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

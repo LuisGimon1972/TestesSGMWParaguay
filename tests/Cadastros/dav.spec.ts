@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Teste de Cadastro de DAV', async ({ page }) => {    
     test.setTimeout(60000); 
@@ -149,4 +149,5 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
       const corpoBruto = await getCriadoResponse.text();
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

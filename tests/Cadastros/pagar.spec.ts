@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora   } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Cadastro Pagamento', async ({ page }) => {    
@@ -162,4 +162,5 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
       console.log('Corpo bruto da resposta:', corpoBruto);
     }
     await capturarRequisicoesApi(page);     
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

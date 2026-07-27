@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Exclusão de datos funcionários', async ({ page }) => {
@@ -64,13 +64,11 @@ test('Exclusão de datos funcionários', async ({ page }) => {
       
       expect([404, 200]).toContain(getExcluidoResponse.status());
 
-      console.log(`Registro ${codigoLimpo} removido com sucesso.`);      
-      
-      
-
+      console.log(`Registro ${codigoLimpo} removido com sucesso.`);                 
       await page.waitForTimeout(2000);
       await capturarRequisicoesApi(page);
       await page.waitForTimeout(4000);
+      console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
   } else {
       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
   }

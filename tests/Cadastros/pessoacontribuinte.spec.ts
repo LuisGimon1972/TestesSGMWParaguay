@@ -9,9 +9,7 @@ function gerarRUC(): string {
 }
 
 test('Cadastro de Clientes Contribuintes', async ({ page }) => {
-    await loginCompleto(page);    
-
-    await page.waitForTimeout(2000);       
+    await loginCompleto(page);        
     
     const salvarPessoaPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/pessoa') &&

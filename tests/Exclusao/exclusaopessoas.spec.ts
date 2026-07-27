@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Exclusão de datos Pessoas', async ({ page }) => {
@@ -77,9 +77,10 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
 
       console.log(`Registro ${codigoLimpo} removido com sucesso.`);      
   
-      await capturarRequisicoesApi(page);
+      await capturarRequisicoesApi(page);    
       await page.waitForTimeout(4000);
+      console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
     } else {
       console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
-    }
+    }    
 });
