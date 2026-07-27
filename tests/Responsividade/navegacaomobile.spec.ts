@@ -1,5 +1,6 @@
 import { test, devices } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
+import { formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test.describe('Navegação de Menus - Mobile', () => {
@@ -15,7 +16,7 @@ test.describe('Navegação de Menus - Mobile', () => {
     await loginCompletomobile(page);
     await page.waitForTimeout(2000);       
 
-    //await capturarRequisicoesApi(page);    
+    await capturarRequisicoesApi(page);    
 
     async function abrirMenuMobile() {      
       const btnHamburguer = page.locator('button[aria-label="Menu" i], button:has(i:text-is("menu"))').first();
@@ -96,5 +97,6 @@ test.describe('Navegação de Menus - Mobile', () => {
       await navegarPara(item.principal, item.sub);
     }    
     console.log('✅ Navegação mobile concluída com sucesso!');
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
   });
 });
