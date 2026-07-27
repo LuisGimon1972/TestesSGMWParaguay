@@ -5,6 +5,7 @@ import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test.describe('Navegação de Menus - Mobile', () => {
   test('Deve navegar por todos os menus principais no modo mobile', async ({ page }) => {
+    console.log(`🕒 Início do teste: ${formatarDataHora(new Date())}`);   
     test.setTimeout(90000);
 
     const mobileDevice = devices['iPhone 12'];
