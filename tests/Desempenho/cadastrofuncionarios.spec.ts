@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Desempenho Cadastro de funcionários', async ({ page }) => {
@@ -72,6 +72,7 @@ test('Desempenho Cadastro de funcionários', async ({ page }) => {
   
   const totalGeral = tempoLogin + tempoTotal;
   console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);
+  console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });
 
 function gerarRUC() {

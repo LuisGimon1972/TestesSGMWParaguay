@@ -95,6 +95,7 @@ test('Navegação de menus', async ({ page }) => {
     await clicarMenu('a[href*="usuario/perfil"]');
     console.log('✅ Clicou em Perfil de Acesso');   
     
-    await capturarRequisicoesApi(page);            
+    await capturarRequisicoesApi(page); 
+    await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

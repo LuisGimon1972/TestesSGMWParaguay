@@ -1,5 +1,5 @@
 import { test} from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Desempenho do login - tempo de resposta', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });      
@@ -12,4 +12,5 @@ test('Desempenho do login - tempo de resposta', async ({ page }) => {
   if (tempoResposta > 5000) {
     console.log('⚠️ Tempo acima do limite esperado');
   }  
+  console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

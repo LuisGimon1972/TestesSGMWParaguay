@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { loginCompleto } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Teste de Desempenho de buscas em Produtos', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -45,4 +45,5 @@ test('Teste de Desempenho de buscas em Produtos', async ({ page }) => {
 
     const totalGeral = tempoLogin + tempoTotal;
     console.log(`⏱️Tempo total Módulo: ${totalGeral} ms`);       
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });
