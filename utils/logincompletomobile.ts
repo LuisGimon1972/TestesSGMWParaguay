@@ -1,10 +1,8 @@
 import { Page, expect } from '@playwright/test';
 import { talVez } from '../utils/talvez';
 
-export async function loginCompletomobile(page: Page) {  
+export async function loginCompletomobile(page: Page) {   
   
-
-  console.log('INICIO');
   await page.goto(process.env.BASE_URL!);
   console.log('ABRIU SITE');
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto } from '../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Navegação de menus', async ({ page }) => {
@@ -96,4 +96,5 @@ test('Navegação de menus', async ({ page }) => {
     console.log('✅ Clicou em Perfil de Acesso');   
     
     await capturarRequisicoesApi(page);            
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

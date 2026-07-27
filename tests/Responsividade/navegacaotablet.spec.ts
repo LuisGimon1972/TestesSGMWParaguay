@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
+import { formatarDataHora } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 
 test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
@@ -98,4 +99,5 @@ test('Teste de Responsividade Navegação Tablet', async ({ page }) => {
     console.log('CLICOU EM FUNCIONÁRIOS');         
 
     await capturarRequisicoesApi(page);                
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { loginCompletomobile } from '../../utils/logincompletomobile';
+import { formatarDataHora } from '../../utils/loginCompleto';
 import { Page } from '@playwright/test';
 
 test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });   
+    console.log(`🕒 Inicio do teste: ${formatarDataHora(new Date())}`);   
     await loginCompletomobile(page);    
     
     menumobile(); 
@@ -155,5 +157,6 @@ test('Teste de Responsividade Navegação Mobile', async ({ page }) => {
     console.log('⚠️ NENHUMA REQUISIÇÃO CAPTURADA!');
   }
 }
+console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 
 });
