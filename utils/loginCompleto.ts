@@ -2,9 +2,23 @@ import { Page } from '@playwright/test';
 import { talVez } from '../utils/talvez';
 import { fecharPopupAtualizacao } from '../utils/novidade';
 
+function formatarDataHora(date: Date): string {
+  const dia = String(date.getDate()).padStart(2, '0');
+  const mes = String(date.getMonth() + 1).padStart(2, '0'); // meses começam em 0
+  const ano = date.getFullYear();
+
+  const horas = String(date.getHours()).padStart(2, '0');
+  const minutos = String(date.getMinutes()).padStart(2, '0');
+  const segundos = String(date.getSeconds()).padStart(2, '0');
+
+  return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+}
+
 export async function loginCompleto(page: Page) {
 
-  console.log('INICIO');
+  let inicioTeste = new Date();
+  console.log(`🕒 Início do teste: ${formatarDataHora(inicioTeste)}`);  
+  
   await page.goto(process.env.BASE_URL!);
   console.log('✅ Abriu Site:', process.env.BASE_URL);
   await page.getByText(/log in|entrar/i).click();
