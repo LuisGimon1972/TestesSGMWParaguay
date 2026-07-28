@@ -71,7 +71,19 @@ test('Teste de Faturamento de Compras', async ({ page }) => {
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' });
     await salvar.first().waitFor({ state: 'visible' });
     await salvar.first().click({ force: true });         
-    console.log('✅ Clicou em Salvar Itens');  
+    console.log('✅ Clicou em Salvar Item 1');  
+
+    await page.waitForTimeout(2000);
+    const salvari2 = page.locator('button.q-btn').filter({ hasText: 'SALVAR' });
+    await salvari2.first().waitFor({ state: 'visible' });
+    await salvari2.first().click({ force: true });         
+    console.log('✅ Clicou em Salvar Item 2');  
+
+    await page.waitForTimeout(2000);
+    const salvari3 = page.locator('button.q-btn').filter({ hasText: 'SALVAR' });
+    await salvari3.first().waitFor({ state: 'visible' });
+    await salvari3.first().click({ force: true });         
+    console.log('✅ Clicou em Salvar Item 3');  
 
     await page.waitForTimeout(2000);
     const salvar2 = page.locator('button.q-btn').filter({ hasText: 'SALVAR' });
@@ -122,8 +134,7 @@ test('Teste de Faturamento de Compras', async ({ page }) => {
     ]);    
     
     const dadosTratados = await respostaSalvar.json();
-    console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');          
-    
+    console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');              
 
     const salvarUrlResponse = await salvarCompraPromise;     
     const urlCompletaPost = salvarUrlResponse.url();
