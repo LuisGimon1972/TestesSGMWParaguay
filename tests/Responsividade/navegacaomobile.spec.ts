@@ -56,7 +56,7 @@ test.describe('Navegação de Menus - Mobile', () => {
         
         if (!(await submenuAlvo.isVisible())) {
           await clicarElementoMenu(principal);
-          await page.waitForTimeout(800); // Espera a sanfona abrir
+          await page.waitForTimeout(800); 
         }
         
         await clicarElementoMenu(sub);
