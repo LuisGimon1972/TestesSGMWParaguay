@@ -83,30 +83,31 @@ test('Teste de Faturamento de Vendas', async ({ page }) => {
     await page.waitForTimeout(1000);     
 
      const saldoTexto = await page
-    .locator('text=Saldo venda')
-    .locator('xpath=following::*[contains(text(),"Gs")][1]')
-    .innerText();
+  .locator('text=Saldo venda')
+  .locator('xpath=following::*[contains(text(),"Gs")][1]')
+  .innerText();
 
-    const saldo = Number(
-      saldoTexto
-        .replace('Gs', '')
-        .trim()
-        .replace(/\./g, '')
-        .replace(',', '.')
-    )/100;
-    console.log('TOTAL DE VENDAS:',saldo.toString().trim()); 
+  const saldo = Number(
+    saldoTexto
+      .replace('Gs', '')
+      .trim()
+      .replace(/\./g, '')
+      .replace(',', '.')
+  );
+  console.log('TOTAL DE VENDAS:', saldo.toFixed(2));
+
 
     const valor = saldo;    
     const valorEfectivo = calcularEfectivo(valor)
     const troco = valorEfectivo - valor
-    const efectivo = page.locator('.payment-specie-row', {
-      hasText: 'EFECTIVO'
-    });
-    await efectivo.locator('input').fill(valorEfectivo.toString());
-    console.log('DIGITOU VALOR EM EFECTIVO:',valorEfectivo.toString()); 
-    console.log('CALCULOU TROCO:',troco.toString()); 
+    const efectivo = valor + troco
 
-   
+    const efectivoRow = page.locator('.payment-specie-row', { hasText: 'EFECTIVO' });
+    const efectivoInput = efectivoRow.locator('input:not([disabled])').first();
+
+    await efectivoInput.fill(valorEfectivo.toString());    
+    console.log('DIGITOU VALOR EM EFECTIVO:',efectivo.toFixed(2).replace('.', ',')); 
+    console.log('CALCULOU TROCO:', troco.toFixed(2).replace('.', ','));
 
     const confirmar = page
     .locator('button.q-btn')
