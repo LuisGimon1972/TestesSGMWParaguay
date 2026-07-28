@@ -3,7 +3,6 @@ import { loginCompleto, formatarDataHora } from '../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../utils/capturaApi';
 
 test('Navegação de menus', async ({ page }) => {   
-    console.log(`🕒 Inicio do teste: ${formatarDataHora(new Date())}`);   
     test.setTimeout(90000);
 
     await loginCompleto(page);        
