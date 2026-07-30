@@ -26,6 +26,8 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Recebimento');   
+    
+    await capturarRequisicoesApi(page);         
 
     console.log('📝 DADOS ENVIADOS PRA API');   
     
@@ -111,8 +113,8 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
     const urlCompletaPost = respostaSalvar.url();
     console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
 
-    const salvarPagarResponse = await salvarReceberPromise;
-    const dadosSalvos = await salvarPagarResponse.json();
+    const salvarReceberResponse = await salvarReceberPromise;
+    const dadosSalvos = await salvarReceberResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
    
@@ -142,6 +144,7 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
       'x-tenant': headersOriginais['x-tenant'] || '',
       'x-empresa': headersOriginais['x-empresa'] || '',
     };
+    await capturarRequisicoesApi(page);         
     
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
@@ -159,7 +162,6 @@ test('Teste de Cadastro de Recebimento', async ({ page }) => {
       console.error('Erro ao converter resposta para JSON:', error);
       const corpoBruto = await getCriadoResponse.text();
       console.log('Corpo bruto da resposta:', corpoBruto);
-    }
-    await capturarRequisicoesApi(page);     
+    }   
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

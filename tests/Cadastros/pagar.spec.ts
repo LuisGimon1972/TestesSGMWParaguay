@@ -27,8 +27,9 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Pagamento');   
 
-    console.log('📝 DADOS ENVIADOS PRA API');   
-    
+    await capturarRequisicoesApi(page);         
+
+    console.log('📝 DADOS ENVIADOS PRA API');       
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(1).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
@@ -66,7 +67,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await quaOpcaoMenu.waitFor({ state: 'visible' });
     await quaOpcaoMenu.click();
     const especie = await page.locator('input[aria-label="Cliente"]').inputValue();      
-    console.log('✅ Selecionou uma Espécie:',plano.toUpperCase());
+    console.log('✅ Selecionou uma Espécie:',especie.toUpperCase());
 
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
@@ -106,6 +107,8 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
         }, { timeout: 30000 }),
         btnSalvar.click() 
     ]);   
+
+    await capturarRequisicoesApi(page);         
     
     const urlCompletaPost = respostaSalvar.url();
     console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
@@ -158,7 +161,6 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
       console.error('Erro ao converter resposta para JSON:', error);
       const corpoBruto = await getCriadoResponse.text();
       console.log('Corpo bruto da resposta:', corpoBruto);
-    }
-    await capturarRequisicoesApi(page);     
+    }    
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

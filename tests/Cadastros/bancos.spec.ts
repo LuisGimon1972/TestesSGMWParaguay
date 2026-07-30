@@ -1,13 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { loginCompleto, formatarDataHora} from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
+import { obterNomePessoaAleatorio } from '../../utils/nomescompletos';
 
-test('Teste de Cadastro de Caixa', async ({ page }) => {    
+test('Teste de Cadastro de Bancos', async ({ page }) => {    
     test.setTimeout(60000); 
     await loginCompleto(page);       
 
-    const salvarCaixaPromise = page.waitForResponse((response) =>
-    response.url().includes('/api/financeiro/movimento') &&
+    const salvarBancoPromise = page.waitForResponse((response) =>
+    response.url().includes('/api/conta-bancaria') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
     response.status() < 300);    
@@ -18,63 +19,56 @@ test('Teste de Cadastro de Caixa', async ({ page }) => {
     console.log('✅ Clicou em Financeiro');    
 
     await page.waitForTimeout(1000);
-    await page.locator('a[href*="financeiro/caixa"]').click();
-    console.log('✅ Clicou em Finaceiro Caixa');            
+    // Adicionado await faltante aqui
+    await page.locator('a[href*="financeiro/contas"]').click();
+    console.log('✅ Clicou em Finaceiro Banco');            
     
-    const btnCadastrar = page.getByText(/cadastrar movimento no caixa/i).first();
+    const btnCadastrar = page.getByText(/cadastrar nova conta/i).first();
     await btnCadastrar.waitFor({ state: 'visible' });
     await btnCadastrar.click({ force: true });
-    console.log('✅ Clicou em Cadastrar movimento no caixa');   
-    
-    await capturarRequisicoesApi(page);        
+    console.log('✅ Clicou em Cadastrar nova conta');  
+    await capturarRequisicoesApi(page);      
 
     console.log('📝 DADOS ENVIADOS PRA API');           
     
-    await page.locator('.q-select').nth(1).click();
+    await page.locator('.q-select').nth(0).click();
     const menuItems = page.locator('.q-menu .q-item, .q-portal .q-item, .q-virtual-scroll__content .q-item, [role="option"]');
     await expect(menuItems.first()).toBeVisible({ timeout: 8000 });
     const primeiraOpcao = menuItems.first();
     await primeiraOpcao.scrollIntoViewIfNeeded().catch(() => {});
     const textoPrimeira = (await primeiraOpcao.innerText()).replace(/\s+/g, ' ').trim();
     await primeiraOpcao.click({ force: true });
-    console.log('✅ Selecionou a primeira opção do menu:', textoPrimeira.toUpperCase());  
+    console.log('✅ Selecionou um Banco:', textoPrimeira.toUpperCase());  
     
     await page.waitForTimeout(2000);  
-    await page.locator('.q-select').nth(2).click();
+    await page.locator('.q-select').nth(1).click();
     const opcaoCliente = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await opcaoCliente.waitFor({ state: 'visible' });    
     const textoCliente = (await opcaoCliente.innerText()).replace(/\s+/g, ' ').trim();
     await opcaoCliente.click();      
-    console.log('✅ Selecionou um Cliente:', textoCliente.toUpperCase());
+    console.log('✅ Selecionou o tipo de conta:', textoCliente.toUpperCase());
+
+    const agencia = `315`;
+    await page.getByLabel(/agência/i).fill(agencia);
+    console.log('✅ Agência:', agencia);
+
+    const conta = `1488777-5`;
+    await page.getByLabel(/número da conta/i).fill(agencia);
+    console.log('✅ Número da Conta:', conta);
     
-    const descricao = `ESPÉCIE EFECTIVO ${Date.now()}`;
+    const descricao = `CONTA CORRENTE ${Date.now()}`;
     await page.getByLabel(/descrição/i).fill(descricao);
-    console.log('✅ Descrição da Espécie:', descricao.toUpperCase());
-    
-    await page.locator('.q-select').nth(3).click();
-    const opcaoEspecie = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
-    await opcaoEspecie.waitFor({ state: 'visible' });
-    const textoEspecie = (await opcaoEspecie.innerText()).replace(/\s+/g, ' ').trim();
-    await opcaoEspecie.click();      
-    console.log('✅ Selecionou uma Espécie:', textoEspecie.toUpperCase());    
-    
-    await page.locator('.q-select').nth(4).click();
-    const opcaoPlano = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
-    await opcaoPlano.waitFor({ state: 'visible' });
-    const textoPlano = (await opcaoPlano.innerText()).replace(/\s+/g, ' ').trim();
-    await opcaoPlano.click();     
-    console.log('✅ Selecionou um Plano de Contas:', textoPlano.toUpperCase());            
-    
-    const valorOrig = Math.floor(Math.random() * 1000) + 1;
-    const campoOrig = page.locator('.q-field').filter({ hasText: /valor de saída/i }).last();
-    await campoOrig.locator('input').fill(valorOrig.toString());
-    console.log('✅ Valor de Saída:', valorOrig.toFixed(0));            
-    
+    console.log('✅ Descrição da Conta:', descricao.toUpperCase());
+
+    const gerente = obterNomePessoaAleatorio();
+    await page.getByLabel(/gerente/i).fill(gerente);
+    console.log('✅ Gerente do Banco:', gerente.toUpperCase());   
+        
     const btnSalvar = page.locator('.q-btn').filter({ hasText: /salvar/i });
     await btnSalvar.waitFor({ state: 'visible' });
     await btnSalvar.click({ force: true });
-    console.log('✅ Clicou em Salvar');  
-    console.log('📝 FIM DE DADOS ENVIADOS PRA API');   
+    console.log('✅ Clicou em Salvar');     
+    console.log('📝 FIM DE DADOS ENVIADOS PRA API');       
     
      console.log('✅ ENVIANDO DADOS E AGUARDANDO RETORNO DA API');
     
@@ -83,39 +77,40 @@ test('Teste de Cadastro de Caixa', async ({ page }) => {
             const url = response.url();
             const metodo = response.request().method();
             
-            return url.includes('/api/financeiro/movimento') && 
+            return url.includes('/api/conta-bancaria') && 
                    ['POST', 'GET'].includes(metodo) && 
                    response.status() >= 200 && 
                    response.status() < 300;
         }, { timeout: 30000 }),
         btnSalvar.click() 
     ]);   
+     await capturarRequisicoesApi(page);        
     
     const urlCompletaPost = respostaSalvar.url();
     console.log("🌐 A URL capturada do POST é:", urlCompletaPost);
 
-    const salvarCaixaResponse = await salvarCaixaPromise;
-    const dadosSalvos = await salvarCaixaResponse.json();
+    const salvarBancoResponse = await salvarBancoPromise;
+    const dadosSalvos = await salvarBancoResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
    
     const dadosTratados = await respostaSalvar.json();
     console.log('✅ REQUISIÇÃO CAPTURADA COM SUCESSO!');    
     
-    let idCaixa = '';
+    let idBanco = '';
     if (dadosTratados && dadosTratados.controle) {
-        idCaixa = dadosTratados.controle.toString().trim();
+        idBanco = dadosTratados.controle.toString().trim();
     } else if (dadosTratados.data && dadosTratados.data[0] && dadosTratados.data[0].controle) {
-        idCaixa = dadosTratados.controle.toString().trim();
+        idBanco = dadosTratados.controle.toString().trim();
     } else if (dadosTratados[0] && dadosTratados[0].controle) {
-        idCaixa = dadosTratados[0].controle.toString().trim();
+        idBanco = dadosTratados[0].controle.toString().trim();
     }
 
-    if (!idCaixa) {
+    if (!idBanco) {
         throw new Error('Não foi possível extrair o ID de "controle" da resposta da API.');
     }        
     
-    const urlRegistroCriado = `${urlCompletaPost}/${idCaixa}`;                
+    const urlRegistroCriado = `${urlCompletaPost}/${idBanco}`;                
     const headersOriginais = respostaSalvar.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -125,15 +120,13 @@ test('Teste de Cadastro de Caixa', async ({ page }) => {
       'x-tenant': headersOriginais['x-tenant'] || '',
       'x-empresa': headersOriginais['x-empresa'] || '',
     };
-
-     await capturarRequisicoesApi(page);        
     
     const getCriadoResponse = await page.request.get(urlRegistroCriado, {
       headers: headersGetRegistro,
     });
     console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
-    console.log('✅ Novo Controle:', idCaixa);        
+    console.log('✅ Novo Controle:', idBanco);        
     console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
