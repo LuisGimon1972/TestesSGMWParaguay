@@ -23,6 +23,21 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       const primeiraLinha = page.locator('table tr:first-child td');
       const qtdColunas = await primeiraLinha.count();
 
+      const linhas = page.locator('tbody tr');      
+      const linhaSelecionada = linhas.nth(1);
+      const colunas = linhaSelecionada.locator('td');
+      const totalColunas = await colunas.count();
+      const nomeCliente = totalColunas > 0 ? (await colunas.nth(4).innerText().catch(() => '')).trim() : '';
+      console.log(`✅ Cliente selecionado para exclusão: ${nomeCliente || 'Desconhecido'}`);        
+      const email = (await linhaSelecionada.locator('td').nth(1).innerText()).trim(); 
+      console.log(`✅ E-mail: ${email}`);        
+      const funcao = (await linhaSelecionada.locator('td').nth(2).innerText()).trim();
+      console.log(`✅ Função: ${funcao}`);        
+      const datacad = (await linhaSelecionada.locator('td').nth(3).innerText()).trim(); 
+      console.log(`✅ Data de cadastro: ${datacad}`);   
+
+
+
       console.log('CAPTURA DO REGISTRO DA GRADE ANTES DE SER REMOVIDO:');
       for (let i = 1; i < qtdColunas; i++) {
         const valor = await primeiraLinha.nth(i).textContent();
