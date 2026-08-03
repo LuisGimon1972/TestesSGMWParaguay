@@ -1,0 +1,85 @@
+export type CentroCusto = {
+  id: string;
+  nomeCentroCusto: string;
+};
+
+export const centrosCusto: CentroCusto[] = [
+  { id: '3001', nomeCentroCusto: 'Administração Geral' },
+  { id: '3002', nomeCentroCusto: 'Diretoria Executiva' },
+  { id: '3003', nomeCentroCusto: 'Financeiro' },
+  { id: '3004', nomeCentroCusto: 'Controladoria' },
+  { id: '3005', nomeCentroCusto: 'Contabilidade' },
+  { id: '3006', nomeCentroCusto: 'Fiscal e Tributário' },
+  { id: '3007', nomeCentroCusto: 'Recursos Humanos' },
+  { id: '3008', nomeCentroCusto: 'Departamento Pessoal' },
+  { id: '3009', nomeCentroCusto: 'Treinamento e Desenvolvimento' },
+  { id: '3010', nomeCentroCusto: 'Tecnologia da Informação' },
+  { id: '3011', nomeCentroCusto: 'Infraestrutura de TI' },
+  { id: '3012', nomeCentroCusto: 'Desenvolvimento de Sistemas' },
+  { id: '3013', nomeCentroCusto: 'Suporte Técnico' },
+  { id: '3014', nomeCentroCusto: 'Segurança da Informação' },
+  { id: '3015', nomeCentroCusto: 'Marketing' },
+  { id: '3016', nomeCentroCusto: 'Publicidade e Propaganda' },
+  { id: '3017', nomeCentroCusto: 'Comunicação' },
+  { id: '3018', nomeCentroCusto: 'Eventos Corporativos' },
+  { id: '3019', nomeCentroCusto: 'Comercial' },
+  { id: '3020', nomeCentroCusto: 'Vendas Internas' },
+  { id: '3021', nomeCentroCusto: 'Vendas Externas' },
+  { id: '3022', nomeCentroCusto: 'Representantes Comerciais' },
+  { id: '3023', nomeCentroCusto: 'Atendimento ao Cliente' },
+  { id: '3024', nomeCentroCusto: 'Pós-Venda' },
+  { id: '3025', nomeCentroCusto: 'Produção' },
+  { id: '3026', nomeCentroCusto: 'Operações' },
+  { id: '3027', nomeCentroCusto: 'Controle de Produção' },
+  { id: '3028', nomeCentroCusto: 'Engenharia' },
+  { id: '3029', nomeCentroCusto: 'Pesquisa e Desenvolvimento' },
+  { id: '3030', nomeCentroCusto: 'Qualidade' },
+  { id: '3031', nomeCentroCusto: 'Laboratório' },
+  { id: '3032', nomeCentroCusto: 'Logística' },
+  { id: '3033', nomeCentroCusto: 'Transporte' },
+  { id: '3034', nomeCentroCusto: 'Distribuição' },
+  { id: '3035', nomeCentroCusto: 'Almoxarifado' },
+  { id: '3036', nomeCentroCusto: 'Estoque' },
+  { id: '3037', nomeCentroCusto: 'Compras' },
+  { id: '3038', nomeCentroCusto: 'Suprimentos' },
+  { id: '3039', nomeCentroCusto: 'Importação' },
+  { id: '3040', nomeCentroCusto: 'Exportação' },
+  { id: '3041', nomeCentroCusto: 'Manutenção Predial' },
+  { id: '3042', nomeCentroCusto: 'Manutenção Industrial' },
+  { id: '3043', nomeCentroCusto: 'Frota' },
+  { id: '3044', nomeCentroCusto: 'Segurança Patrimonial' },
+  { id: '3045', nomeCentroCusto: 'Segurança do Trabalho' },
+  { id: '3046', nomeCentroCusto: 'Meio Ambiente' },
+  { id: '3047', nomeCentroCusto: 'Jurídico' },
+  { id: '3048', nomeCentroCusto: 'Auditoria' },
+  { id: '3049', nomeCentroCusto: 'Compliance' },
+  { id: '3050', nomeCentroCusto: 'Projetos' },
+  { id: '3051', nomeCentroCusto: 'Expansão' },
+  { id: '3052', nomeCentroCusto: 'Filial São Paulo' },
+  { id: '3053', nomeCentroCusto: 'Filial Rio de Janeiro' },
+  { id: '3054', nomeCentroCusto: 'Filial Curitiba' },
+  { id: '3055', nomeCentroCusto: 'Filial Porto Alegre' },
+  { id: '3056', nomeCentroCusto: 'Filial Belo Horizonte' },
+  { id: '3057', nomeCentroCusto: 'Filial Brasília' },
+  { id: '3058', nomeCentroCusto: 'Filial Salvador' },
+  { id: '3059', nomeCentroCusto: 'Filial Assunção' },
+  { id: '3060', nomeCentroCusto: 'Filial Ciudad del Este' },
+  { id: '3061', nomeCentroCusto: 'Filial Concórdia' },
+  { id: '3062', nomeCentroCusto: 'Filial Chapecó' },
+  { id: '3063', nomeCentroCusto: 'Loja Centro' },
+  { id: '3064', nomeCentroCusto: 'Loja Shopping' },
+  { id: '3065', nomeCentroCusto: 'E-commerce' },
+  { id: '3066', nomeCentroCusto: 'Marketplace' },
+  { id: '3067', nomeCentroCusto: 'Call Center' },
+  { id: '3068', nomeCentroCusto: 'Ouvidoria' },
+  { id: '3069', nomeCentroCusto: 'Pesquisa de Mercado' },
+  { id: '3070', nomeCentroCusto: 'Inovação' }
+];
+
+export function obterNomeCentroCustoAleatorio(): string {
+  return centrosCusto[Math.floor(Math.random() * centrosCusto.length)].nomeCentroCusto;
+}
+
+export function obterCentroCustoAleatorio(): CentroCusto {
+  return centrosCusto[Math.floor(Math.random() * centrosCusto.length)];
+}
