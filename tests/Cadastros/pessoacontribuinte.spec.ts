@@ -56,7 +56,7 @@ test('Cadastro de Clientes Contribuintes', async ({ page }) => {
     await page.getByLabel(/RUC/i).fill(ruc);
     console.log('✅ Número de idenficação RUC:', ruc);
     
-    await page.waitForTimeout(700);
+    await page.waitForTimeout(1500);
     await page.locator('[aria-label="Tipo de operação"]').click({ force: true });
     const menuDoc1 = page.locator('.q-menu').last();
     await menuDoc1.waitFor();
