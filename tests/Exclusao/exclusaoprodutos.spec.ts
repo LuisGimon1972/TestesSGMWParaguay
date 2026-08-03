@@ -26,13 +26,13 @@ test('Exclusão de datos Produtos', async ({ page }) => {
       const colunas = linhaSelecionada.locator('td');
       const totalColunas = await colunas.count();
       const nomeProduto = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
-      console.log(`✅ Produto selecionado para exclusão: ${nomeProduto || 'Desconhecido'}`);              
+      console.log(`     ✅ Produto selecionado para exclusão: ${nomeProduto || 'Desconhecido'}`);              
       const barras = (await linhaSelecionada.locator('td').nth(3).innerText()).trim(); 
-      console.log(`✅ Código de Barras: ${barras}`);        
+      console.log(`     ✅ Código de Barras: ${barras}`);        
       const ref = (await linhaSelecionada.locator('td').nth(4).innerText()).trim(); 
-      console.log(`✅ Referência: ${ref}`);                  
+      console.log(`     ✅ Referência: ${ref}`);                  
       const fornecedor = (await linhaSelecionada.locator('td').nth(5).innerText()).trim(); 
-      console.log(`✅ Fornecedor: ${fornecedor}`);                        
+      console.log(`     ✅ Fornecedor: ${fornecedor}`);                        
      
       await page.waitForSelector('table tr:first-child td', { state: 'visible' });
 

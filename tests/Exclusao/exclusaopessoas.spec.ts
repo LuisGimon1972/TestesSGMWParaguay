@@ -26,19 +26,19 @@ test('Exclusão de datos Pessoas', async ({ page }) => {
       const colunas = linhaSelecionada.locator('td');
       const totalColunas = await colunas.count();
       const nomeCliente = totalColunas > 0 ? (await colunas.nth(4).innerText().catch(() => '')).trim() : '';
-      console.log(`✅ Cliente selecionado para exclusão: ${nomeCliente || 'Desconhecido'}`);              
+      console.log(`     ✅ Cliente selecionado para exclusão: ${nomeCliente || 'Desconhecido'}`);              
       const natureza = (await linhaSelecionada.locator('td').nth(2).innerText()).trim(); 
-      console.log(`✅ Natureza: ${natureza}`);        
+      console.log(`     ✅ Natureza: ${natureza}`);        
       const tipoc = (await linhaSelecionada.locator('td').nth(3).innerText()).trim(); 
-      console.log(`✅ Tipo de Cadastro: ${tipoc}`);                  
+      console.log(`     ✅ Tipo de Cadastro: ${tipoc}`);                  
       const pais = (await linhaSelecionada.locator('td').nth(6).innerText()).trim(); 
-      console.log(`✅ País: ${pais}`);                  
+      console.log(`     ✅ País: ${pais}`);                  
       const dpto = (await linhaSelecionada.locator('td').nth(7).innerText()).trim(); 
-      console.log(`✅ Departamento: ${dpto}`);                  
+      console.log(`     ✅ Departamento: ${dpto}`);                  
       const dtto = (await linhaSelecionada.locator('td').nth(8).innerText()).trim(); 
-      console.log(`✅ Distrito: ${dtto}`);                  
+      console.log(`     ✅ Distrito: ${dtto}`);                  
       const ciudad = (await linhaSelecionada.locator('td').nth(9).innerText()).trim(); 
-      console.log(`✅ Cidade: ${ciudad}`);                        
+      console.log(`     ✅ Cidade: ${ciudad}`);                        
       
 
       await page.waitForSelector('table tr:first-child td', { state: 'visible' });
