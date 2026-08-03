@@ -23,8 +23,7 @@ test('Exclusão de datos funcionários', async ({ page }) => {
 
   await menuTresPontos.click();
   console.log('✅ Clicou nos três pontos');       
-
-  // 2. Checa se o botão "Excluir" está visível no menu flutuante
+  
   const botaoExcluirMenu = page.locator('text=Excluir');
   const podeExcluir = await botaoExcluirMenu.isVisible({ timeout: 3000 }).catch(() => false);
 

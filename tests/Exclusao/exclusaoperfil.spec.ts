@@ -19,7 +19,7 @@ test('Exclusão de datos Perfil de Acesso', async ({ page }) => {
   const trashIcons = await page.locator('table img[src*="trash"]').count();  
 
     if (trashIcons === 0) {
-       console.log('✅ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
        return;
     } 
       console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');
