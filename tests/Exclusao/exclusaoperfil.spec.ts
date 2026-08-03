@@ -35,7 +35,7 @@ test('Exclusão de datos Perfil de Acesso', async ({ page }) => {
 
       await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
-      const codigoPerfil = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
+      const codigoPerfil = await primeiraLinha.nth(2).textContent(); 
       const codigoLimpo = codigoPerfil?.trim();
 
       if (!codigoLimpo) {
