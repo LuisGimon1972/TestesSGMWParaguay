@@ -15,8 +15,8 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
     console.log('✅ Clicou em Subgrupos');
 
     await page.waitForTimeout(2000);
-     const trashIcons = await page.locator('table img[src*="trash"]').count();
-    console.log('Quantidade de ícones de edição:', trashIcons);
+    const trashIcons = await page.locator('table img[src*="trash"]').count();
+
 
     if (trashIcons === 0) {
        console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR!');
