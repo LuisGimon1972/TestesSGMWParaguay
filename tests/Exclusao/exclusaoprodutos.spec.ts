@@ -78,6 +78,6 @@ test('Exclusão de datos Produtos', async ({ page }) => {
       await page.waitForTimeout(4000);
       console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
      } else {
-      console.log('✅ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
+      console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR.');
      }
 });
