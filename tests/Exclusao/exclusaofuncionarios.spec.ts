@@ -78,13 +78,13 @@ test('Exclusão de datos funcionários', async ({ page }) => {
   const getExcluidoResponse = await page.request.get(`/api/py/funcionario/${codigoLimpo}`);
 
   console.log('✅ RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO');
-  console.log(`   ✅ Status: ${getExcluidoResponse.status()}`);
+  console.log(`     ✅ Status: ${getExcluidoResponse.status()}`);
 
   try {
     const dadosExcluido = await getExcluidoResponse.json();
     console.log(JSON.stringify(dadosExcluido, null, 2));
   } catch {
-    console.log('   ✅ Resposta sem corpo. (Status Code: 404)');
+    console.log('     ✅ Resposta sem corpo. (Status Code: 404)');
   }
   
   expect([404, 200]).toContain(getExcluidoResponse.status());
