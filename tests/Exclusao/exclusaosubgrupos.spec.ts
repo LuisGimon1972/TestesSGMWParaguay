@@ -22,7 +22,7 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
        console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR!');
        return;
     } 
-    console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');
+      console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');
       const primeiraLinha = page.locator('table tr:first-child td');      
       const linhas = page.locator('tbody tr');      
       const linhaSelecionada = linhas.nth(1);
