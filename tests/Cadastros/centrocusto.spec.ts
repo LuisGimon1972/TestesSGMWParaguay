@@ -7,7 +7,7 @@ test('Cadastro de marcas', async ({ page }) => {
     await loginCompleto(page);    
 
     await page.waitForTimeout(2000);           
-    const salvarMarcaPromise = page.waitForResponse((response) =>
+    const salvarCentroPromise = page.waitForResponse((response) =>
     response.url().includes('/api/centro/custo') &&
     ['POST'].includes(response.request().method()) &&
     response.status() >= 200 &&
@@ -25,30 +25,30 @@ test('Cadastro de marcas', async ({ page }) => {
     const btnCadastrar = page.getByText(/cadastrar centro de custo/i).first();
     await btnCadastrar.waitFor();
     await btnCadastrar.click({ force: true });
-    console.log('✅ Clicou em Cadastrar Marca');    
+    console.log('✅ Clicou em Cadastrar Centro de Custo');    
 
     console.log('***DADOS ENVIADOS PRA API***');
     const centrocusto = obterNomeCentroCustoAleatorio();
     await page.getByLabel(/centro de custo/i).fill(centrocusto);
-    console.log('✅ Nome da Marca:', centrocusto.toUpperCase());     
-    console.log('FIM DE DADOS ENVIADOS');      
+    console.log('✅ Nome do Centro de Custo:', centrocusto.toUpperCase());     
+    console.log('✅FIM DE DADOS ENVIADOS');      
 
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR MARCA');  
+    console.log('✅ Clicou em Salvar Centro de Custo');  
 
-    const salvarUrlResponse = await salvarMarcaPromise;     
+    const salvarUrlResponse = await salvarCentroPromise;     
     const urlCompletaPost = salvarUrlResponse.url();
     console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
-    const salvarPessoaResponse = await salvarMarcaPromise;
+    const salvarPessoaResponse = await salvarCentroPromise;
     const dadosSalvos = await salvarPessoaResponse.json();
     console.log('✅ DADOS RETORNADOS NA CRIAÇÃO');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
-    const idMarca = dadosSalvos.controle.toString().trim();    
-    const urlRegistroCriado = `${urlCompletaPost}/${idMarca}`;                
+    const idCentro = dadosSalvos.controle.toString().trim();    
+    const urlRegistroCriado = `${urlCompletaPost}/${idCentro}`;                
     const headersOriginais = salvarPessoaResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
@@ -64,7 +64,7 @@ test('Cadastro de marcas', async ({ page }) => {
     });
     console.log('🌐 A URL do registro criado é:', urlRegistroCriado);
     console.log('✅ RESPOSTA DA API AO CONSULTAR O NOVO REGISTRO');
-    console.log('✅ Novo Controle:', idMarca);            
+    console.log('✅ Novo Controle:', idCentro);            
     console.log(`✅ Status: ${getCriadoResponse.status()}`);
 
     try {
