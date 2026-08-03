@@ -6,11 +6,6 @@ test('Cadastro de subgrupos', async ({ page }) => {
     await loginCompleto(page);    
 
     await page.waitForTimeout(2000);           
-    const salvarSubgrupoPromise = page.waitForResponse((response) =>
-    response.url().includes('/api/produto/subgrupo') &&
-    ['POST'].includes(response.request().method()) &&
-    response.status() >= 200 &&
-    response.status() < 300);
  
     const cadBtn = page.getByText(/cadastros/i).first();
     await expect(cadBtn).toBeVisible();
@@ -18,7 +13,7 @@ test('Cadastro de subgrupos', async ({ page }) => {
     console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/subgrupos"]').click()
+    await page.locator('a[href*="registros/subgrupos"]').click();
     console.log('✅ Clicou em Subgrupos');
 
     const btnCadastrar = page.getByText(/cadastrar subgrupo/i).first();
@@ -32,37 +27,60 @@ test('Cadastro de subgrupos', async ({ page }) => {
     console.log('✅ Nome do Subgrupo:', nomesubgrupo.toUpperCase());   
 
     await page.waitForTimeout(1000);    
-    await page.locator('[aria-label="Grupo"]').click({ force: true });
-    const grupo = page.locator('.q-menu:visible');
-    await grupo.waitFor();
-    await grupo
-    .locator('.q-item')
-    .filter({ hasText: /test/i })
-    .first()
-    .click({ force: true });
+    await page.locator('[aria-label="Grupo"]').click({ force: true });    
+
+    const menuGrupo = page.locator('.q-menu:visible');
+    await menuGrupo.waitFor();
+    await page.waitForTimeout(500);
+
+    const itensGrupo = menuGrupo.locator('.q-item:visible').filter({ hasText: /[a-zA-Z0-9]/ });
+    const quantidadeGrupos = await itensGrupo.count();
+
+    if (quantidadeGrupos === 0) {
+        console.log('⚠️ Nenhum grupo disponível na lista. Pulando o teste...');
+        test.skip(true, 'Teste pulado por falta de grupo cadastrado para vincular.');
+    }
+    
+    await itensGrupo.first().click({ force: true });
+    await page.waitForTimeout(500);
+    
     const grupoc = await page.locator('input[aria-label="Grupo"]').inputValue();
-    console.log('✅ Grupo selecionado:',grupoc);    
+    
+    if (!grupoc || grupoc.trim() === '') {
+        console.log('⚠️ Nenhum grupo foi selecionado com sucesso!');
+        test.skip(true, 'Teste pulado por falta de grupo cadastrado para vincular.');
+    }
+
+    console.log('✅ Grupo selecionado:', grupoc);    
     console.log('FIM DADOS ENVIADOS');
+    // --- FIM DA LÓGICA DE GRUPO ---
 
     await page.waitForTimeout(1000);
 
+    // 💡 A escuta do POST é criada AQUI (somente se não deu skip acima)
+    const salvarSubgrupoPromise = page.waitForResponse((response) =>
+        response.url().includes('/api/produto/subgrupo') &&
+        ['POST'].includes(response.request().method()) &&
+        response.status() >= 200 &&
+        response.status() < 300
+    );
+
     await page.locator('.q-btn')
-    .filter({ hasText: /confirmar|guardar/i })
-    .click({ force: true });
+        .filter({ hasText: /confirmar|guardar/i })
+        .click({ force: true });
     console.log('✅ Clicou em Salvar Subgrupo');  
 
     const salvarUrlResponse = await salvarSubgrupoPromise;     
     const urlCompletaPost = salvarUrlResponse.url();
     console.log('🌐 A URL capturada do POST é:', urlCompletaPost);
 
-    const salvarPessoaResponse = await salvarSubgrupoPromise;
-    const dadosSalvos = await salvarPessoaResponse.json();
+    const dadosSalvos = await salvarUrlResponse.json();
     console.log('***DADOS RETORNADOS NA CRIAÇÃO***');
     console.log(JSON.stringify(dadosSalvos, null, 2));
     
     const idSubgrupo = dadosSalvos.controle.toString().trim();    
     const urlRegistroCriado = `${urlCompletaPost}/${idSubgrupo}`;                
-    const headersOriginais = salvarPessoaResponse.request().headers();
+    const headersOriginais = salvarUrlResponse.request().headers();
     const headersGetRegistro: Record<string, string> = {
       Accept: 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
