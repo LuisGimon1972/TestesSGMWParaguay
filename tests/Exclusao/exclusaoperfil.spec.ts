@@ -12,7 +12,7 @@ test('Exclusão de datos Perfil de Acesso', async ({ page }) => {
 
   await page.waitForTimeout(1000);
   page.locator('a[href*="usuario/perfil"]').click()
-  console.log('✅ Clicou em  Persil de Acesso');
+  console.log('✅ Clicou em  Perfil de Acesso');
   
   await page.waitForTimeout(2000);
   
