@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 
 export async function capturarRequisicoesApi(page: Page) {  
-   console.log(`➡️REQUISIÇÕES E RESPOSTA DA API ⬅️`);
+   console.log(`➡️REQUISIÇÕES E RESPOSTAS DA API ⬅️`);
    const requisicoes: any[] = [];
 
   page.on('request', request => {
