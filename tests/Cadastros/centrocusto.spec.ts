@@ -3,7 +3,7 @@ import { loginCompleto, formatarDataHora   } from '../../utils/loginCompleto';
 import { capturarRequisicoesApi } from '../../utils/capturaApi';
 import { obterNomeCentroCustoAleatorio } from '../../utils/listacentrocusto';
 
-test('Cadastro de marcas', async ({ page }) => {
+test('Cadastro de centro de custos', async ({ page }) => {
     await loginCompleto(page);    
 
     await page.waitForTimeout(2000);           
