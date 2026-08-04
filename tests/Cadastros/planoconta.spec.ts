@@ -20,7 +20,7 @@ test('Cadastro de plano de contas', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/plano-contas"]').click()
-    console.log('✅ Clicou em Centro de Custos'); 
+    console.log('✅ Clicou em Plano de Contas'); 
 
     const btnCadastrar = page.getByText(/cadastrar plano de conta/i).first();
     await btnCadastrar.waitFor();
@@ -32,7 +32,6 @@ test('Cadastro de plano de contas', async ({ page }) => {
     await page.getByLabel(/descrição/i).fill(planoconta);
     console.log('✅ Nome do Plano de Conta:', planoconta.toUpperCase());     
 
-
     const wrapper = page.locator('.q-radio').first();
     await wrapper.waitFor({ state: 'visible', timeout: 10000 });
     await wrapper.click({ timeout: 5000 });    
@@ -43,9 +42,8 @@ test('Cadastro de plano de contas', async ({ page }) => {
     } catch (err) {    
     const aria = await wrapper.getAttribute('aria-checked');
     if (aria === 'true') {
-        console.log('Selecionado via aria-checked no wrapper');
-    } else {
-        // Fallback 2: forçar check no input (quando input está hidden)
+        console.log('✅ Selecionado via aria-checked no wrapper');
+    } else {    
         await input.check({ force: true });
         await expect(input).toBeChecked({ timeout: 5000 });
     }
