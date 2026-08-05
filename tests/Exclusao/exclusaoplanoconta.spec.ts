@@ -59,7 +59,7 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
       const getExcluidoResponse = await page.request.get(`/api/plano-conta/${codigoLimpo}`);
 
       console.log('✅ RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO');
-      console.log(`     ✅Status: ${getExcluidoResponse.status()}`);
+      console.log(`     ✅ Status: ${getExcluidoResponse.status()}`);
 
       try {
         const dadosExcluido = await getExcluidoResponse.json();
