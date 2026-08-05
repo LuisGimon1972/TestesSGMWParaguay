@@ -11,12 +11,11 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
     console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
-    page.locator('a[href*="registros/centro-costos"]').click()
-    console.log('✅ Clicou em Centro de Custos');
+    page.locator('a[href*="registros/plano-contas"]').click()
+    console.log('✅ Clicou em Plano de Contas'); 
 
     await page.waitForTimeout(2000);
     const trashIcons = await page.locator('table img[src*="trash"]').count();
-
 
     if (trashIcons === 0) {
        console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR!');
@@ -29,7 +28,7 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
       const colunas = linhaSelecionada.locator('td');
       const totalColunas = await colunas.count();
       const nomeSGrupo = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
-      console.log(`     ✅ Centro de custo selecionado para exclusão: ${nomeSGrupo || 'Desconhecido'}`);              
+      console.log(`     ✅ Plano de conta selecionado para exclusão: ${nomeSGrupo || 'Desconhecido'}`);              
       const cod = (await linhaSelecionada.locator('td').nth(1).innerText().catch(() => '')).trim(); 
       console.log(`     ✅ Código: ${cod}`);              
     
@@ -53,11 +52,11 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
       console.log('✅ Clicou em Excluir no modal de confirmação');
 
       const deleteResponse = await page.waitForResponse((response) =>
-      response.url().includes(`/api/centro/custo/${codigoLimpo}`) &&
+      response.url().includes(`/api/plano-conta/${codigoLimpo}`) &&
       response.request().method() === 'DELETE');
       expect([200, 204]).toContain(deleteResponse.status());
 
-      const getExcluidoResponse = await page.request.get(`/api/centro/custo/${codigoLimpo}`);
+      const getExcluidoResponse = await page.request.get(`/api/plano-conta/${codigoLimpo}`);
 
       console.log('✅ RESPOSTA DA API AO CONSULTAR REGISTRO EXCLUÍDO');
       console.log(`     ✅Status: ${getExcluidoResponse.status()}`);

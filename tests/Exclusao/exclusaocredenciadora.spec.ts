@@ -55,7 +55,7 @@ test('Exclusão de datos Credenciadora', async ({ page }) => {
       );
 
       await page.click('button:has-text("EXCLUIR")');
-      console.log('✅ Clicou em Excluir no Cadastro de confirmação');
+      console.log('✅ Clicou em Excluir no modal de confirmação');
 
       const deleteResponse = await deletePromise;
       expect([200, 204]).toContain(deleteResponse.status());
