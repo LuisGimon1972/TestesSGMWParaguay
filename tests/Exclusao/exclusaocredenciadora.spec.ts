@@ -28,11 +28,11 @@ test('Exclusão de datos Credenciadora', async ({ page }) => {
       const colunas = linhaSelecionada.locator('td');
       const totalColunas = await colunas.count();
       const nomeSGrupo = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
-      console.log(`     ✅ Subgrupo selecionado para exclusão: ${nomeSGrupo || 'Desconhecido'}`);              
+      console.log(`     ✅ Credenciadora selecionada para exclusão: ${nomeSGrupo || 'Desconhecido'}`);              
       const cod = (await linhaSelecionada.locator('td').nth(1).innerText().catch(() => '')).trim(); 
       console.log(`     ✅ Código: ${cod}`);              
     
-          await page.waitForSelector('table tr:first-child td', { state: 'visible' });
+      await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
       const codigoSubgrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
       const codigoLimpo = codigoSubgrupo?.trim();
