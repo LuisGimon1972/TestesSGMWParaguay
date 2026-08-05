@@ -33,7 +33,7 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
       const cod = (await linhaSelecionada.locator('td').nth(1).innerText().catch(() => '')).trim(); 
       console.log(`     ✅ Código: ${cod}`);              
     
-          await page.waitForSelector('table tr:first-child td', { state: 'visible' });
+      await page.waitForSelector('table tr:first-child td', { state: 'visible' });
       
       const codigoSubgrupo = await primeiraLinha.nth(2).textContent(); // exemplo: coluna 1
       const codigoLimpo = codigoSubgrupo?.trim();
