@@ -31,8 +31,7 @@ test('Cadastro de credenciadora/taxa', async ({ page }) => {
     console.log('✅ DADOS ENVIADOS PRA API');
     await page.waitForTimeout(2000);   
     await page.locator('.q-select').nth(0).click();    
-    const indiceAleatorio = Math.ceil(Math.random() * 3);
-    console.log(indiceAleatorio);
+    const indiceAleatorio = Math.ceil(Math.random() * 3);    
     const opcaoAleatoria = page.locator(`(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[${indiceAleatorio}]`);
     await opcaoAleatoria.waitFor({ state: 'visible' });
     await opcaoAleatoria.click();
@@ -96,8 +95,7 @@ test('Cadastro de credenciadora/taxa', async ({ page }) => {
     }
 
     expect([404, 200]).toContain(getCriadoResponse.status());    
-
-    console.log('➡️REQUISIÇÕES E RESPOSTAS DA API ⬅️');
+    
     await capturarRequisicoesApi(page); 
     await page.waitForTimeout(4000);      
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
