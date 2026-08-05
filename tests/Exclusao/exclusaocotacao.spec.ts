@@ -56,7 +56,7 @@ test('Exclusão de datos cotação de moedas', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.waitForSelector('button:has-text("EXCLUIR")');
     await page.click('button:has-text("EXCLUIR")');
-    console.log('✅ Clicou em Excluir no diálogo de confirmação');
+    console.log('✅ Clicou em Excluir no modal de confirmação');
 
     const deleteResponse = await page.waitForResponse((response) =>
     response.url().includes(`/api/moeda/cotacao/${codigoLimpo}`) &&
