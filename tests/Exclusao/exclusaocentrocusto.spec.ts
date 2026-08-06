@@ -28,8 +28,8 @@ test('Exclusão de datos Subgrupos', async ({ page }) => {
       const linhaSelecionada = linhas.nth(1);
       const colunas = linhaSelecionada.locator('td');
       const totalColunas = await colunas.count();
-      const nomeSGrupo = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
-      console.log(`     ✅ Centro de custo selecionado para exclusão: ${nomeSGrupo || 'Desconhecido'}`);              
+      const nomeCentro = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
+      console.log(`     ✅ Centro de custo selecionado para exclusão: ${nomeCentro || 'Desconhecido'}`);              
       const cod = (await linhaSelecionada.locator('td').nth(1).innerText().catch(() => '')).trim(); 
       console.log(`     ✅ Código: ${cod}`);              
     
