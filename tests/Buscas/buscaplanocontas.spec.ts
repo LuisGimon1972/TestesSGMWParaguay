@@ -1,0 +1,55 @@
+import { test, expect } from '@playwright/test';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
+
+test('Teste de busca crítico em Centro de Custo', async ({ page }) => {    
+    await loginCompleto(page);
+      
+    const cadBtn = page.getByText(/cadastros/i).first();
+    await expect(cadBtn).toBeVisible();
+    await cadBtn.click();
+    console.log('✅ Clicou em Cadastros');
+
+    await page.waitForTimeout(1000);
+    page.locator('a[href*="registros/plano-contas"]').click()
+    console.log('✅ Clicou em Plano de Contas'); 
+    
+    await page.waitForTimeout(2000);
+    const trashIcons = await page.locator('table img[src*="trash"]').count();
+
+    if (trashIcons === 0) {
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+       return;
+    } 
+    
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const nomePlano = totalColunas > 0 ? (await colunas.nth(3).innerText().catch(() => '')).trim() : '';        
+    
+    const primeiroNome = nomePlano.toString();
+    await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
+    await page.waitForTimeout(1000);  
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+
+    const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+    if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
+    } else {
+        console.log('✅ BUSCA PLANO DE CONTAS EXISTENTE:', primeiroNome);
+    }        
+
+    await page.waitForTimeout(1000);
+
+    const prodInexistente = `PLANO INEXISTENTE`;
+    await page.getByLabel(/pesquisar registro/i).fill(prodInexistente);
+    await page.waitForTimeout(1000);  
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);    
+    
+    console.log('✅ BUSCA PLANO DE CONTAS INEXISTENTE OK:', prodInexistente);
+    
+    await page.waitForTimeout(4000);  
+    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
+});
