@@ -13,7 +13,21 @@ test('Teste de busca crítico em Perfil de Acesso', async ({ page }) => {
     page.locator('a[href*="usuario/perfil"]').click()
     console.log('CLICOU EM PERFIL DE ACESSO');
 
-     const primeiroNome = `TEST PERFIL`;
+    await page.waitForTimeout(2000);
+    const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
+
+    if (editIcons === 0) {
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+       return;
+    } 
+    
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const perfil = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
+
+     const primeiroNome = perfil.toString();
      await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
      await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');

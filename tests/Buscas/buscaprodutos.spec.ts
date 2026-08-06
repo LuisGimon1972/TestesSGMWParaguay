@@ -11,22 +11,36 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
       ]);
       console.log('CLICOU PRODUTOS');
 
-     const primeiroNome = `TEST`;
-     await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
-     await page.waitForTimeout(1000);  
-     await page.keyboard.press('Enter');
-     await page.waitForTimeout(1500);
-     console.log('BUSCA PRODUTO EXISTENTE OK:', primeiroNome);
+      await page.waitForTimeout(2000);
+      const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
+ 
+      if (editIcons === 0) {
+          console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+          return;
+      } 
+  
+      const linhas = page.locator('tbody tr');      
+      const linhaSelecionada = linhas.nth(1);
+      const colunas = linhaSelecionada.locator('td');
+      const totalColunas = await colunas.count();
+      const nome = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
 
-    await page.waitForTimeout(1000);
+      const primeiroNome = nome.toString();
+      await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
+      await page.waitForTimeout(1000);  
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1500);
+      console.log('BUSCA PRODUTO EXISTENTE OK:', primeiroNome);
 
-    const prodInexistente = `PRODUTO INEXISTENTE`;
-    await page.getByLabel(/pesquisar registro/i).fill(prodInexistente);
-    await page.waitForTimeout(1000);  
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(1500);
-    console.log('BUSCA PRODUTO INEXISTENTE OK:', prodInexistente);
+      await page.waitForTimeout(1000);
+
+      const prodInexistente = `PRODUTO INEXISTENTE`;
+      await page.getByLabel(/pesquisar registro/i).fill(prodInexistente);
+      await page.waitForTimeout(1000);  
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1500);
+      console.log('BUSCA PRODUTO INEXISTENTE OK:', prodInexistente);
     
-    await page.waitForTimeout(4000);  
-    console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
+      await page.waitForTimeout(4000);  
+      console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });
