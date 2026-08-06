@@ -136,7 +136,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       const textAreas = page.locator('textarea.q-field__native');
 
       await page.waitForTimeout(2000);
-      const infproduto = `TEST INFORMAÇÕES ADICIONAIS DE PRODUTOS PRODUTO APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
+      const infproduto = `TEST INFORMAÇÕES ADICIONAIS DE PRODUTOS, DE MUITA BOA QUALIDADE ${Date.now()}`;
       await textAreas.nth(0).fill(infproduto);
       console.log('✅ Informações adicionais:', infproduto);
       await expect(textAreas.nth(0)).toHaveValue(infproduto);      
