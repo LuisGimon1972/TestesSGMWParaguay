@@ -29,7 +29,7 @@ test('Cadastro de usuários', async ({ page }) => {
   await btnCadastrar.click();
   console.log('✅ Clicou em Cadastrar Usuário');
 
-  console.log('DADOS ENVIADOS PRA API');
+  console.log('➡️ DADOS ENVIADOS PRA API');
   const ruc = gerarRUC();
   const campoCI = page
   .locator('.q-field')
@@ -107,7 +107,7 @@ test('Cadastro de usuários', async ({ page }) => {
   .click({ force: true });
   const tipace = await page.locator('input[aria-label="Perfil de acesso"]').inputValue();      
   console.log('✅ Selecionou o Perfil de Acesso:',tipace);
-  console.log('FIM DADOS ENVIADOS');
+  console.log('➡️ FIM DADOS ENVIADOS');
     
   await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })

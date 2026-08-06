@@ -26,16 +26,16 @@ test('Cadastro de marcas', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Marca');    
 
-    console.log('***DADOS ENVIADOS PRA API***');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const marca = `MARCA ADIDAS ${Date.now()}`;
     await page.getByLabel(/cadastrar nova marca/i).fill(marca);
     console.log('✅ Nome da Marca:', marca.toUpperCase());     
-    console.log('FIM DE DADOS ENVIADOS');      
+    console.log('➡️ FIM DE DADOS ENVIADOS');      
 
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })
     .click({ force: true });
-    console.log('CLICOU EM SALVAR MARCA');  
+    console.log('✅ Clicou em Salvar Marca');  
 
     const salvarUrlResponse = await salvarMarcaPromise;     
     const urlCompletaPost = salvarUrlResponse.url();

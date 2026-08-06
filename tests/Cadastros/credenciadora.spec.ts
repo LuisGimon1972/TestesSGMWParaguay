@@ -26,7 +26,7 @@ test('Cadastro de credenciadora/taxa', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Credenciadora');    
 
-    console.log('✅ DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     await page.waitForTimeout(2000);   
     await page.locator('.q-select').nth(0).click();    
     const indiceAleatorio = Math.ceil(Math.random() * 3);    
@@ -44,7 +44,7 @@ test('Cadastro de credenciadora/taxa', async ({ page }) => {
     const conta = await page.locator('input[aria-label="Conta bancária"]').inputValue();      
     console.log('✅ Selecionou uma Conta Bancária:', conta.toUpperCase());
 
-    console.log('✅ FIM DE DADOS ENVIADOS');      
+    console.log('➡️ FIM DE DADOS ENVIADOS');      
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })

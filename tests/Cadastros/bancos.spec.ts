@@ -29,7 +29,7 @@ test('Teste de Cadastro de Bancos', async ({ page }) => {
     console.log('✅ Clicou em Cadastrar nova conta');  
     await capturarRequisicoesApi(page);      
 
-    console.log('📝 DADOS ENVIADOS PRA API');           
+    console.log('➡️ DADOS ENVIADOS PRA API');           
     
     await page.locator('.q-select').nth(0).click();
     const menuItems = page.locator('.q-menu .q-item, .q-portal .q-item, .q-virtual-scroll__content .q-item, [role="option"]');
@@ -68,7 +68,7 @@ test('Teste de Cadastro de Bancos', async ({ page }) => {
     await btnSalvar.waitFor({ state: 'visible' });
     await btnSalvar.click({ force: true });
     console.log('✅ Clicou em Salvar');     
-    console.log('📝 FIM DE DADOS ENVIADOS PRA API');       
+    console.log('➡️ FIM DE DADOS ENVIADOS PRA API');       
     
      console.log('✅ ENVIANDO DADOS E AGUARDANDO RETORNO DA API');
     

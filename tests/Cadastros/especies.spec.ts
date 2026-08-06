@@ -26,7 +26,7 @@ test('Cadastro de espécies', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Espécie');
 
-    console.log('DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const descricao = `ESPÉCIE EFECTIVO ${Date.now()}`;
     await page.getByLabel(/descrição/i).fill(descricao);
     console.log('✅ Descrição da Espécie:', descricao.toUpperCase());
@@ -69,7 +69,7 @@ test('Cadastro de espécies', async ({ page }) => {
     .click({ force: true });
     const tipoesp = await page.locator('input[aria-label="Tipo da espécie"]').inputValue();      
     console.log('✅ Tipo da Espécie:',tipoesp.toUpperCase());
-    console.log('FIM DE DADOS ENVIADOS***');    
+    console.log('➡️ FIM DE DADOS ENVIADOS***');    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })

@@ -25,11 +25,11 @@ test('Cadastro de grupos', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Grupo');    
 
-    console.log('DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const nomegrupo = `GRUPO BEBIDAS ${Date.now()}`;
     await page.getByLabel(/cadastrar novo grupo/i).fill(nomegrupo);
     console.log('✅ Nome do Grupo:', nomegrupo.toUpperCase()); 
-    console.log('FIM DE DADOS ENVIADOS');    
+    console.log('➡️ FIM DE DADOS ENVIADOS');    
     
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })

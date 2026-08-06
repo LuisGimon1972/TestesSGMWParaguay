@@ -23,7 +23,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await btnCadastrar.click();
   console.log('✅ Clicou em Cadastrar Funcionário');
 
-  console.log('DADOS ENVIADOS PRA API'); 
+  console.log('➡️ DADOS ENVIADOS PRA API'); 
   const nomefuncionario = obterNomePessoaAleatorio();
   const camponomefuncionario = page
   .locator('.q-field')
@@ -58,7 +58,7 @@ test('Cadastro de funcionários', async ({ page }) => {
   await campoCI.fill('');
   await campoCI.type(ruc, { delay: 50 });
   console.log('✅ Número do RUC:', ruc); 
-  console.log('***FIM DADOS ENVIADOS ***');
+  console.log('➡️ FIM DADOS ENVIADOS');
   
   await page.locator('.q-btn')
   .filter({ hasText: /salvar|guardar/i })

@@ -21,7 +21,7 @@ test('Cadastro de subgrupos', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Subgrupo');    
 
-    console.log('DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const nomesubgrupo = `TEST SUBGRUPO ${Date.now()}`;
     await page.getByLabel(/cadastrar novo subgrupo/i).fill(nomesubgrupo);
     console.log('✅ Nome do Subgrupo:', nomesubgrupo.toUpperCase());   
@@ -52,12 +52,10 @@ test('Cadastro de subgrupos', async ({ page }) => {
     }
 
     console.log('✅ Grupo selecionado:', grupoc);    
-    console.log('FIM DADOS ENVIADOS');
-    // --- FIM DA LÓGICA DE GRUPO ---
+    console.log('➡️ FIM DADOS ENVIADOS');    
 
     await page.waitForTimeout(1000);
-
-    // 💡 A escuta do POST é criada AQUI (somente se não deu skip acima)
+    
     const salvarSubgrupoPromise = page.waitForResponse((response) =>
         response.url().includes('/api/produto/subgrupo') &&
         ['POST'].includes(response.request().method()) &&

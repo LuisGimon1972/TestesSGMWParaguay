@@ -29,7 +29,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
 
     await capturarRequisicoesApi(page);         
 
-    console.log('📝 DADOS ENVIADOS PRA API');       
+    console.log('➡️ DADOS ENVIADOS PRA API');       
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(1).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
@@ -90,7 +90,7 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     await btnSalvar.waitFor({ state: 'visible' });
     await btnSalvar.click({ force: true });
     console.log('✅ Clicou em Salvar');  
-    console.log('📝 FIM DE DADOS ENVIADOS PRA API');   
+    console.log('➡️ FIM DE DADOS ENVIADOS PRA API');   
     
 
     console.log('✅ ENVIANDO DADOS E AGUARDANDO RETORNO DA API');

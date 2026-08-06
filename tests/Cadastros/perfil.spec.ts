@@ -26,7 +26,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   await btnCadastrar.click();
   console.log('✅ Clicou em Cadastrar Peril de Acesso'); 
     
-  console.log('DADOS ENVIADOS PRA API');
+  console.log('➡️ DADOS ENVIADOS PRA API');
   const nome = `PERFIL ADMINISTRADOR ${Date.now()}`;
   const campoNome = page
   .locator('.q-field')
@@ -44,7 +44,7 @@ test('Cadastro de perfil de acesso', async ({ page }) => {
   .filter({ hasText: /salvar|guardar/i })
   .click({ force: true });
   console.log('✅ Clicou em EM Salvar Perfil de Acesso');
-  console.log('FIM DE DADOS ENVIADOS');  
+  console.log('➡️ FIM DE DADOS ENVIADOS');  
 
     const salvarUrlResponse = await salvarPerfilPromise;     
     const urlCompletaPost = salvarUrlResponse.url(); 

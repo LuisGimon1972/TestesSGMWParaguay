@@ -25,7 +25,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Cotação');    
     
-    console.log('DADOS ENVIADOS PARA API');    
+    console.log('➡️ DADOS ENVIADOS PARA API');    
     const moedaField = page.locator('[aria-label="Moeda de cotação (diferente da sua empresa)"]').first();
     await moedaField.scrollIntoViewIfNeeded();
     await expect(moedaField).toBeVisible();    
@@ -80,7 +80,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await inputDatafin.fill('');
     await inputDatafin.type(datafin, { delay: 50 });
     console.log('✅ Fim de Vigência:', datafin);
-    console.log('FIM DE DADOS ENVIADOS');    
+    console.log('➡️ FIM DE DADOS ENVIADOS');    
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })

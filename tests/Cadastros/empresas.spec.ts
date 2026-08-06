@@ -60,7 +60,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   await btnAdicionar.waitFor({ state: 'visible' });
   await btnAdicionar.click();    
   
-  console.log('DADOS ENVIADOS PARA API');
+  console.log('➡️ DADOS ENVIADOS PARA API');
 
   const ruc = gerarRUC();
   const inputRuc = page.locator('input[aria-label*="RUC" i], .q-field:has-text("RUC") input').first();
@@ -213,7 +213,7 @@ test('Teste de Cadastro de Empresas', async ({ page }) => {
   
   await selecionarOpcaoQuasar(page, /atividade econômica/i);
 
-  console.log('FIM DE DADOS ENVIADOS');
+  console.log('➡️ FIM DE DADOS ENVIADOS');
   
   await page.locator('.q-btn').filter({ hasText: /salvar|guardar/i }).click({ force: true });
   console.log('✅ Configuração da empresa salva com sucesso!'); 

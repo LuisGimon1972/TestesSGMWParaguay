@@ -31,7 +31,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await page.emulateMedia({ media: 'screen' });
     await page.evaluate(() => { document.body.style.zoom = '0.8'; });
        
-    console.log('DADOS ENVIADOS PRA API');          
+    console.log('➡️ DADOS ENVIADOS PRA API');          
     await page.waitForTimeout(2000);
     await page.locator('.q-select').nth(5).click();
     await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
@@ -58,7 +58,7 @@ test('Teste de Cadastro de Faturas', async ({ page }) => {
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
     console.log('✅ Clicou em Adicionar Itens');  
-    console.log('FIM DE DADOS ENVIADOS PRA API');
+    console.log('➡️ FIM DE DADOS ENVIADOS PRA API');
 
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });

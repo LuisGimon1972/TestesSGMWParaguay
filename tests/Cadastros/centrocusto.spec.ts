@@ -27,11 +27,11 @@ test('Cadastro de centro de custos', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Centro de Custo');    
 
-    console.log('✅ DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const centrocusto = obterNomeCentroCustoAleatorio();
     await page.getByLabel(/centro de custo/i).fill(centrocusto);
     console.log('✅ Nome do Centro de Custo:', centrocusto.toUpperCase());     
-    console.log('✅FIM DE DADOS ENVIADOS');      
+    console.log('➡️FIM DE DADOS ENVIADOS');      
 
     await page.locator('.q-btn')
     .filter({ hasText: /confirmar|guardar/i })

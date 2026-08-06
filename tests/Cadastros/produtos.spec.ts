@@ -32,7 +32,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.evaluate(() => {
       document.body.style.zoom = '0.7'; });      
 
-      console.log('DADOS ENVIADOS PRA API');
+      console.log('➡️ DADOS ENVIADOS PRA API');
       
       const nomeproduto = obterProdutoAleatorio();
       await page.getByLabel(/nome/i).fill(nomeproduto.nome);
@@ -137,7 +137,7 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       await page.locator('textarea.q-field__native').fill(obsproduto);
       console.log('✅ Observações:', obsproduto);
       await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);
-      console.log('FIM DE DADOS ENVIADOS');
+      console.log('➡️ FIM DE DADOS ENVIADOS');
 
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })

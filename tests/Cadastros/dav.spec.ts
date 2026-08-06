@@ -28,7 +28,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar DAV');   
 
-    console.log('DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
    
     const davField = page.locator('[aria-label="Tipo de DAV"]').first();
     await davField.scrollIntoViewIfNeeded();
@@ -76,7 +76,7 @@ test('Teste de Cadastro de DAV', async ({ page }) => {
     await btnAdicionar.waitFor({ state: 'visible' });
     await btnAdicionar.click({ force: true });
     console.log('✅ Clicou em Adicionar');  
-    console.log('FIM DE DADOS ENVIADOS PRA API');
+    console.log('➡️ FIM DE DADOS ENVIADOS PRA API');
     
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });

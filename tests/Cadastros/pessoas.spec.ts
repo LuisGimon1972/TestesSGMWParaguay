@@ -38,7 +38,7 @@ test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
       console.log(`✅ Clicou em Cadastrar Pessoas`);  
       console.log(`✅ Abriu Form de Pessoas`);      
 
-    console.log('DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     await page.locator('[aria-label="Natureza"]').click({ force: true });
     const menu = page.locator('.q-menu:visible');
     await menu.waitFor();
@@ -157,7 +157,7 @@ test('Cadastro de Clientes Não Contribuintes', async ({ page }) => {
     await inputTelefone.press('Backspace');
     await inputTelefone.type(telefone, { delay: 30 });
     console.log('✅ Telefone/Contato:', telefone);    
-    console.log('FIM DE DADOS ENVIADOS');           
+    console.log('➡️ FIM DE DADOS ENVIADOS');           
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })

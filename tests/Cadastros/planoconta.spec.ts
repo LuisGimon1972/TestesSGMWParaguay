@@ -27,7 +27,7 @@ test('Cadastro de plano de contas', async ({ page }) => {
     await btnCadastrar.click({ force: true });
     console.log('✅ Clicou em Cadastrar Plano de Contas');    
 
-    console.log('✅ DADOS ENVIADOS PRA API');
+    console.log('➡️ DADOS ENVIADOS PRA API');
     const planoconta = obterNomeContaAleatoria();
     await page.getByLabel(/descrição/i).fill(planoconta);
     console.log('✅ Nome do Plano de Conta:', planoconta.toUpperCase());     
@@ -49,7 +49,7 @@ test('Cadastro de plano de contas', async ({ page }) => {
     }
     }
 
-    console.log('✅FIM DE DADOS ENVIADOS');      
+    console.log('➡️ FIM DE DADOS ENVIADOS');      
 
     await page.locator('.q-btn')
     .filter({ hasText: /salvar|guardar/i })
