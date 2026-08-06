@@ -33,6 +33,13 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
 
+    const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+    if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
+    } else {
+        console.log('BUSCA CENTRO DE CUSTO EXISTENTE OK:', primeiroNome);
+    }    
+
     console.log('✅ BUSCA CENTRO DE CUSTO EXISTENTE OK:', primeiroNome);
 
     await page.waitForTimeout(1000);

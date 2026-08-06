@@ -30,7 +30,13 @@ test('Teste de busca crítico em  Marcas', async ({ page }) => {
      await page.waitForTimeout(1000);  
      await page.keyboard.press('Enter');
      await page.waitForTimeout(1500);
-     console.log('BUSCA MARCA EXISTENTE OK:', primeiroNome);
+
+     const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+     if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
+     } else {
+        console.log('BUSCA MARCA EXISTENTE OK:', primeiroNome);
+     }             
 
     await page.waitForTimeout(1000);
 

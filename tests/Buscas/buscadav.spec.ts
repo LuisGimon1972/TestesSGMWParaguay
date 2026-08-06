@@ -38,10 +38,14 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
     await page.getByLabel(/pesquisar registro/i).fill(davNome);
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
-    await page.waitForTimeout(1500);
-    console.log('BUSCA DAV EXISTENTE OK:', davNome);
+    await page.waitForTimeout(1500);        
 
-    await page.waitForTimeout(1000);
+    const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+    if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${davNome}`);
+    } else {
+        console.log('BUSCA DAV EXISTENTE OK:', davNome);
+    }    
 
     const davInexistente = `CLIENTE DAV INEXISTENTE`;
     await page.getByLabel(/pesquisar registro/i).fill(davInexistente);

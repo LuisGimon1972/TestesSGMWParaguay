@@ -27,7 +27,13 @@ test('Teste de busca crítico em Pessoas', async ({ page }) => {
   await page.waitForTimeout(2000);  
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2000);
-  console.log('BUSCA PESSOA EXISTENTE OK:', primeiroNome);
+  
+  const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+     if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
+     } else {
+        console.log('BUSCA PESSOA EXISTENTE OK:', primeiroNome);
+     }        
 
   await page.waitForTimeout(1000);
 

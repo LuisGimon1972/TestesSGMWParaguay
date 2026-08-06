@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginCompleto, formatarDataHora   } from '../../utils/loginCompleto';
+import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
 test('Teste de busca crítico em Usuários', async ({ page }) => {
     await loginCompleto(page);
@@ -33,7 +33,13 @@ test('Teste de busca crítico em Usuários', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA  USUÁRIO EXISTENTE OK:', primeiroNome);
+    
+    const registrosEncontrados = await page.locator('table img[src*="edit"], table svg').count();
+    if (registrosEncontrados === 0) {
+        console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
+    } else {
+        console.log('BUSCA USUÁRIO EXISTENTE OK:', primeiroNome);
+    }    
 
     await page.waitForTimeout(1000);
 
