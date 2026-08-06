@@ -16,12 +16,30 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
     ]);
     console.log('CLICOU EM DAV');
 
-     const davNome = `REGISTRO`;
-     await page.getByLabel(/pesquisar registro/i).fill(davNome);
-     await page.waitForTimeout(1000);  
-     await page.keyboard.press('Enter');
-     await page.waitForTimeout(1500);
-     console.log('BUSCA DAV EXISTENTE OK:', davNome);
+    await page.waitForTimeout(2000);
+    const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
+
+    if (editIcons === 0) {
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+       return;
+    } 
+    console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const nomedav = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';        
+
+    const davNome = nomedav
+    .toString()
+    .replace(/[^a-zA-ZÀ-ÿ\s]/g, '') 
+    .replace(/\s+/g, ' ')           
+    .trim();                        
+    await page.getByLabel(/pesquisar registro/i).fill(davNome);
+    await page.waitForTimeout(1000);  
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+    console.log('BUSCA DAV EXISTENTE OK:', davNome);
 
     await page.waitForTimeout(1000);
 

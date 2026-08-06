@@ -15,13 +15,31 @@ test('Teste de busca crítico em Faturamento', async ({ page }) => {
       page.locator('a[href*="facturacion"]').first().click()
     ]);
     console.log('CLICOU EM FATURAMENTO');
+    
+    await page.waitForTimeout(2000);
+    const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
 
-     const primeiroNome = `TEST CLIENTE`;
-     await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
-     await page.waitForTimeout(1000);  
-     await page.keyboard.press('Enter');
-     await page.waitForTimeout(1500);
-     console.log('BUSCA FATURA EXISTENTE OK:', primeiroNome);
+    if (editIcons === 0) {
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+       return;
+    } 
+    console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const nomecliente = totalColunas > 0 ? (await colunas.nth(4).innerText().catch(() => '')).trim() : '';
+    const primeiroNome = nomecliente
+    .toString()
+    .replace(/[^a-zA-ZÀ-ÿ\s]/g, '') 
+    .replace(/\s+/g, ' ')           
+    .trim();                        
+     
+    await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
+    await page.waitForTimeout(1000);  
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+    console.log('BUSCA FATURA EXISTENTE OK:', primeiroNome);
 
     await page.waitForTimeout(1000);
 

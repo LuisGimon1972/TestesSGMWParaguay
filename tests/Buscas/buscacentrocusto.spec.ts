@@ -16,18 +16,16 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
     await page.waitForTimeout(2000);
     const trashIcons = await page.locator('table img[src*="trash"]').count();
 
-
     if (trashIcons === 0) {
        console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
        return;
     } 
-      console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
-      const linhas = page.locator('tbody tr');      
-      const linhaSelecionada = linhas.nth(1);
-      const colunas = linhaSelecionada.locator('td');
-      const totalColunas = await colunas.count();
-      const nomeCentro = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
-        
+    console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const nomeCentro = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';        
     
     const primeiroNome = nomeCentro.toString();
     await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
