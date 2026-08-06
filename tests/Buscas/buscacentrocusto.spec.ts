@@ -18,7 +18,7 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
 
 
     if (trashIcons === 0) {
-       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EXCLUIR!');
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
        return;
     } 
       console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
