@@ -48,7 +48,7 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);    
     
-    console.log('✅ BUSCA CENTRO DE CUSTO INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA CENTRO DE CUSTO INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
