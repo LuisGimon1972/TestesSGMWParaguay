@@ -113,10 +113,19 @@ test('Cadastro de produtos/serviços', async ({ page }) => {
       .click();
       console.log('IVA OK');
       
-      const obsproduto = `TEST OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;
-      await page.locator('textarea.q-field__native').fill(obsproduto);
-      console.log('OBSERVAÇÕES OK:', obsproduto);
-      await expect(page.locator('textarea.q-field__native')).toHaveValue(obsproduto);
+      const textAreas = page.locator('textarea.q-field__native');
+
+      await page.waitForTimeout(2000);
+      const infproduto = `TEST INFORMAÇÕES ADICIONAIS DE PRODUTOS, DE MUITA BOA QUALIDADE ${Date.now()}`;
+      await textAreas.nth(0).fill(infproduto);
+      console.log('✅ Informações adicionais:', infproduto);
+      await expect(textAreas.nth(0)).toHaveValue(infproduto);      
+
+      await page.waitForTimeout(2000);
+      const obsproduto = `TEST OBSERVAÇÕES DE PRODUTOS PRODUTO REVISADO E APROVADO DE MUITA BOA QUALIDADE ${Date.now()}`;      
+      await textAreas.nth(1).fill(obsproduto);
+      console.log('✅ Observações:', obsproduto);
+      await expect(textAreas.nth(1)).toHaveValue(obsproduto);
 
       await page.locator('.q-btn')
       .filter({ hasText: /salvar|guardar/i })
