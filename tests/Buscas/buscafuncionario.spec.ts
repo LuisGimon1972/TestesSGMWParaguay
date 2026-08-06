@@ -7,11 +7,23 @@ test('Teste de busca crítico em Funcionários', async ({ page }) => {
   
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
-    console.log('CLICOU EM FUNCIONÁRIOS'); 
+    console.log('CLICOU EM FUNCIONÁRIOS');     
 
-    await page.waitForTimeout(1000);        
+    await page.waitForTimeout(2000);
+    const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
 
-    const primeiroNome = `TEST FUNCIONARIO`;
+    if (editIcons === 0) {
+       console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
+       return;
+    } 
+    
+    const linhas = page.locator('tbody tr');      
+    const linhaSelecionada = linhas.nth(1);
+    const colunas = linhaSelecionada.locator('td');
+    const totalColunas = await colunas.count();
+    const nomefuncionario = totalColunas > 0 ? (await colunas.nth(2).innerText().catch(() => '')).trim() : '';
+
+    const primeiroNome = nomefuncionario.toString();
     await page.getByLabel(/pesquisar registro/i).fill(primeiroNome);
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');

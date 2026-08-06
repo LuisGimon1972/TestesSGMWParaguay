@@ -20,7 +20,7 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
        console.log('⚠️ NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA BUSCAR!');
        return;
     } 
-    console.log('✅ CAPTURA DO REGISTRO ANTES DE SER REMOVIDO:');      
+    
     const linhas = page.locator('tbody tr');      
     const linhaSelecionada = linhas.nth(1);
     const colunas = linhaSelecionada.locator('td');
