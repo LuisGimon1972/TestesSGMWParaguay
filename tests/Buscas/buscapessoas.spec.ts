@@ -6,7 +6,7 @@ test('Teste de busca crítico em Pessoas', async ({ page }) => {
   
   await page.waitForTimeout(1000);
   await page.getByText(/pessoas/i).click({ force: true }); 
-  console.log('CLICOU PESSOAS');
+  console.log('✅ Clicou em Pessoas');
 
   await page.waitForTimeout(2000);
   const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -32,7 +32,7 @@ test('Teste de busca crítico em Pessoas', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA PESSOA EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA PESSOA EXISTENTE:', primeiroNome);
      }        
 
   await page.waitForTimeout(1000);
@@ -42,6 +42,6 @@ test('Teste de busca crítico em Pessoas', async ({ page }) => {
   await page.waitForTimeout(1000);  
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2000);
-  console.log('BUSCA PESSOA INEXISTENTE OK:', nomeInexistente);
+  console.log('✅ BUSCA PESSOA INEXISTENTE:', nomeInexistente);
   console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   
 });

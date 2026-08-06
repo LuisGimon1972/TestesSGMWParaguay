@@ -9,7 +9,7 @@ test('Teste de busca crítico em Lotes', async ({ page }) => {
       page.waitForURL(/lotes/, { timeout: 15000 }),
       page.locator('a[href*="lotes"]').first().click()
     ]);
-    console.log('CLICOU EM LOTES');     
+    console.log('✅ Clicou em SIFEN');     
 
     await page.waitForTimeout(1000);        
 
@@ -24,10 +24,10 @@ test('Teste de busca crítico em Lotes', async ({ page }) => {
         await page.waitForTimeout(1500);
         await page.keyboard.press('Enter');
         await page.waitForTimeout(2000);
-        console.log('BUSCA LOTE EXISTENTE OK:', loteEscolhido);
+        console.log('✅ Clicou emBUSCA LOTE EXISTENTE OK:', loteEscolhido);
     } 
     else {
-        console.log('NENHUM LOTE VÁLIDO ENCONTRADO NA GRADE.');
+        console.log('⚠️ NENHUM LOTE VÁLIDO ENCONTRADO NA GRADE.');
     }  
     
     await page.waitForTimeout(4000);  

@@ -6,11 +6,11 @@ test('Teste de busca crítico em  Marcas', async ({ page }) => {
       
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
+    console.log('✅ Clicou em Cadastro');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/marcas"]').click()
-    console.log('CLICOU EM MARCAS'); 
+    console.log('✅ Clicou em Marcas'); 
 
     await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -35,7 +35,7 @@ test('Teste de busca crítico em  Marcas', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA MARCA EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA MARCA EXISTENTE:', primeiroNome);
      }             
 
     await page.waitForTimeout(1000);
@@ -45,7 +45,7 @@ test('Teste de busca crítico em  Marcas', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA MARCA INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA MARCA INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   

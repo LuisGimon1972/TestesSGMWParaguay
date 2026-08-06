@@ -6,11 +6,11 @@ test('Teste de busca crítico em Perfil de Espécies', async ({ page }) => {
   
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
+    console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/metodos-pagos"]').click()
-    console.log('CLICOU EM ESPÉCIES'); 
+    console.log('✅ Clicou em Espécies'); 
 
     await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -36,7 +36,7 @@ test('Teste de busca crítico em Perfil de Espécies', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA ESPÉCIE EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA ESPÉCIE EXISTENTE:', primeiroNome);
      }        
      
 
@@ -47,7 +47,7 @@ test('Teste de busca crítico em Perfil de Espécies', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA ESPÉCIE INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA ESPÉCIE INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);        

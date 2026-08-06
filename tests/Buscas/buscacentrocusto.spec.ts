@@ -37,10 +37,8 @@ test('Teste de busca crítico em Centro de Custo', async ({ page }) => {
     if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
     } else {
-        console.log('BUSCA CENTRO DE CUSTO EXISTENTE OK:', primeiroNome);
-    }    
-
-    console.log('✅ BUSCA CENTRO DE CUSTO EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA CENTRO DE CUSTO EXISTENTE:', primeiroNome);
+    }        
 
     await page.waitForTimeout(1000);
 

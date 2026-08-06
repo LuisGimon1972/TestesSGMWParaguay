@@ -9,7 +9,7 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
       page.waitForURL(/producto/, { timeout: 15000 }),
       page.locator('a[href*="producto"]').first().click()
       ]);
-      console.log('CLICOU PRODUTOS');
+      console.log('✅ Clicou em Produtos');
 
       await page.waitForTimeout(2000);
       const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -35,7 +35,7 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA PRODUTO EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA PRODUTO EXISTENTE:', primeiroNome);
      }        
       
 
@@ -46,7 +46,7 @@ test('Teste de busca crítico em Produtos', async ({ page }) => {
       await page.waitForTimeout(1000);  
       await page.keyboard.press('Enter');
       await page.waitForTimeout(1500);
-      console.log('BUSCA PRODUTO INEXISTENTE OK:', prodInexistente);
+      console.log('✅ BUSCA PRODUTO INEXISTENTE:', prodInexistente);
     
       await page.waitForTimeout(4000);  
       console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   

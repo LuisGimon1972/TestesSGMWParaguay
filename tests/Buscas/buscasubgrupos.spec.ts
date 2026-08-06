@@ -6,11 +6,11 @@ test('Teste de busca crítico em Subgrupos', async ({ page }) => {
 
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
+    console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/subgrupos"]').click()
-    console.log('CLICOU EM SUBGRUPOS');
+    console.log('✅ Clicou em Subgrupos');
 
 
      await page.waitForTimeout(2000);
@@ -37,9 +37,8 @@ test('Teste de busca crítico em Subgrupos', async ({ page }) => {
     if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
     } else {
-        console.log('BUSCA SUBGRUPO EXISTENTE OK:', primeiroNome);
-    }    
-     
+        console.log('✅ BUSCA SUBGRUPO EXISTENTE:', primeiroNome);
+    }         
 
     await page.waitForTimeout(1000);
 
@@ -48,7 +47,7 @@ test('Teste de busca crítico em Subgrupos', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA SUBGRUPO INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA SUBGRUPO INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);   

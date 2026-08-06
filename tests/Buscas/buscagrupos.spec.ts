@@ -6,11 +6,11 @@ test('Teste de busca crítico em Grupos', async ({ page }) => {
   
     await page.waitForTimeout(1000);
     await page.getByText(/cadastros/i).click({ force: true }); 
-    console.log('CLICOU EM CADASTROS');
+    console.log('✅ Clicou em Cadastros');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/grupos"]').click()
-    console.log('CLICOU EM GRUPOS');
+    console.log('✅ Clicou em Grupos');
 
     await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -36,7 +36,7 @@ test('Teste de busca crítico em Grupos', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA GRUPO EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA GRUPO EXISTENTE:', primeiroNome);
      }             
 
     await page.waitForTimeout(1000);
@@ -46,7 +46,7 @@ test('Teste de busca crítico em Grupos', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA GRUPO INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA GRUPO INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);

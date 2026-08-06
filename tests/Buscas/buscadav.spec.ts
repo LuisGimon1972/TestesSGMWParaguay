@@ -7,14 +7,14 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
   const venBtn = page.getByText(/vendas/i).first();
   await expect(venBtn).toBeVisible();
   await venBtn.click();
-  console.log('CLICOU EM VENDAS');
+  console.log('✅ Clicou em Vendas');
   
   await page.waitForTimeout(1000);
     await Promise.all([
       page.waitForURL(/dav/, { timeout: 15000 }),
       page.locator('a[href*="dav"]').first().click()
     ]);
-    console.log('CLICOU EM DAV');
+    console.log('✅ Clicou em DAV');
 
     await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -44,7 +44,7 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
     if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${davNome}`);
     } else {
-        console.log('BUSCA DAV EXISTENTE OK:', davNome);
+        console.log('✅ BUSCA DAV EXISTENTE:', davNome);
     }    
 
     const davInexistente = `CLIENTE DAV INEXISTENTE`;
@@ -52,7 +52,7 @@ test('Teste de busca crítico em DAV', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA DAV INEXISTENTE OK:', davInexistente);
+    console.log('✅ Clicou em BUSCA DAV INEXISTENT:', davInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);        

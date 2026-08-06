@@ -8,11 +8,11 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     const cadBtn = page.getByText(/cadastros/i).first();
     await expect(cadBtn).toBeVisible();
     await cadBtn.click();
-    console.log('CLICOU EM CADASTRO');
+    console.log('✅ Clicou em Cadastro');
 
     await page.waitForTimeout(1000);
     page.locator('a[href*="registros/cotizacion-monedas"]').click()
-    console.log('CLICOU EM COTAÇÃO');
+    console.log('✅ Clicou em Cotação de Moedas');
 
     await page.waitForTimeout(1000);    
     const codigos = await page.locator('table td span[class*="tw-text-ellipsis"][class*="tw-text-nowrap"]').allTextContents();
@@ -23,9 +23,9 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
         await page.waitForTimeout(1000);
         await page.keyboard.press('Enter');
         await page.waitForTimeout(1500);
-        console.log('BUSCA COTAÇÃO EXISTENTE OK:', codigoEscolhido);
+        console.log('✅ BUSCA COTAÇÃO EXISTENTE:', codigoEscolhido);
     } else {
-        console.warn('Nenhum código encontrado na grade.');
+        console.warn('⚠️ Nenhum código encontrado na grade.');
     }
     
     await page.waitForTimeout(1000);   
@@ -34,7 +34,7 @@ test('Teste de busca crítico em Cotação de Moedas', async ({ page }) => {
     await page.waitForTimeout(1000);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA COTAÇÃO INEXISTENTE OK:', moedainex);
+    console.log('✅ BUSCA COTAÇÃO INEXISTENTE:', moedainex);
 
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);        

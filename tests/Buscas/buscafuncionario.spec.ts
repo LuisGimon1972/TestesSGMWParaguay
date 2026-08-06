@@ -7,7 +7,7 @@ test('Teste de busca crítico em Funcionários', async ({ page }) => {
   
     await page.waitForTimeout(1000);
     await page.getByText(/funcionários/i).click({ force: true });
-    console.log('CLICOU EM FUNCIONÁRIOS');     
+    console.log('✅ Clicou em Funcionários');     
 
     await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
@@ -33,7 +33,7 @@ test('Teste de busca crítico em Funcionários', async ({ page }) => {
      if (registrosEncontrados === 0) {
         console.log(`⚠️ Nenhum registro encontrado na grade com o valor: ${primeiroNome}`);
      } else {
-        console.log('BUSCA FUNCIONÁRIO EXISTENTE OK:', primeiroNome);
+        console.log('✅ BUSCA FUNCIONÁRIO EXISTENTE:', primeiroNome);
      }            
 
     await page.waitForTimeout(1000);
@@ -43,7 +43,7 @@ test('Teste de busca crítico em Funcionários', async ({ page }) => {
     await page.waitForTimeout(1000);  
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
-    console.log('BUSCA FUNCIONÁRIO INEXISTENTE OK:', prodInexistente);
+    console.log('✅ BUSCA FUNCIONÁRIO INEXISTENTE:', prodInexistente);
     
     await page.waitForTimeout(4000);  
     console.log(`🕒 Finalização do teste: ${formatarDataHora(new Date())}`);        
