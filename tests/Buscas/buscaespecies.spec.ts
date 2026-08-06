@@ -12,7 +12,7 @@ test('Teste de busca crítico em Perfil de Espécies', async ({ page }) => {
     page.locator('a[href*="registros/metodos-pagos"]').click()
     console.log('CLICOU EM ESPÉCIES'); 
 
-     await page.waitForTimeout(2000);
+    await page.waitForTimeout(2000);
     const editIcons = await page.locator('table img[src*="edit"], table svg').count();  
 
     if (editIcons === 0) {
