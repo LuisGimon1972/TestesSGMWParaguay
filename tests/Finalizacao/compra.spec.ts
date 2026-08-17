@@ -4,7 +4,8 @@ import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 test('Teste de Faturamento de Compras', async ({ page }) => {
     test.setTimeout(60000); 
     await loginCompleto(page);      
-
+    
+    
     const salvarCompraPromise = page.waitForResponse((response) =>
     response.url().includes('/api/py/compra') &&
     ['POST'].includes(response.request().method()) &&
@@ -48,11 +49,24 @@ test('Teste de Faturamento de Compras', async ({ page }) => {
     await page.locator('.q-select').nth(0).click();
     await page.locator('.q-menu .q-item').first().click();
     const fornecedor = await page.locator('input[aria-label="Fornecedor"]').inputValue();
-    console.log('✅ Fornecedor:', fornecedor.toUpperCase());          
+    console.log('✅ Fornecedor:', fornecedor.toUpperCase());              
+
+    const botaoItens = page.locator([
+      'button:has(i:has-text("format_list_bulleted"))',
+      'button:has(.q-icon:has-text("format_list_bulleted"))',
+      'button:has-text("Itens")',
+      'button:has-text("Produtos")',
+      'button[title*="Itens" i]',
+      'button[aria-label*="Itens" i]'
+    ].join(', ')).first();
     
-    const botaoItens = page.locator('button').filter({ has: page.locator('i:text("format_list_bulleted")') }).first();
-    await botaoItens.click();
+    await expect(botaoItens, 'O botão de itens da compra deve estar visível').toBeVisible({ timeout: 10000 });
+    
+    await botaoItens.scrollIntoViewIfNeeded().catch(() => {});
+    await botaoItens.click({ force: true });
     console.log('✅ Clicou em Itens da Compra');      
+    
+    await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible', timeout: 15000 });  
     
     await page.getByText('Seleção de produto(s)').waitFor({ state: 'visible' });
     const ativos = page.getByText('Ativo', { exact: true });
