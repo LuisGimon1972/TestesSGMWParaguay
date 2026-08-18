@@ -99,13 +99,12 @@ test('Cadastro de usuários', async ({ page }) => {
 
   await page.waitForTimeout(2000);
   await page.locator('.q-select').nth(0).click();
-  await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
+  await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[2]').click();       
   const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
   await primeiraOpcaoMenu.waitFor({ state: 'visible' });
   await primeiraOpcaoMenu.click();
   const tipoper = await page.locator('input[aria-label="Perfil de acesso"]').inputValue();      
-  console.log('✅ Selecionou o Perfil de Acesso:',tipoper);
-  
+  console.log('✅ Selecionou o Perfil de Acesso:',tipoper);  
   
   console.log('➡️ FIM DADOS ENVIADOS');
   await page.waitForTimeout(1000);  
