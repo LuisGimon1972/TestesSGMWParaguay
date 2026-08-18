@@ -58,17 +58,16 @@ test('Cadastro de espécies', async ({ page }) => {
     const tipomoe = await page.locator('input[aria-label="Moeda de cotação (diferente da sua empresa)"]').inputValue();      
     console.log('✅ Moeda de Cotação:', tipomoe.toUpperCase());
 
-    await page.waitForTimeout(1000);
-    await page.locator('[aria-label="Tipo da espécie"]').click({ force: true });
-    const menu = page.locator('.q-menu:visible');
-    await menu.waitFor();
-    await menu
-    .locator('.q-item')
-    .filter({ hasText: /dinheiro/i })
-    .first()
-    .click({ force: true });
-    const tipoesp = await page.locator('input[aria-label="Tipo da espécie"]').inputValue();      
-    console.log('✅ Tipo da Espécie:',tipoesp.toUpperCase());
+    await page.waitForTimeout(2000);
+    await page.locator('.q-select').nth(2).click();
+    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
+    const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
+    await primeiraOpcaoMenu.waitFor({ state: 'visible' });
+    await primeiraOpcaoMenu.click();
+    const tipoesp = await page.locator('input[aria-label="Tipo do método de pago"]').inputValue();      
+    console.log('✅ Selecionou um Tipo de Espécie:',tipoesp.toUpperCase());
+
+    
     console.log('➡️ FIM DE DADOS ENVIADOS***');    
 
     await page.locator('.q-btn')
