@@ -97,21 +97,21 @@ test('Cadastro de usuários', async ({ page }) => {
   await campoconfirmarsenha.fill(confirmarsenha);
   console.log('✅ Senha Confirmação:', confirmarsenha);
 
-  await page.locator('[aria-label="Perfil de acesso"]').click({ force: true });
-  const cartao = page.locator('.q-menu:visible');
-  await cartao.waitFor();
-  await cartao
-  .locator('.q-item')
-  .filter({ hasText: /vendedor/i })
-  .first()
-  .click({ force: true });
-  const tipace = await page.locator('input[aria-label="Perfil de acesso"]').inputValue();      
-  console.log('✅ Selecionou o Perfil de Acesso:',tipace);
+  await page.waitForTimeout(2000);
+  await page.locator('.q-select').nth(0).click();
+  await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]').click();       
+  const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
+  await primeiraOpcaoMenu.waitFor({ state: 'visible' });
+  await primeiraOpcaoMenu.click();
+  const tipoper = await page.locator('input[aria-label="Perfil de acesso"]').inputValue();      
+  console.log('✅ Selecionou o Perfil de Acesso:',tipoper);
+  
+  
   console.log('➡️ FIM DADOS ENVIADOS');
-    
+  await page.waitForTimeout(1000);  
   await page.locator('.q-btn')
-    .filter({ hasText: /salvar|guardar/i })
-    .click({ force: true });
+  .filter({ hasText: /salvar|guardar/i })
+  .click({ force: true });
   console.log('✅ Clicou em Salvar Usuário');      
 
   const salvarUrlResponse = await salvarUsuarioPromise;     
