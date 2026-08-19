@@ -4,7 +4,7 @@ import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 test('Teste de Finalizar DAV', async ({ page }) => {
     await loginCompleto(page);          
     
-    await page.waitForTimeout(2000); // Considere substituir por page.waitForLoadState('networkidle') no futuro
+    await page.waitForTimeout(2000); 
     
     const venBtn = page.getByText(/vendas/i).first();
     await expect(venBtn).toBeVisible();
@@ -16,12 +16,11 @@ test('Teste de Finalizar DAV', async ({ page }) => {
       page.locator('a[href*="dav"]').first().click()
     ]);
     console.log('CLICOU EM DAV');    
-
-    // Aguardando um seletor visível da tabela ao invés de usar timeout fixo
+    
     await page.waitForSelector('table img[src="/icons/edit.svg"]', { state: 'visible', timeout: 15000 });
 
     const editIcons = await page.locator('table img[src="/icons/edit.svg"]').count();
-    console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons);
+    console.log('QUANTIDADE DE REGISTROS NA GRADE:', editIcons.toString().trim());
 
     if (editIcons === 0) {
         console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
@@ -30,7 +29,7 @@ test('Teste de Finalizar DAV', async ({ page }) => {
     
     const linhasAbierto = page.locator('table tr', { hasText: /abierto/i });
     const quantidadeAbierto = await linhasAbierto.count();
-    console.log('QUANTIDADE DE REGISTROS COM STATUS "ABIERTO":', quantidadeAbierto);
+    console.log('QUANTIDADE DE REGISTROS COM STATUS "ABIERTO":', quantidadeAbierto.toString().trim());
     
     if (quantidadeAbierto === 0) {
         console.log('Nenhum registro com status Abierto foi encontrado na grade.');
@@ -74,10 +73,9 @@ test('Teste de Finalizar DAV', async ({ page }) => {
     console.log('URL DO REGISTRO EDITADO:', urlRegistroEditado);
     console.log('*** DADOS ENVIADOS PRA API ***');  
     
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(500);
     await page.locator('.q-select').nth(1).click();
-    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[3]').click();       
-    
+    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[2]').click();         
     const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await primeiraOpcaoMenu.waitFor({ state: 'visible' });
     await primeiraOpcaoMenu.click();
@@ -86,6 +84,16 @@ test('Teste de Finalizar DAV', async ({ page }) => {
     console.log('✅ Selecionou o Status:', statusdav.toUpperCase());
 
     await page.waitForTimeout(1000);
+
+    const hoje = new Date();
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const ano = hoje.getFullYear();
+    const dataISO = `${dia}-${mes}-${ano}`;    
+    const inputValidade = page.getByLabel(/validade do orçamento|previsão da entrega/i);
+    await inputValidade.waitFor({ state: 'visible' });
+    await inputValidade.fill(dataISO);    
+    console.log('✅ Data de Operação:', dataISO);        
 
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });
