@@ -41,7 +41,6 @@ test('Teste de Importação de DAV', async ({ page }) => {
 
   const idx = Math.floor(Math.random() * candidatos.length);
   const escolhido = candidatos[idx];
-  //console.log(`DEBUG: escolhendo aleatoriamente ${escolhido.label}`);
 
   await escolhido.locator.scrollIntoViewIfNeeded();
   await escolhido.locator.click({ force: true });
