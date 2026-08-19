@@ -24,7 +24,7 @@ test('Teste de Finalizar DAV', async ({ page }) => {
 
     if (editIcons === 0) {
         console.log('NENHUM REGISTRO ENCONTRADO NA GRADE, NADA PARA EDITAR.');
-        return; // Encerra o teste aqui se não houver o que editar
+        return; 
     }
     
     const linhasAbierto = page.locator('table tr', { hasText: /abierto/i });
@@ -36,7 +36,6 @@ test('Teste de Finalizar DAV', async ({ page }) => {
         return; // Encerra o teste se não achar a condição necessária
     }    
 
-    // CORREÇÃO 1: Preparar as promessas de API ANTES de clicar no botão
     const getRegistroEditadoPromise = page.waitForResponse((response) =>
         response.url().includes('/api/py/venda') &&
         response.request().method() === 'GET' &&
@@ -59,8 +58,7 @@ test('Teste de Finalizar DAV', async ({ page }) => {
         document.body.style.zoom = '0.8'; 
     });
     console.log('🔍 Zoom ajustado para 80% via CSS');
-
-    // Aguarda as respostas que foram engatilhadas pelo clique
+    
     const respostaVendaInicial = await getVendaPromise;
     const dadosAntes = await respostaVendaInicial.json();
     console.log('*** DADOS DO REGISTRO NO BANCO (ANTES DA ALTERAÇÃO) ***');
@@ -98,8 +96,7 @@ test('Teste de Finalizar DAV', async ({ page }) => {
     const salvar = page.locator('button.q-btn').filter({ hasText: 'SALVAR' }).first();
     await salvar.waitFor({ state: 'visible' });
     console.log('✅ Clicou em Salvar');
-
-    // Salvando usando o padrão Promise.all (correto para evitar race condition)
+    
     const [respostaSalvar] = await Promise.all([
         page.waitForResponse((response) => {
             const url = response.url();
@@ -111,11 +108,9 @@ test('Teste de Finalizar DAV', async ({ page }) => {
         }, { timeout: 30000 }),
         salvar.click() 
     ]);       
-
-    // CORREÇÃO 2: Removido "await salvarVendaPromise" (Variável não existia)
+    
     console.log('✅ Resposta de salvamento capturada com status:', respostaSalvar.status());
-
-    // Preparando Header para o GET final
+    
     const headersGetRegistro: Record<string, string> = {
         Accept: 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
