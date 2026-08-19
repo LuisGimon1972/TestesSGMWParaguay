@@ -64,7 +64,7 @@ test('Cadastro de espécies', async ({ page }) => {
     const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await primeiraOpcaoMenu.waitFor({ state: 'visible' });
     await primeiraOpcaoMenu.click();
-    const tipoesp = await page.locator('input[aria-label="Tipo do método de pago"]').inputValue();      
+    const tipoesp = await page.locator('input[aria-label="Tipo do método pago"]').inputValue();      
     console.log('✅ Selecionou um Tipo de Espécie:',tipoesp.toUpperCase());
 
     
