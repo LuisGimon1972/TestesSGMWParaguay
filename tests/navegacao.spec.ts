@@ -63,6 +63,8 @@ test('Navegação de menus', async ({ page }) => {
       { principal: 'Vendas', sub: 'DAV' },
       { principal: 'SIFEN' },
       { principal: 'Compras' },
+      { principal: 'Relatórios' , sub: 'Modelos' },
+      { principal: 'Relatórios' , sub: 'Histórico de geração' },
       { principal: 'Cadastros', sub: 'Espécies' },
       { principal: 'Cadastros', sub: 'Cotação de moedas' },
       { principal: 'Cadastros', sub: 'Grupos' },
