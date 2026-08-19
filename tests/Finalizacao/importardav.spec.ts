@@ -1,7 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { loginCompleto, formatarDataHora } from '../../utils/loginCompleto';
 
-
 function calcularEfectivo(total: number): number {
   return Math.ceil(total / 10) * 10;
 }
