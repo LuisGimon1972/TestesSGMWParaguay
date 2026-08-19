@@ -72,11 +72,10 @@ test('Teste de Finalizar DAV', async ({ page }) => {
     console.log('*** DADOS ENVIADOS PRA API ***');  
     
     await page.waitForTimeout(500);
-    await page.locator('.q-select').nth(1).click();
-    await page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[2]').click();         
-    const primeiraOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
-    await primeiraOpcaoMenu.waitFor({ state: 'visible' });
-    await primeiraOpcaoMenu.click();
+    await page.locator('.q-select').nth(1).click();        
+    const opcaoFinalizado = page.locator('.q-menu .q-item', { hasText: 'Finalizado' });        
+    await opcaoFinalizado.waitFor({ state: 'visible' });
+    await opcaoFinalizado.click();
     
     const statusdav = await page.locator('input[aria-label="Situação"]').inputValue();      
     console.log('✅ Selecionou o Status:', statusdav.toUpperCase());
