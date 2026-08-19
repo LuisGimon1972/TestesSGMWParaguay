@@ -13,14 +13,14 @@ test('Teste de Importação de DAV', async ({ page }) => {
   const venBtn = page.getByText(/vendas/i).first();
   await expect(venBtn).toBeVisible();
   await venBtn.click();
-  console.log('✅ CLICOU EM VENDAS');
+  console.log('✅ Clicou em Vendas');
 
   await page.waitForTimeout(1000);
   await Promise.all([
     page.waitForURL(/facturacion/, { timeout: 15000 }),
     page.locator('a[href*="facturacion"]').first().click()
   ]);
-  console.log('✅ CLICOU EM FATURAMENTO');
+  console.log('✅ Clicou em Faturamento');
 
   const btnCadastrar = page.getByText(/importar dav/i).first();
   await btnCadastrar.waitFor({ state: 'visible' });
@@ -41,7 +41,7 @@ test('Teste de Importação de DAV', async ({ page }) => {
 
   const idx = Math.floor(Math.random() * candidatos.length);
   const escolhido = candidatos[idx];
-  console.log(`DEBUG: escolhendo aleatoriamente ${escolhido.label}`);
+  //console.log(`DEBUG: escolhendo aleatoriamente ${escolhido.label}`);
 
   await escolhido.locator.scrollIntoViewIfNeeded();
   await escolhido.locator.click({ force: true });
@@ -52,7 +52,7 @@ test('Teste de Importação de DAV', async ({ page }) => {
   const linhasFinalizado = page.locator('table tr', { hasText: /finalizado/i });
   const quantidadeFinalizado = await linhasFinalizado.count();
 
-  console.log('QUANTIDADE DE REGISTROS COM STATUS "FINALIZADO":', quantidadeFinalizado);
+  console.log('QUANTIDADE DE REGISTROS COM STATUS "FINALIZADO":', quantidadeFinalizado.toString().trim());
 
   if (quantidadeFinalizado === 0) {
     console.log('❌ Nenhum registro com status Finalizado foi encontrado na grade.');
