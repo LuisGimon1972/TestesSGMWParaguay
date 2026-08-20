@@ -61,6 +61,7 @@ test('Navegação de menus', async ({ page }) => {
       { principal: 'Financeiro', sub: 'Conciliação de cartão' },      
       { principal: 'Vendas', sub: 'Faturamento' },
       { principal: 'Vendas', sub: 'DAV' },
+      { principal: 'Vendas', sub: 'Devolução' },
       { principal: 'SIFEN' },
       { principal: 'Compras' },
       { principal: 'Relatórios' , sub: 'Modelos' },
