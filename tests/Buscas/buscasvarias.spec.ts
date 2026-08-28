@@ -135,53 +135,6 @@ test('Teste de Busca Crítico Unificado: Pessoas, Produtos, Faturamento, Usuári
   await page.waitForLoadState('networkidle');
   console.log('✅ BUSCA FATURA INEXISTENTE:', prodInexistenteF);
 
-
-  // ==============================================================
-  // 4. MÓDULO USUÁRIOS
-  // ==============================================================
-  const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
-  await expect(usuariosBtn).toBeVisible();
-  await usuariosBtn.click();
-  console.log('✅ Clicou em Usuários');
-
-  const listadoU = page.locator('a[href*="usuario/listado"]');
-  await expect(listadoU).toBeVisible();
-  await listadoU.click();
-  console.log('✅ Clicou em Listagem de Usuários');
-
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(1500); // Respiro para a grade renderizar na tela
-  
-  const editIconsU = await page.locator('table img[src*="edit"], table svg').count();  
-  expect(editIconsU, '⚠️ FALHA CRÍTICA: NENHUM REGISTRO ENCONTRADO EM USUÁRIOS!').toBeGreaterThan(0);
-  
-  const linhasU = page.locator('tbody tr');      
-  const linhaSelecionadaU = linhasU.nth(1);
-  const colunasU = linhaSelecionadaU.locator('td');
-  const totalColunasU = await colunasU.count();
-  const nomeusuarioU = totalColunasU > 0 ? (await colunasU.nth(3).innerText().catch(() => '')).trim() : '';
-
-  const primeiroNomeU = nomeusuarioU.toString().trim();     
-  await page.getByLabel(/pesquisar registro/i).fill(primeiroNomeU);
-  await page.keyboard.press('Enter');
-  
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(1000);
-  
-  const registrosEncontradosU = await page.locator('table img[src*="edit"], table svg').count();
-  if (registrosEncontradosU === 0) {
-      console.log(`⚠️ Nenhum registro encontrado com o valor: ${primeiroNomeU}`);
-  } else {
-      console.log('✅ BUSCA USUÁRIO EXISTENTE:', primeiroNomeU);
-  }    
-
-  const prodInexistenteU = `USUÁRIO INEXISTENTE`;
-  await page.getByLabel(/pesquisar registro/i).fill(prodInexistenteU);
-  await page.keyboard.press('Enter');
-  await page.waitForLoadState('networkidle');
-  console.log('✅ BUSCA USUÁRIO INEXISTENTE:', prodInexistenteU);
-
-
   // ==============================================================
   // 5. MÓDULO DAV
   // ==============================================================
@@ -228,6 +181,54 @@ test('Teste de Busca Crítico Unificado: Pessoas, Produtos, Faturamento, Usuári
   await page.keyboard.press('Enter');
   await page.waitForLoadState('networkidle');
   console.log('✅ BUSCA DAV INEXISTENTE:', davInexistenteD);
+
+  
+  // ==============================================================
+  // 4. MÓDULO USUÁRIOS
+  // ==============================================================
+  const usuariosBtn = page.getByText(/usu[aá]rios/i).first();
+  await expect(usuariosBtn).toBeVisible();
+  await usuariosBtn.click();
+  console.log('✅ Clicou em Usuários');
+
+  const listadoU = page.locator('a[href*="usuario/listado"]');
+  await expect(listadoU).toBeVisible();
+  await listadoU.click();
+  console.log('✅ Clicou em Listagem de Usuários');
+
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1500); // Respiro para a grade renderizar na tela
+  
+  const editIconsU = await page.locator('table img[src*="edit"], table svg').count();  
+  expect(editIconsU, '⚠️ FALHA CRÍTICA: NENHUM REGISTRO ENCONTRADO EM USUÁRIOS!').toBeGreaterThan(0);
+  
+  const linhasU = page.locator('tbody tr');      
+  const linhaSelecionadaU = linhasU.nth(1);
+  const colunasU = linhaSelecionadaU.locator('td');
+  const totalColunasU = await colunasU.count();
+  const nomeusuarioU = totalColunasU > 0 ? (await colunasU.nth(3).innerText().catch(() => '')).trim() : '';
+
+  const primeiroNomeU = nomeusuarioU.toString().trim();     
+  await page.getByLabel(/pesquisar registro/i).fill(primeiroNomeU);
+  await page.keyboard.press('Enter');
+  
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
+  
+  const registrosEncontradosU = await page.locator('table img[src*="edit"], table svg').count();
+  if (registrosEncontradosU === 0) {
+      console.log(`⚠️ Nenhum registro encontrado com o valor: ${primeiroNomeU}`);
+  } else {
+      console.log('✅ BUSCA USUÁRIO EXISTENTE:', primeiroNomeU);
+  }    
+
+  const prodInexistenteU = `USUÁRIO INEXISTENTE`;
+  await page.getByLabel(/pesquisar registro/i).fill(prodInexistenteU);
+  await page.keyboard.press('Enter');
+  await page.waitForLoadState('networkidle');
+  console.log('✅ BUSCA USUÁRIO INEXISTENTE:', prodInexistenteU);
   
   console.log(`🕒 Finalização de TODOS os testes de busca: ${formatarDataHora(new Date())}`);        
+
+
 });
