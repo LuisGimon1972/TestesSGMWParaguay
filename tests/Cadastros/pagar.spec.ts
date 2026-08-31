@@ -66,8 +66,8 @@ test('Teste de Cadastro Pagamento', async ({ page }) => {
     const quaOpcaoMenu = page.locator('(//div[contains(@class,"q-menu")]//*[contains(@class,"q-item")])[1]');
     await quaOpcaoMenu.waitFor({ state: 'visible' });
     await quaOpcaoMenu.click();
-    const especie = await page.locator('input[aria-label="Métodos pagos"]').inputValue();      
-    console.log('✅ Selecionou uma Espécie:',especie.toUpperCase());
+    const especie = await page.locator('input[aria-label="Cliente"]').inputValue();      
+    console.log('✅ Selecionou uma Espécie:',plano.toUpperCase());
 
     const hoje = new Date();
     const dia = String(hoje.getDate()).padStart(2, '0');
