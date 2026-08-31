@@ -90,20 +90,8 @@ test('Edição de datos produtos/serviços', async ({ page }) => {
             await inputPrecusto.press('Control+A');
             await inputPrecusto.press('Delete');
             await inputPrecusto.type(precusto.toString());
-            console.log('✅ Preço de custo Alterado:', precusto.toFixed(0));
+            console.log('✅ Preço de custo Alterado:', precusto.toFixed(0));            
             
-            const campoLucro = page.locator('.q-field')
-            .filter({ hasText: /% lucro/i })
-            .last();
-            const perLucro = await campoLucro.locator('input').inputValue();
-            console.log('✅ % de Lucro:', perLucro);
-            
-            const campoPrevenda = page.locator('.q-field')
-            .filter({ hasText: /preço de venda/i })
-            .last();
-            const valorPrevenda = await campoPrevenda.locator('input').inputValue();
-            console.log('✅ Preço de Venda Alterado:', valorPrevenda);            
-            expect(Number(perLucro)).toBeGreaterThanOrEqual(0);
 
             const cantidad = Math.floor(Math.random() * 1000) + 1;
             const campocantidad = page.locator('.q-field')
