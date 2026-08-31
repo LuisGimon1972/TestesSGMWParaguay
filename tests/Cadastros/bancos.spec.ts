@@ -32,9 +32,11 @@ test('Teste de Cadastro de Bancos', async ({ page }) => {
     console.log('➡️ DADOS ENVIADOS PRA API');           
     
     await page.locator('.q-select').nth(0).click();
+    const opcao = Math.floor(Math.random() * 5) + 1;
+    const x = opcao;
     const menuItems = page.locator('.q-menu .q-item, .q-portal .q-item, .q-virtual-scroll__content .q-item, [role="option"]');
-    await expect(menuItems.first()).toBeVisible({ timeout: 8000 });
-    const primeiraOpcao = menuItems.first();
+    await expect(menuItems.nth(x)).toBeVisible({ timeout: 8000 });
+    const primeiraOpcao = menuItems.nth(x);
     await primeiraOpcao.scrollIntoViewIfNeeded().catch(() => {});
     const textoPrimeira = (await primeiraOpcao.innerText()).replace(/\s+/g, ' ').trim();
     await primeiraOpcao.click({ force: true });
