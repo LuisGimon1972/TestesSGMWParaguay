@@ -74,8 +74,7 @@ test('Cadastro de cotação de moedas', async ({ page }) => {
     await inputDatafin.pressSequentially(datafin, { delay: 50 });
     console.log('✅ Fim de Vigência:', datafin);
     console.log('➡️ FIM DE DADOS ENVIADOS');    
-
-    // Alteração: Captura qualquer resposta POST para essa URL, sem filtrar o status 200 ainda
+    
     const salvarCotacaoPromise = page.waitForResponse(
         (response) =>
             response.url().includes('/api/moeda/cotacao') &&
