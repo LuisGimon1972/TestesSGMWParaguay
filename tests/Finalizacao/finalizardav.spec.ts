@@ -27,9 +27,9 @@ test('Teste de Finalizar DAV', async ({ page }) => {
         return; 
     }
     
-    const linhasAbierto = page.locator('table tr', { hasText: /abierto/i });
+    const linhasAbierto = page.locator('table tr', { hasText: /abierto|aberto/i });
     const quantidadeAbierto = await linhasAbierto.count();
-    console.log('QUANTIDADE DE REGISTROS COM STATUS "ABIERTO":', quantidadeAbierto.toString().trim());
+    console.log('QUANTIDADE DE REGISTROS COM STATUS "ABIERTOOU ABERTO":', quantidadeAbierto.toString().trim());
     
     if (quantidadeAbierto === 0) {
         console.log('Nenhum registro com status Abierto foi encontrado na grade.');
